@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using CampusServicePortal.Data;
 
 namespace CampusServicePortal.Data
 {
@@ -9,17 +10,11 @@ namespace CampusServicePortal.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Complaint> Complaints { get; set; }
-        public DbSet<TransportBooking> Bookings { get; set; }
+        public DbSet<TransportRoute> TransportRoutes { get; set; }
+        public DbSet<Book> Books { get; set; }
+        public DbSet<CampusEvent> Events { get; set; }
+        public DbSet<MenuItem> MenuItems { get; set; }
+        public DbSet<ExamSchedule> ExamSchedules { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            // Setting up Relationship for the Data Access Layer
-            modelBuilder.Entity<Complaint>()
-                .HasOne(c => c.Student)
-                .WithMany(u => u.Complaints)
-                .HasForeignKey(c => c.StudentId);
-        }
     }
 }

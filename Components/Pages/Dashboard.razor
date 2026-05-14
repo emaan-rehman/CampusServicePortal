@@ -73,9 +73,13 @@
                                 {
                                     <tr>
                                         <td>#@item.Id</td>
-                                        <td>@item.Student?.FullName</td>
-                                        <td>@item.Description</td>
-                                        <td><span class="badge bg-secondary">Pending</span></td>
+                                        <td>@(item.Student?.FullName ?? "Unknown Student")</td>
+                                        <td class="text-truncate" style="max-width: 200px;">@item.Description</td>
+                                        <td>
+                                            <span class="badge @(item.Status == "Pending" ? "bg-warning" : "bg-success")">
+                                                @item.Status
+                                            </span>
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
@@ -109,16 +113,19 @@
     {
         try
         {
-            // Fetching real data from your Repository
-            complaints = await Repo.GetComplaintsAsync();
+            // Ensure the Repo is actually returning a list, even if empty
+            var data = await Repo.GetComplaintsAsync();
+            complaints = data ?? new List<Complaint>();
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Dashboard Error: {ex.Message}");
+            // Log this to your Debug console to see the real error
+            System.Diagnostics.Debug.WriteLine($"Dashboard Error: {ex.Message}");
         }
         finally
         {
             isLoading = false;
+            StateHasChanged(); // Force the UI to re-render
         }
     }
 }

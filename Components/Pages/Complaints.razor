@@ -55,10 +55,16 @@
 
     private async Task HandleSubmit()
     {
+        // Ensure the ID is set to something valid in your DB for now
+        // In a real app, this would be the logged-in User's ID
+        newComplaint.StudentId = 1;
         newComplaint.CreatedAt = DateTime.Now;
         newComplaint.Status = "Pending";
+
         await Repo.CreateComplaintAsync(newComplaint);
-        complaintList = await Repo.GetComplaintsAsync(); // Refresh list
-        newComplaint = new(); // Reset form
+    
+        // Refresh and Reset
+        complaintList = await Repo.GetComplaintsAsync();
+        newComplaint = new();
     }
 }
