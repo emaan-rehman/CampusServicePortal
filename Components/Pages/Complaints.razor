@@ -1,0 +1,63 @@
+﻿@page "/complaints"
+@inject ICampusRepository Repo
+@using CampusServicePortal.Data
+@using System.ComponentModel.DataAnnotations
+
+<div class="container mt-4">
+    <h3 class="mb-4">Campus Complaint Portal</h3>
+
+    <EditForm Model="@newComplaint" OnValidSubmit="HandleSubmit" class="card p-4 shadow-sm mb-5">
+        <DataAnnotationsValidator />
+        <div class="mb-3">
+            <label>Issue Title</label>
+            <InputText @bind-Value="newComplaint.Title" class="form-control" />
+            <ValidationMessage For="@(() => newComplaint.Title)" />
+        </div>
+        <div class="mb-3">
+            <label>Detailed Description</label>
+            <InputTextArea @bind-Value="newComplaint.Description" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Complaint</button>
+    </EditForm>
+
+    <table class="table table-hover shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Date Submitted</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in complaintList)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Title</td>
+                    <td><span class="badge bg-warning">@item.Status</span></td>
+                    <td>@item.CreatedAt.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private Complaint newComplaint = new();
+    private List<Complaint> complaintList = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        complaintList = await Repo.GetComplaintsAsync();
+    }
+
+    private async Task HandleSubmit()
+    {
+        newComplaint.CreatedAt = DateTime.Now;
+        newComplaint.Status = "Pending";
+        await Repo.CreateComplaintAsync(newComplaint);
+        complaintList = await Repo.GetComplaintsAsync(); // Refresh list
+        newComplaint = new(); // Reset form
+    }
+}
