@@ -1,0 +1,21 @@
+﻿@page "/transport"
+@rendermode InteractiveServer
+
+<PageTitle>Transport Booking</PageTitle>
+
+<div class="container mt-4">
+    <h2 class="text-primary fw-bold">Transport Booking</h2>
+    <hr />
+    <div class="card shadow-sm p-4">
+        <p>Available Routes: 12 Active</p>
+        <button class="btn btn-success" @onclick="BookTransport">Book Now</button>
+    </div>
+</div>
+
+@code {
+    private void BookTransport()
+    {
+        // Interactivity test
+        Console.WriteLine("Transport Booked!");
+    }
+}
