@@ -1,5 +1,124 @@
-﻿<h3>Dashboard</h3>
+﻿@page "/dashboard"
+@using CampusServicePortal.Repositories
+@using CampusServicePortal.Data
+@rendermode InteractiveServer
+@inject ICampusRepository Repo
+
+<PageTitle>Campus Dashboard</PageTitle>
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary">Campus Service Overview</h2>
+        <span class="badge bg-info text-dark p-2">Session: Spring 2026</span>
+    </div>
+
+    @if (isLoading)
+    {
+        <div class="text-center mt-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p>Loading Dashboard Data...</p>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0 bg-primary text-white p-3 h-100">
+                    <h6>Total Complaints</h6>
+                    <h2 class="fw-bold">@complaints?.Count</h2>
+                    <small>+2 since yesterday</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0 bg-success text-white p-3 h-100">
+                    <h6>Transport Status</h6>
+                    <h2 class="fw-bold">Active</h2>
+                    <small>12 Buses on Route</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0 bg-warning text-dark p-3 h-100">
+                    <h6>New Requests</h6>
+                    <h2 class="fw-bold">8</h2>
+                    <small>Pending Approval</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0 bg-danger text-white p-3 h-100">
+                    <h6>Emergency Alerts</h6>
+                    <h2 class="fw-bold">0</h2>
+                    <small>System Normal</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0 fw-bold">Recent Complaints</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Student</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in complaints.Take(5))
+                                {
+                                    <tr>
+                                        <td>#@item.Id</td>
+                                        <td>@item.Student?.FullName</td>
+                                        <td>@item.Description</td>
+                                        <td><span class="badge bg-secondary">Pending</span></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0 fw-bold">Quick Actions</h5>
+                    </div>
+                    <div class="card-body d-grid gap-2">
+                        <a href="/transport" class="btn btn-outline-primary text-start"><i class="bi bi-bus-front"></i> Track Transport</a>
+                        <a href="/complaints" class="btn btn-outline-primary text-start"><i class="bi bi-exclamation-circle"></i> File Complaint</a>
+                        <a href="/library" class="btn btn-outline-primary text-start"><i class="bi bi-book"></i> Library Portal</a>
+                        <a href="/cafeteria" class="btn btn-outline-primary text-start"><i class="bi bi-cup-hot"></i> Food Menu</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
 
 @code {
+    private List<Complaint> complaints = new();
+    private bool isLoading = true;
 
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Fetching real data from your Repository
+            complaints = await Repo.GetComplaintsAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Dashboard Error: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
 }
