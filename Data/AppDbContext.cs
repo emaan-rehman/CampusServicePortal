@@ -15,6 +15,10 @@ namespace CampusServicePortal.Data
         public DbSet<CampusEvent> Events { get; set; }
         public DbSet<MenuItem> MenuItems { get; set; }
         public DbSet<ExamSchedule> ExamSchedules { get; set; }
-
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Faculty> Faculty { get; set; }
+        public DbSet<Fee> Fees { get; set; }
+        public DbSet<HostelRoom> HostelRooms { get; set; }
+        public DbSet<TransportBooking> TransportBookings { get; set; }
     }
 }

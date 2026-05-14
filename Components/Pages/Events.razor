@@ -1,5 +1,9 @@
 ﻿@page "/events"
 @rendermode InteractiveServer
+@using CampusServicePortal.Repositories
+@using CampusServicePortal.Data
+@inject ICampusRepository Repo
+@using System.ComponentModel.DataAnnotations
 
 <div class="container mt-4">
     <h3>Upcoming Campus Events</h3>

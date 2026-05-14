@@ -1,4 +1,11 @@
-﻿<h3>RoleManagement</h3>
+﻿@page "/RoleManagement"
+@using CampusServicePortal.Repositories
+@using CampusServicePortal.Data
+@rendermode InteractiveServer
+@inject ICampusRepository Repo
+@using System.ComponentModel.DataAnnotations
+
+<h3>RoleManagement</h3>
 
 @code {
 

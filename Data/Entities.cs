@@ -41,7 +41,13 @@ namespace CampusServicePortal.Data
         public string RouteName { get; set; } = string.Empty;
         public string Status { get; set; } = "Active";
     }
-
+    public class TransportBooking
+    {
+        [Key] public int Id { get; set; }
+        public int UserId { get; set; }
+        public int RouteId { get; set; }
+        public DateTime BookingDate { get; set; }
+    }
     public class Book
     {
         [Key] public int Id { get; set; }
@@ -69,5 +75,35 @@ namespace CampusServicePortal.Data
         [Key] public int Id { get; set; }
         public string SubjectName { get; set; } = string.Empty;
         public DateTime ExamDate { get; set; }
+    }
+    public class Course
+    {
+        [Key] public int Id { get; set; }
+        public string CourseName { get; set; } = string.Empty;
+        public string CourseCode { get; set; } = string.Empty;
+    }
+
+    public class Faculty
+    {
+        [Key] public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Department { get; set; } = string.Empty;
+    }
+
+    public class Fee
+    {
+        [Key] public int Id { get; set; }
+        public int StudentId { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Amount { get; set; }
+        public bool IsPaid { get; set; }
+    }
+
+    public class HostelRoom
+    {
+        [Key] public int Id { get; set; }
+        public string RoomNumber { get; set; } = string.Empty;
+        public string Block { get; set; } = string.Empty;
+        public bool IsOccupied { get; set; }
     }
 }
