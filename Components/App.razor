@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,14 +10,15 @@
     <link rel="stylesheet" href="CampusServicePortal.styles.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
     
-    @* Directive must be lowercase 'r' and prefixed with @ *@
+    @* Correct directive for .NET 10 Interactivity *@
     <HeadOutlet @rendermode="InteractiveServer" />
 </head>
 
 <body>
-    @* This enables interactivity for the entire application *@
+    @* Enabling interactivity for the entire app routes *@
     <Routes @rendermode="InteractiveServer" />
 
     <script src="_framework/blazor.web.js"></script>
 </body>
+
 </html>
