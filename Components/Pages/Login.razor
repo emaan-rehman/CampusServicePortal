@@ -48,7 +48,7 @@
         if (user != null)
         {
             Session.Login(user);
-            Nav.NavigateTo("/"); // Go to home page after success
+            Nav.NavigateTo("/", forceLoad: true);
         }
         else
         {
