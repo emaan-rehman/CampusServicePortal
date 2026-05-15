@@ -22,13 +22,18 @@ namespace CampusServicePortal.Data
         public DbSet<HostelRoom> HostelRooms { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Define the inheritance mapping for the Users table
-            modelBuilder.Entity<User>()
-                .HasDiscriminator<string>("UserType") // This matches a column in your SQL table
-                .HasValue<User>("User")               // Rows with 'User' become User objects
-                .HasValue<Student>("Student");         // Rows with 'Student' become Student objects
+            // 1. Force User to be a standard table with NO inheritance/discriminators
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("Users");
+                entity.HasNoDiscriminator(); // This is the critical line to stop the crash
+            });
 
-            // Also ensure you have no duplicate definitions to avoid earlier errors
+            // 2. If you have a Student class, you MUST either delete it 
+            // OR map it to a completely different table name to avoid the conflict
+            modelBuilder.Ignore<Student>();
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

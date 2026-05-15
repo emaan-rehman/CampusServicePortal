@@ -1,45 +1,81 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using CampusServicePortal.Data
+@inject UserSession Session
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">Smart Campus Portal</a>
     </div>
 </div>
 
-<div class="nav-scrollable">
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="flex-column">
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Login">
-                <span class="bi bi-exclamation-circle-fill" aria-hidden="true"></span> Login
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="dashboard" Match="NavLinkMatch.All">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="bi bi-house-door-fill" aria-hidden="true"></span> Dashboard
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="complaints">
-                <span class="bi bi-exclamation-circle-fill" aria-hidden="true"></span> Complaints
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="transport">
-                <span class="bi bi-bus-front-fill" aria-hidden="true"></span> Transport Booking
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="events">
-                <span class="bi bi-bus-front-fill" aria-hidden="true"></span> Events
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="RoleManagement">
-                <span class="bi bi-bus-front-fill" aria-hidden="true"></span>Role Management
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="library">
-                <span class="bi bi-bus-front-fill" aria-hidden="true"></span> Library
-            </NavLink>
-        </div>
+
+        @if (Session.IsLoggedIn)
+        {
+            @* --- Student & Shared Features --- *@
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="Complaints">
+                    <span class="bi bi-chat-dots-fill" aria-hidden="true"></span> Complaints
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="transport">
+                    <span class="bi bi-bus-front-fill" aria-hidden="true"></span> Transport Booking
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="events">
+                    <span class="bi bi-calendar-event-fill" aria-hidden="true"></span> Events
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="Library">
+                    <span class="bi bi-book-half" aria-hidden="true"></span> Library
+                </NavLink>
+            </div>
+
+            @* --- Admin Only Features --- *@
+            @if (Session.CurrentUser?.Role?.RoleName == "Admin")
+            {
+                <div class="nav-item px-3 mt-3">
+                    <hr class="text-white opacity-25" />
+                    <p class="text-uppercase small text-muted ps-3">Management</p>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="RoleManagement">
+                        <span class="bi bi-people-fill" aria-hidden="true"></span> Role Management
+                    </NavLink>
+                </div>
+            }
+
+            <div class="nav-item px-3 mt-4">
+                <button class="btn btn-link nav-link text-danger" @onclick="HandleLogout">
+                    <span class="bi bi-box-arrow-right" aria-hidden="true"></span> Logout
+                </button>
+            </div>
+        }
+        else
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="login">
+                    <span class="bi bi-person-badge-fill" aria-hidden="true"></span> Login
+                </NavLink>
+            </div>
+        }
     </nav>
 </div>
+
+@code {
+    private void HandleLogout()
+    {
+        Session.Logout();
+    }
+}

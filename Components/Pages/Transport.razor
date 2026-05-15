@@ -4,7 +4,18 @@
 @using System.ComponentModel.DataAnnotations
 @inject ICampusRepository Repo
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
+@inject UserSession Session
+@inject NavigationManager Nav
 
+@code {
+    protected override void OnInitialized()
+    {
+        if (!Session.IsLoggedIn)
+        {
+            Nav.NavigateTo("/login");
+        }
+    }
+}
 <PageTitle>Transport Booking</PageTitle>
 
 <div class="container mt-4">

@@ -3,6 +3,18 @@
 @using CampusServicePortal.Repositories
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 @inject ICampusRepository Repo
+@inject UserSession Session
+@inject NavigationManager Nav
+
+@code {
+    protected override void OnInitialized()
+    {
+        if (!Session.IsLoggedIn)
+        {
+            Nav.NavigateTo("/login");
+        }
+    }
+}
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">

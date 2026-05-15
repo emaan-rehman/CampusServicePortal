@@ -94,7 +94,9 @@ namespace CampusServicePortal.Repositories
         public async Task<User?> AuthenticateUserAsync(string email, string password)
         {
             using var db = await _dbFactory.CreateDbContextAsync();
+            // Use .AsNoTracking() to prevent EF from trying to do complex relationship checks during login
             return await db.Users
+                .AsNoTracking()
                 .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Email == email && u.PasswordHash == password);
         }
