@@ -53,7 +53,11 @@ namespace CampusServicePortal.Data
                 entity.Property(e => e.SubjectCode);
                 entity.Property(e => e.SubjectName);
             });
-            modelBuilder.Entity<Fee>().ToTable("Fees");
+            modelBuilder.Entity<HostelRoom>(entity =>
+            {
+                entity.ToTable("HostelRooms");
+                entity.HasKey(e => e.RoomId); // This resolves the 'requires a primary key' error
+            });
 
             base.OnModelCreating(modelBuilder);
         }

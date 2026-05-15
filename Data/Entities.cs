@@ -159,7 +159,9 @@ namespace CampusServicePortal.Data
 
     public class HostelRoom
     {
+        [Key] // This explicitly defines the Primary Key
         public int RoomId { get; set; }
+
         public string? RoomNumber { get; set; }
         public int? Capacity { get; set; }
         public bool? IsOccupied { get; set; }
