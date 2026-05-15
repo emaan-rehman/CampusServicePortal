@@ -43,7 +43,7 @@
         var user = await Repo.AuthenticateUserAsync(loginEmail, loginPassword);
         if (user != null)
         {
-            Session.Login(user);
+            UserSession.CurrentUser = user;
             // FORCE LOAD is the key. It restarts the app state so the Sidebar refreshes.
             Nav.NavigateTo("/", forceLoad: true);
         }

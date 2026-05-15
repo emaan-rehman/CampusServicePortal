@@ -1,11 +1,14 @@
 ﻿using CampusServicePortal.Data;
 
-public class UserSession
+namespace CampusServicePortal.Data
 {
-    public User? CurrentUser { get; set; }
-    // Ensure this logic is simple:
-    public bool IsLoggedIn => CurrentUser != null;
+    public class UserSession
+    {
+        // Static means it persists across the entire app instance
+        public static User? CurrentUser { get; set; }
+        public bool IsLoggedIn => CurrentUser != null;
 
-    public void Login(User user) => CurrentUser = user;
-    public void Logout() => CurrentUser = null;
+        public void Login(User user) => CurrentUser = user;
+        public void Logout() => CurrentUser = null;
+    }
 }

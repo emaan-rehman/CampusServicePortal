@@ -11,7 +11,7 @@
         <div class="top-row px-4">
             @if (Session.IsLoggedIn)
             {
-                <span class="me-3">Welcome, <strong>@Session.CurrentUser?.FullName</strong></span>
+                <span class="me-3">Welcome, <strong>@UserSession.CurrentUser?.FullName</strong></span>
                 <a href="login" @onclick="() => Session.Logout()">Logout</a>
             }
             else
