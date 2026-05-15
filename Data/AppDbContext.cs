@@ -27,7 +27,7 @@ namespace CampusServicePortal.Data
                 .HasDiscriminator<string>("UserType")
                 .HasValue<User>("Base")
                 .HasValue<Student>("Student");
-
+            modelBuilder.Entity<User>().HasNoDiscriminator();
             base.OnModelCreating(modelBuilder);
         }
     }

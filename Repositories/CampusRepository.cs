@@ -14,9 +14,9 @@ namespace CampusServicePortal.Repositories
         Task<List<CampusEvent>> GetEventsAsync();
         Task<List<MenuItem>> GetCafeteriaMenuAsync();
         Task<List<ExamSchedule>> GetExamsAsync();
-        Task<List<Role>> GetRolesAsync();
         Task<List<User>> GetUsersAsync();
-        Task UpdateUserRoleAsync(int userId, int roleId);
+        Task<List<Role>> GetRolesAsync();
+        Task UpdateUserRoleAsync(int userId, int newRoleId);
     }
 
     public class CampusRepository : ICampusRepository
@@ -76,25 +76,25 @@ namespace CampusServicePortal.Repositories
         }
         public async Task<List<MenuItem>> GetCafeteriaMenuAsync() => await _db.MenuItems.AsNoTracking().ToListAsync();
         public async Task<List<ExamSchedule>> GetExamsAsync() => await _db.ExamSchedules.AsNoTracking().ToListAsync();
-        public async Task<List<Role>> GetRolesAsync()
-        {
-            using var db = await _dbFactory.CreateDbContextAsync();
-            return await db.Roles.AsNoTracking().ToListAsync();
-        }
-
         public async Task<List<User>> GetUsersAsync()
         {
             using var db = await _dbFactory.CreateDbContextAsync();
-            return await db.Users.Include(u => u.Role).AsNoTracking().ToListAsync();
+            return await db.Users.Include(u => u.Role).ToListAsync();
         }
 
-        public async Task UpdateUserRoleAsync(int userId, int roleId)
+        public async Task<List<Role>> GetRolesAsync()
         {
             using var db = await _dbFactory.CreateDbContextAsync();
-            var user = await db.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+            return await db.Roles.ToListAsync();
+        }
+
+        public async Task UpdateUserRoleAsync(int userId, int newRoleId)
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+            var user = await db.Users.FindAsync(userId);
             if (user != null)
             {
-                user.RoleId = roleId; // This now exists because of Step 1
+                user.RoleId = newRoleId;
                 await db.SaveChangesAsync();
             }
         }
