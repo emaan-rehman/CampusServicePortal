@@ -68,7 +68,12 @@ namespace CampusServicePortal.Repositories
             using var db = await _dbFactory.CreateDbContextAsync();
             return await db.Books.AsNoTracking().ToListAsync();
         }
-        public async Task<List<CampusEvent>> GetEventsAsync() => await _db.Events.AsNoTracking().ToListAsync();
+        public async Task<List<CampusEvent>> GetEventsAsync()
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+            // AsNoTracking() improves performance for read-only lists
+            return await db.Events.AsNoTracking().OrderBy(e => e.Date).ToListAsync();
+        }
         public async Task<List<MenuItem>> GetCafeteriaMenuAsync() => await _db.MenuItems.AsNoTracking().ToListAsync();
         public async Task<List<ExamSchedule>> GetExamsAsync() => await _db.ExamSchedules.AsNoTracking().ToListAsync();
         public async Task<List<Role>> GetRolesAsync()

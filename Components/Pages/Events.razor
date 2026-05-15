@@ -1,56 +1,92 @@
 ﻿@page "/events"
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @using CampusServicePortal.Repositories
 @using CampusServicePortal.Data
 @inject ICampusRepository Repo
-@using System.ComponentModel.DataAnnotations
 
 <div class="container mt-4">
-    <h3 class="fw-bold text-primary">Upcoming Campus Events</h3>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold text-primary">Upcoming Campus Events</h3>
+        @if (events != null)
+        {
+            <span class="badge bg-secondary">@events.Count Events Found</span>
+        }
+    </div>
     <hr />
+
+    @if (!string.IsNullOrEmpty(regMessage))
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm">
+            @regMessage
+            <button type="button" class="btn-close" @onclick='() => regMessage = ""'></button>
+        </div>
+    }
 
     @if (events == null)
     {
         <div class="text-center mt-5">
             <div class="spinner-border text-primary" role="status"></div>
-            <p>Fetching events...</p>
+            <p class="mt-2">Connecting to campus database...</p>
         </div>
     }
     else if (!events.Any())
     {
-        <div class="alert alert-info">No upcoming events found at this time.</div>
+        <div class="alert alert-info shadow-sm text-center py-5">
+            <i class="bi bi-calendar-x fs-1 d-block mb-3"></i>
+            No upcoming events found at this time. Check back later!
+        </div>
     }
     else
     {
-        @foreach (var ev in events)
-        {
-            <div class="card mb-3 shadow-sm border-start border-primary border-4">
-                <div class="card-body">
-                    <h5 class="card-title fw-bold">@ev.Title</h5>
-                    <p class="card-text text-muted">
-                        <i class="bi bi-calendar-event"></i> Date: @ev.Date.ToLongDateString()
-                    </p>
-                    <button class="btn btn-primary btn-sm">Register Now</button>
+        <div class="row">
+            @foreach (var ev in events)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 shadow-sm border-0 border-top border-primary border-4">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold text-dark">@ev.Title</h5>
+                            <p class="card-text mb-1">
+                                <small class="text-muted">
+                                    <i class="bi bi-geo-alt-fill text-danger"></i> @(ev.Location ?? "Main Campus")
+                                </small>
+                            </p>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    <i class="bi bi-calendar-check-fill text-primary"></i> @ev.Date.ToString("MMMM dd, yyyy")
+                                </small>
+                            </p>
+                            <button class="btn btn-outline-primary btn-sm w-100 mt-2"
+                                    @onclick="() => Register(ev.Title)">
+                                Register Now
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     }
 </div>
 
 @code {
     private List<CampusEvent>? events;
+    private string regMessage = "";
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            // Ensure this method exists in your Repo and uses the Factory!
             events = await Repo.GetEventsAsync();
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Events Page Error: {ex.Message}");
-            events = new List<CampusEvent>(); // Set to empty list so UI doesn't hang
+            Console.WriteLine($"Database Error: {ex.Message}");
+            events = new List<CampusEvent>();
         }
+    }
+
+    private void Register(string eventTitle)
+    {
+        regMessage = $"Success! You have registered for: {eventTitle}";
+        // Logic for saving registration to DB can be added here
     }
 }

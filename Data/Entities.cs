@@ -87,9 +87,14 @@ namespace CampusServicePortal.Data
 
     public class CampusEvent
     {
-        [Key]
+        [Key] // Prevents the "requires a primary key" exception
         public int Id { get; set; }
+
+        [Required]
         public string Title { get; set; } = string.Empty;
+
+        public string? Location { get; set; } // Matches nvarchar(100) in SQL
+
         public DateTime Date { get; set; } = DateTime.Now;
     }
 
