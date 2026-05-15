@@ -22,12 +22,13 @@ namespace CampusServicePortal.Data
         public DbSet<HostelRoom> HostelRooms { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Define the inheritance mapping for the Users table
             modelBuilder.Entity<User>()
-                .HasDiscriminator<string>("UserType") // "UserType" is a column in your SQL table
-                .HasValue<User>("Admin")
-                .HasValue<Student>("Student");
+                .HasDiscriminator<string>("UserType") // This matches a column in your SQL table
+                .HasValue<User>("User")               // Rows with 'User' become User objects
+                .HasValue<Student>("Student");         // Rows with 'Student' become Student objects
 
-            // Ensure this matches your previous "materialize" error fix
+            // Also ensure you have no duplicate definitions to avoid earlier errors
         }
     }
 }
