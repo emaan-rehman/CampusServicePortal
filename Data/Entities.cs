@@ -116,14 +116,6 @@ namespace CampusServicePortal.Data
         public decimal Price { get; set; }
     }
 
-    public class ExamSchedule
-    {
-        [Key]
-        public int Id { get; set; }
-        public string SubjectName { get; set; } = string.Empty;
-        public DateTime ExamDate { get; set; }
-    }
-
  
     public class Course
     {
@@ -139,6 +131,14 @@ namespace CampusServicePortal.Data
         public int UserId { get; set; }
         public int CourseId { get; set; }
         public DateTime EnrollmentDate { get; set; } = DateTime.Now;
+    }
+    public class ExamSchedule
+    {
+        public int Id { get; set; }
+        public string SubjectCode { get; set; } = string.Empty; // Must match image_ebdafb
+        public string SubjectName { get; set; } = string.Empty;
+        public DateTime? ExamDate { get; set; }
+        public string? Room { get; set; } // Must match image_ebdafb
     }
     public class Faculty
     {

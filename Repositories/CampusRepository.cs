@@ -16,7 +16,8 @@ namespace CampusServicePortal.Repositories
         Task<List<MenuItem>> GetCafeteriaMenuAsync();
         Task<List<Course>> GetAllCoursesAsync();
         Task EnrollInCourseAsync(Enrollment enrollment);
-        Task<List<ExamSchedule>> GetExamsAsync();
+      
+        Task<List<ExamSchedule>> GetExamSchedulesAsync();
         Task<User?> AuthenticateUserAsync(string email, string password);
         Task<List<User>> GetUsersAsync();
         Task<List<Role>> GetRolesAsync();
@@ -92,7 +93,13 @@ namespace CampusServicePortal.Repositories
             return await db.Events.AsNoTracking().OrderBy(e => e.Date).ToListAsync();
         }
         public async Task<List<MenuItem>> GetCafeteriaMenuAsync() => await _db.MenuItems.AsNoTracking().ToListAsync();
-        public async Task<List<ExamSchedule>> GetExamsAsync() => await _db.ExamSchedules.AsNoTracking().ToListAsync();
+        public async Task<List<ExamSchedule>> GetExamSchedulesAsync()
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+            return await db.ExamSchedules
+                .OrderBy(e => e.ExamDate)
+                .ToListAsync();
+        }
         public async Task<User?> AuthenticateUserAsync(string email, string password)
         {
             using var db = await _dbFactory.CreateDbContextAsync();

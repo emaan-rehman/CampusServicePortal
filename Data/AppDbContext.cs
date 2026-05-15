@@ -22,10 +22,10 @@ namespace CampusServicePortal.Data
 
         // Other Entities (Placeholders for future use)
         public DbSet<MenuItem> MenuItems { get; set; }
-        public DbSet<ExamSchedule> ExamSchedules { get; set; }
         public DbSet<Faculty> Faculty { get; set; }
         public DbSet<Fee> Fees { get; set; }
         public DbSet<HostelRoom> HostelRooms { get; set; }
+        public DbSet<ExamSchedule> ExamSchedules { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,6 +45,14 @@ namespace CampusServicePortal.Data
             modelBuilder.Entity<CampusEvent>().ToTable("Events");
             modelBuilder.Entity<TransportBooking>().ToTable("TransportBookings");
             modelBuilder.Entity<Complaint>().ToTable("Complaints");
+            modelBuilder.Entity<ExamSchedule>(entity =>
+            {
+                entity.ToTable("ExamSchedules");
+                entity.HasKey(e => e.Id);
+                // Explicitly define columns if they still show red squiggles
+                entity.Property(e => e.SubjectCode);
+                entity.Property(e => e.SubjectName);
+            });
 
             base.OnModelCreating(modelBuilder);
         }
