@@ -30,8 +30,15 @@ namespace CampusServicePortal.Repositories
             _dbFactory = dbFactory;
         }
 
-        public async Task<List<Complaint>> GetComplaintsAsync() =>
-            await _db.Complaints.Include(c => c.Student).AsNoTracking().ToListAsync();
+        public async Task<List<Complaint>> GetComplaintsAsync()
+        {
+            // Use the factory to prevent "Second operation started on this context"
+            using var db = await _dbFactory.CreateDbContextAsync();
+            return await db.Complaints
+                .Include(c => c.Student) // This works now because Student is linked in Entities.cs
+                .AsNoTracking()
+                .ToListAsync();
+        }
 
         public async Task CreateComplaintAsync(Complaint complaint)
         {

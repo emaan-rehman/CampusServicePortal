@@ -3,29 +3,92 @@
 @using CampusServicePortal.Data
 @rendermode InteractiveServer
 @inject ICampusRepository Repo
-@using System.ComponentModel.DataAnnotations
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary">Campus Library Catalog</h2>
+        <span class="badge bg-secondary">Total Books: @(books?.Count ?? 0)</span>
+    </div>
+
+    @if (books == null)
+    {
+        <div class="text-center mt-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 text-muted">Accessing library records...</p>
+        </div>
+    }
+    else if (!books.Any())
+    {
+        <div class="alert alert-warning shadow-sm" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            No books found in the catalog. Please check back later.
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Book Title</th>
+                            <th>Availability</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var book in books)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-semibold">@book.Title</td>
+                                <td>
+                                    @if (book.IsAvailable)
+                                    {
+                                        <span class="badge rounded-pill bg-success">Available</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge rounded-pill bg-danger">Checked Out</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm @(book.IsAvailable ? "btn-primary" : "btn-outline-secondary") shadow-sm"
+                                            disabled="@(!book.IsAvailable)"
+                                            @onclick="() => ReserveBook(book.Id)">
+                                        <i class="bi bi-bookmark-plus me-1"></i>
+                                        @(book.IsAvailable ? "Reserve" : "Unavailable")
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
 
 @code {
-    private List<Book> books = new();
+    private List<Book>? books;
 
     protected override async Task OnInitializedAsync()
     {
-        books = await Repo.GetBooksAsync();
+        var fetchedBooks = await Repo.GetBooksAsync();
+        if (fetchedBooks != null && fetchedBooks.Any())
+        {
+            books = fetchedBooks;
+        }
+        else
+        {
+            // If we reach here, the Repo returned nothing or failed
+            books = new List<Book>();
+        }
     }
-}
-
-<tbody>
-    @foreach (var book in books)
+    
+    private void ReserveBook(int bookId)
     {
-        <tr>
-            <td>@book.Title</td>
-            <td>Author Name</td>
-            <td>@(book.IsAvailable ? "Available" : "Checked Out")</td>
-            <td>
-                <button class="btn btn-sm btn-primary" disabled="@(!book.IsAvailable)">
-                    Reserve
-                </button>
-            </td>
-        </tr>
+        // For now, we just log the action to the console
+        Console.WriteLine($"User clicked reserve for Book ID: {bookId}");
     }
-</tbody>
+
+}

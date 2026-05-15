@@ -20,5 +20,15 @@ namespace CampusServicePortal.Data
         public DbSet<Fee> Fees { get; set; }
         public DbSet<HostelRoom> HostelRooms { get; set; }
         public DbSet<TransportBooking> TransportBookings { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // This tells EF that Students and Users live in the same table
+            modelBuilder.Entity<User>()
+                .HasDiscriminator<string>("UserType")
+                .HasValue<User>("Base")
+                .HasValue<Student>("Student");
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
