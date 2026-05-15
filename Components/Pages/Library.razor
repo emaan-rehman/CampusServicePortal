@@ -1,94 +1,70 @@
 ﻿@page "/Library"
-@using CampusServicePortal.Repositories
 @using CampusServicePortal.Data
 @rendermode InteractiveServer
 @inject ICampusRepository Repo
 
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-primary">Campus Library Catalog</h2>
-        <span class="badge bg-secondary">Total Books: @(books?.Count ?? 0)</span>
+    <h2 class="fw-bold text-primary mb-4">Campus Library Catalog</h2>
+
+    <div class="input-group mb-3 shadow-sm">
+        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+        <input type="text" class="form-control border-start-0"
+               placeholder="Search by book title..."
+               @bind="searchTerm" @bind:event="oninput" />
     </div>
 
-    @if (books == null)
+    @if (FilteredBooks == null)
     {
-        <div class="text-center mt-5">
-            <div class="spinner-border text-primary" role="status"></div>
-            <p class="mt-2 text-muted">Accessing library records...</p>
-        </div>
-    }
-    else if (!books.Any())
-    {
-        <div class="alert alert-warning shadow-sm" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-            No books found in the catalog. Please check back later.
-        </div>
+        <div class="text-center mt-5"><div class="spinner-border text-primary"></div></div>
     }
     else
     {
         <div class="card shadow-sm border-0">
-            <div class="card-body p-0">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var book in FilteredBooks)
+                    {
                         <tr>
-                            <th class="ps-4">Book Title</th>
-                            <th>Availability</th>
-                            <th class="text-center">Action</th>
+                            <td class="fw-semibold">@book.Title</td>
+                            <td>
+                                <span class="badge rounded-pill @(book.IsAvailable ? "bg-success" : "bg-danger")">
+                                    @(book.IsAvailable ? "Available" : "Checked Out")
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-primary" disabled="@(!book.IsAvailable)" @onclick="() => ReserveBook(book.Id)">
+                                    Reserve
+                                </button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var book in books)
-                        {
-                            <tr>
-                                <td class="ps-4 fw-semibold">@book.Title</td>
-                                <td>
-                                    @if (book.IsAvailable)
-                                    {
-                                        <span class="badge rounded-pill bg-success">Available</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge rounded-pill bg-danger">Checked Out</span>
-                                    }
-                                </td>
-                                <td class="text-center">
-                                    <button class="btn btn-sm @(book.IsAvailable ? "btn-primary" : "btn-outline-secondary") shadow-sm"
-                                            disabled="@(!book.IsAvailable)"
-                                            @onclick="() => ReserveBook(book.Id)">
-                                        <i class="bi bi-bookmark-plus me-1"></i>
-                                        @(book.IsAvailable ? "Reserve" : "Unavailable")
-                                    </button>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+                    }
+                </tbody>
+            </table>
         </div>
     }
 </div>
 
 @code {
     private List<Book>? books;
+    private string searchTerm = "";
+
+    // NEW LOGIC: Computed list based on search
+    private List<Book>? FilteredBooks => string.IsNullOrWhiteSpace(searchTerm)
+        ? books
+        : books?.Where(b => b.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
 
     protected override async Task OnInitializedAsync()
     {
-        var fetchedBooks = await Repo.GetBooksAsync();
-        if (fetchedBooks != null && fetchedBooks.Any())
-        {
-            books = fetchedBooks;
-        }
-        else
-        {
-            // If we reach here, the Repo returned nothing or failed
-            books = new List<Book>();
-        }
-    }
-    
-    private void ReserveBook(int bookId)
-    {
-        // For now, we just log the action to the console
-        Console.WriteLine($"User clicked reserve for Book ID: {bookId}");
+        try { books = await Repo.GetBooksAsync(); }
+        catch { books = new(); }
     }
 
+    private void ReserveBook(int id) => Console.WriteLine($"Book {id} reserved.");
 }

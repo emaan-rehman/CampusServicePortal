@@ -15,25 +15,22 @@ namespace CampusServicePortal.Data
     public class User
     {
         [Key]
-        public int UserId { get; set; }
+        public int UserId { get; set; } // Matches the 'UserId' column in your DB
         public string FullName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
 
-        // Foreign Key for Role
         public int? RoleId { get; set; }
 
         [ForeignKey("RoleId")]
         public virtual Role? Role { get; set; }
 
-        // Marked virtual to allow override in Student class (Fixes CS0115)
         public virtual string GetUserRole() => "User";
     }
 
     public class Student : User
     {
-        public string RollNumber { get; set; } = string.Empty;
+        public string RollNumber { get; set; } = string.Empty; // Matches DB column
 
-        // Successfully overrides base method
         public override string GetUserRole() => "Student";
     }
 
@@ -49,12 +46,23 @@ namespace CampusServicePortal.Data
         public string Status { get; set; } = "Pending";
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        // Linking to User (matches your DB Users table)
+        // FIXED: Using 'UserId' because your DB doesn't recognize 'StudentId' in this table
         public int UserId { get; set; }
 
         [ForeignKey("UserId")]
         public virtual User? Student { get; set; }
     }
+
+    [Table("Books")] // Forces EF to plural name, resolving image_177f01 error
+    public class Book
+    {
+        [Key]
+        public int Id { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public bool IsAvailable { get; set; } = true;
+    }
+
+    // --- Supporting Classes Kept for Consistency ---
 
     public class TransportRoute
     {
@@ -71,15 +79,6 @@ namespace CampusServicePortal.Data
         public int UserId { get; set; }
         public int RouteId { get; set; }
         public DateTime BookingDate { get; set; } = DateTime.Now;
-    }
-
-    [Table("Books")] // Forces EF Core to look for plural "Books" in SQL
-    public class Book
-    {
-        [Key]
-        public int Id { get; set; }
-        public string Title { get; set; } = string.Empty;
-        public bool IsAvailable { get; set; } = true;
     }
 
     public class CampusEvent
@@ -128,7 +127,9 @@ namespace CampusServicePortal.Data
     {
         [Key]
         public int Id { get; set; }
-        public int StudentId { get; set; }
+
+        // FIXED: Using 'UserId' here as well to maintain inheritance consistency
+        public int UserId { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal Amount { get; set; }

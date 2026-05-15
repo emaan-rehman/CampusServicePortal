@@ -35,7 +35,6 @@ namespace CampusServicePortal.Repositories
             // Use the factory to prevent "Second operation started on this context"
             using var db = await _dbFactory.CreateDbContextAsync();
             return await db.Complaints
-                .Include(c => c.Student) // This works now because Student is linked in Entities.cs
                 .AsNoTracking()
                 .ToListAsync();
         }
