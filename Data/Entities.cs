@@ -142,10 +142,10 @@ namespace CampusServicePortal.Data
     }
     public class Faculty
     {
-        [Key]
-        public int Id { get; set; }
+        public int FacultyId { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string Department { get; set; } = string.Empty;
+        public string? Department { get; set; }
+        public string? Email { get; set; }
     }
 
     public class Fee
