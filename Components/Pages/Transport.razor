@@ -1,8 +1,9 @@
 ﻿@page "/transport"
 @using CampusServicePortal.Repositories
 @using CampusServicePortal.Data
-@rendermode InteractiveServer
+@using System.ComponentModel.DataAnnotations
 @inject ICampusRepository Repo
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 
 <PageTitle>Transport Booking</PageTitle>
 
@@ -11,67 +12,84 @@
 
     @if (!string.IsNullOrEmpty(statusMessage))
     {
-        <div class="alert alert-success shadow-sm">@statusMessage</div>
+        <div class="alert @(statusMessage.StartsWith("Error") ? "alert-danger" : "alert-success") shadow-sm alert-dismissible fade show">
+            @statusMessage
+            <button type="button" class="btn-close" @onclick='() => statusMessage = ""'></button>
+        </div>
     }
 
     <div class="row">
         <div class="col-md-5">
             <div class="card shadow-sm border-0 p-4 bg-light">
-                <h5 class="mb-3">Reserve Your Seat</h5>
+                <h5 class="mb-3 fw-bold text-secondary">Reserve Your Seat</h5>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Select Route</label>
-                    <select class="form-select" @bind="selectedRouteName">
+                    <select class="form-select shadow-sm" @bind="selectedRouteName">
                         <option value="">-- Choose a Route --</option>
                         @if (availableRoutes != null)
                         {
                             @foreach (var route in availableRoutes)
                             {
-                                <option value="@route.RouteName">@route.RouteName (@route.BusNumber)</option>
+                                <option value="@route.RouteName">@route.RouteName (Bus: @route.BusNumber)</option>
                             }
                         }
                     </select>
                 </div>
-                <button class="btn btn-success w-100 py-2 fw-bold"
+                <button class="btn btn-success w-100 py-2 fw-bold shadow-sm"
                         @onclick="BookTransport"
                         disabled="@(string.IsNullOrEmpty(selectedRouteName) || isProcessing)">
                     @if (isProcessing)
                     {
                         <span class="spinner-border spinner-border-sm me-2"></span>
+                        <span>Processing...</span>
                     }
-                    Confirm Booking
+                    else
+                    {
+                        <span>Confirm Booking</span>
+                    }
                 </button>
             </div>
         </div>
 
         <div class="col-md-7">
             <div class="card shadow-sm border-0 p-4">
-                <p class="text-muted">Active Routes: @(availableRoutes?.Count ?? 0)</p>
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Route</th>
-                            <th>Bus No.</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (availableRoutes == null)
-                        {
-                            <tr><td colspan="3" class="text-center">Loading routes...</td></tr>
-                        }
-                        else
-                        {
-                            @foreach (var route in availableRoutes)
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold text-secondary mb-0">Active Routes</h5>
+                    <span class="badge bg-primary">Total: @(availableRoutes?.Count ?? 0)</span>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Route Name</th>
+                                <th>Bus No.</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (availableRoutes == null)
                             {
-                                <tr>
-                                    <td>@route.RouteName</td>
-                                    <td>@route.BusNumber</td>
-                                    <td><span class="badge bg-info">@route.Status</span></td>
-                                </tr>
+                                <tr><td colspan="3" class="text-center py-4 text-muted">Loading routes...</td></tr>
                             }
-                        }
-                    </tbody>
-                </table>
+                            else if (!availableRoutes.Any())
+                            {
+                                <tr><td colspan="3" class="text-center py-4 text-muted">No routes available.</td></tr>
+                            }
+                            else
+                            {
+                                @foreach (var route in availableRoutes)
+                                {
+                                    <tr>
+                                        <td><strong>@route.RouteName</strong></td>
+                                        <td>@route.BusNumber</td>
+                                        <td><span class="badge bg-info text-dark">@route.Status</span></td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -85,33 +103,53 @@
 
     protected override async Task OnInitializedAsync()
     {
-        availableRoutes = await Repo.GetTransportRoutesAsync();
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        try
+        {
+            availableRoutes = await Repo.GetTransportRoutesAsync();
+        }
+        catch (Exception ex)
+        {
+            statusMessage = "Error loading routes: " + ex.Message;
+        }
     }
 
     private async Task BookTransport()
     {
+        if (isProcessing || string.IsNullOrEmpty(selectedRouteName)) return;
+
         isProcessing = true;
+        statusMessage = ""; // Reset previous message
+
         try
         {
             var newBooking = new TransportBooking
             {
                 RouteName = selectedRouteName,
                 BookingDate = DateTime.Now,
-                UserId = 1 // Placeholder for logged-in user
+                // CRITICAL: Ensure a User with ID 1 exists in your Users table
+                UserId = 1
             };
 
             await Repo.CreateBookingAsync(newBooking);
             
             statusMessage = $"Successfully booked seat for {selectedRouteName}!";
-            selectedRouteName = ""; // Reset
+            selectedRouteName = ""; // Clear selection
         }
         catch (Exception ex)
         {
-            statusMessage = "Error: " + ex.Message;
+            // Specifically catching the InnerException to see SQL errors like Foreign Key violations
+            statusMessage = "Error: " + (ex.InnerException?.Message ?? ex.Message);
+            Console.WriteLine(ex.ToString()); // Log for debugging
         }
         finally
         {
             isProcessing = false;
+            StateHasChanged(); // Force UI update
         }
     }
 }

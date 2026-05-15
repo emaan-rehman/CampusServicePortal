@@ -57,6 +57,7 @@ namespace CampusServicePortal.Repositories
 
         public async Task CreateBookingAsync(TransportBooking booking)
         {
+            // Use the factory to ensure a fresh, private connection for this save
             using var db = await _dbFactory.CreateDbContextAsync();
             db.TransportBookings.Add(booking);
             await db.SaveChangesAsync();
