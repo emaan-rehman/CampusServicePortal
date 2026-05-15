@@ -124,14 +124,22 @@ namespace CampusServicePortal.Data
         public DateTime ExamDate { get; set; }
     }
 
+ 
     public class Course
     {
-        [Key]
-        public int Id { get; set; }
-        public string CourseName { get; set; } = string.Empty;
+        public int CourseId { get; set; }
         public string CourseCode { get; set; } = string.Empty;
+        public string CourseName { get; set; } = string.Empty;
+        public int Credits { get; set; }
     }
 
+    public class Enrollment
+    {
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public int CourseId { get; set; }
+        public DateTime EnrollmentDate { get; set; } = DateTime.Now;
+    }
     public class Faculty
     {
         [Key]

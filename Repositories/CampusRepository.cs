@@ -14,6 +14,8 @@ namespace CampusServicePortal.Repositories
         Task<bool> ReserveBookAsync(int bookId);
         Task<List<CampusEvent>> GetEventsAsync();
         Task<List<MenuItem>> GetCafeteriaMenuAsync();
+        Task<List<Course>> GetAllCoursesAsync();
+        Task EnrollInCourseAsync(Enrollment enrollment);
         Task<List<ExamSchedule>> GetExamsAsync();
         Task<User?> AuthenticateUserAsync(string email, string password);
         Task<List<User>> GetUsersAsync();
@@ -120,6 +122,18 @@ namespace CampusServicePortal.Repositories
                 user.RoleId = newRoleId;
                 await db.SaveChangesAsync();
             }
+        }
+        public async Task<List<Course>> GetAllCoursesAsync()
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+            return await db.Courses.ToListAsync();
+        }
+
+        public async Task EnrollInCourseAsync(Enrollment enrollment)
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+            db.Enrollments.Add(enrollment);
+            await db.SaveChangesAsync();
         }
     }
 }

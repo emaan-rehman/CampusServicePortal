@@ -1,0 +1,66 @@
+﻿@page "/courses"
+@using CampusServicePortal.Data
+@using CampusServicePortal.Repositories
+@inject ICampusRepository Repo
+
+<div class="container mt-4">
+    <h3 class="fw-bold mb-4">Available Courses</h3>
+
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success">@successMessage</div>
+    }
+
+    <div class="table-responsive">
+        <table class="table table-hover border">
+            <thead class="table-dark">
+                <tr>
+                    <th>Code</th>
+                    <th>Course Name</th>
+                    <th>Credits</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (courseList != null)
+                {
+                    @foreach (var c in courseList)
+                    {
+                        <tr>
+                            <td>@c.CourseCode</td>
+                            <td>@c.CourseName</td>
+                            <td>@c.Credits</td>
+                            <td>
+                                <button class="btn btn-sm btn-success" @onclick="() => HandleEnroll(c.CourseId)">
+                                    Enroll
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    private List<Course>? courseList;
+    private string successMessage = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        courseList = await Repo.GetAllCoursesAsync();
+    }
+
+    private async Task HandleEnroll(int courseId)
+    {
+        var enrollment = new Enrollment
+        {
+            CourseId = courseId,
+            UserId = UserSession.CurrentUser?.UserId ?? 0
+        };
+
+        await Repo.EnrollInCourseAsync(enrollment);
+        successMessage = "Successfully enrolled in the course!";
+    }
+}
