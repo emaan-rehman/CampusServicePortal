@@ -111,12 +111,11 @@ namespace CampusServicePortal.Data
         [Key]
         public int Id { get; set; }
         public string ItemName { get; set; } = string.Empty;
-
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
+        public string? Category { get; set; }
     }
 
- 
+
     public class Course
     {
         public int CourseId { get; set; }

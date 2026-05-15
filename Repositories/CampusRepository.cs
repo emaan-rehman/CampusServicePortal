@@ -28,6 +28,8 @@ namespace CampusServicePortal.Repositories
         Task<List<Fee>> GetStudentFeesAsync(int studentId);
         Task<List<HostelRoom>> GetAllRoomsAsync();
         Task AddRoomAsync(HostelRoom room);
+        Task<List<MenuItem>> GetCafeMenuAsync();
+        Task AddMenuItemAsync(MenuItem item);
     }
 
     public class CampusRepository : ICampusRepository
@@ -184,6 +186,18 @@ namespace CampusServicePortal.Repositories
         {
             using var db = await _dbFactory.CreateDbContextAsync();
             db.HostelRooms.Add(room);
+            await db.SaveChangesAsync();
+        }
+        public async Task<List<MenuItem>> GetCafeMenuAsync()
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+            return await db.MenuItems.OrderBy(m => m.Category).ToListAsync();
+        }
+
+        public async Task AddMenuItemAsync(MenuItem item)
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+            db.MenuItems.Add(item);
             await db.SaveChangesAsync();
         }
     }
