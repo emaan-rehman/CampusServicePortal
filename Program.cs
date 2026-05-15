@@ -11,6 +11,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddDbContextFactory<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
     sqlOptions => sqlOptions.EnableRetryOnFailure()));
+builder.Services.AddScoped<UserSession>();
 
 // This line fixes the CS0311 error by using the correct interface/class pair
 builder.Services.AddScoped<ICampusRepository, CampusRepository>();

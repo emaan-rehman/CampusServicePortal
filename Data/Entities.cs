@@ -16,9 +16,12 @@ namespace CampusServicePortal.Data
     {
         [Key]
         public int UserId { get; set; } // Matches the 'UserId' column in your DB
+        [Required]
         public string FullName { get; set; } = string.Empty;
+        [Required, EmailAddress]
         public string Email { get; set; } = string.Empty;
-
+        [Required]
+        public string PasswordHash { get; set; } = string.Empty;
         public int? RoleId { get; set; }
 
         [ForeignKey("RoleId")]
