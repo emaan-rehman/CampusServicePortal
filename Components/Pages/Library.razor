@@ -1,10 +1,17 @@
 ﻿@page "/Library"
 @using CampusServicePortal.Data
-@rendermode InteractiveServer
+@using CampusServicePortal.Repositories
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @inject ICampusRepository Repo
 
 <div class="container mt-4">
-    <h2 class="fw-bold text-primary mb-4">Campus Library Catalog</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary">Campus Library Catalog</h2>
+        @if (!string.IsNullOrEmpty(statusMessage))
+        {
+            <div class="alert alert-info py-1 px-3 mb-0">@statusMessage</div>
+        }
+    </div>
 
     <div class="input-group mb-3 shadow-sm">
         <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
@@ -15,38 +22,47 @@
 
     @if (FilteredBooks == null)
     {
-        <div class="text-center mt-5"><div class="spinner-border text-primary"></div></div>
+        <div class="text-center mt-5">
+            <div class="spinner-border text-primary"></div>
+            <p>Loading library records...</p>
+        </div>
     }
     else
     {
-        <div class="card shadow-sm border-0">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>Title</th>
-                        <th>Status</th>
-                        <th class="text-center">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var book in FilteredBooks)
-                    {
+        <div class="card shadow border-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
                         <tr>
-                            <td class="fw-semibold">@book.Title</td>
-                            <td>
-                                <span class="badge rounded-pill @(book.IsAvailable ? "bg-success" : "bg-danger")">
-                                    @(book.IsAvailable ? "Available" : "Checked Out")
-                                </span>
-                            </td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-primary" disabled="@(!book.IsAvailable)" @onclick="() => ReserveBook(book.Id)">
-                                    Reserve
-                                </button>
-                            </td>
+                            <th class="ps-4">Title</th>
+                            <th>Author</th>
+                            <th>Status</th>
+                            <th class="text-center pe-4">Action</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var book in FilteredBooks)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-semibold">@book.Title</td>
+                                <td class="text-muted">@(book.Author ?? "Unknown")</td>
+                                <td>
+                                    <span class="badge rounded-pill @(book.IsAvailable ? "bg-success" : "bg-danger")">
+                                        @(book.IsAvailable ? "Available" : "Checked Out")
+                                    </span>
+                                </td>
+                                <td class="text-center pe-4">
+                                    <button class="btn btn-sm @(book.IsAvailable ? "btn-primary" : "btn-outline-secondary")"
+                                            disabled="@(!book.IsAvailable)"
+                                            @onclick="() => ReserveBook(book)">
+                                        <i class="bi bi-bookmark-plus"></i> Reserve
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     }
 </div>
@@ -54,17 +70,34 @@
 @code {
     private List<Book>? books;
     private string searchTerm = "";
+    private string statusMessage = "";
 
-    // NEW LOGIC: Computed list based on search
     private List<Book>? FilteredBooks => string.IsNullOrWhiteSpace(searchTerm)
         ? books
         : books?.Where(b => b.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadBooks();
+    }
+
+    private async Task LoadBooks()
+    {
         try { books = await Repo.GetBooksAsync(); }
         catch { books = new(); }
     }
 
-    private void ReserveBook(int id) => Console.WriteLine($"Book {id} reserved.");
+    private async Task ReserveBook(Book book)
+    {
+        var success = await Repo.ReserveBookAsync(book.Id);
+        if (success)
+        {
+            statusMessage = $"Reserved: {book.Title}";
+            await LoadBooks(); // Refresh UI to show "Checked Out" status
+        }
+        else
+        {
+            statusMessage = "Error: Book is no longer available.";
+        }
+    }
 }

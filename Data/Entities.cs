@@ -56,10 +56,15 @@ namespace CampusServicePortal.Data
     [Table("Books")] // Forces EF to plural name, resolving image_177f01 error
     public class Book
     {
-        [Key]
+        [Key] // Essential for Entity Framework to track updates
         public int Id { get; set; }
+
+        [Required]
         public string Title { get; set; } = string.Empty;
-        public bool IsAvailable { get; set; } = true;
+
+        public string? Author { get; set; } // Matches nvarchar(100)
+
+        public bool IsAvailable { get; set; } = true; // Matches bit
     }
 
     // --- Supporting Classes Kept for Consistency ---

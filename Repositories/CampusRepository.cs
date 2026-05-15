@@ -11,6 +11,7 @@ namespace CampusServicePortal.Repositories
         Task<List<TransportRoute>> GetTransportRoutesAsync();
         Task CreateBookingAsync(TransportBooking booking);
         Task<List<Book>> GetBooksAsync();
+        Task<bool> ReserveBookAsync(int bookId);
         Task<List<CampusEvent>> GetEventsAsync();
         Task<List<MenuItem>> GetCafeteriaMenuAsync();
         Task<List<ExamSchedule>> GetExamsAsync();
@@ -64,9 +65,22 @@ namespace CampusServicePortal.Repositories
         }
         public async Task<List<Book>> GetBooksAsync()
         {
-            // This ensures a fresh connection is opened specifically for this request
             using var db = await _dbFactory.CreateDbContextAsync();
             return await db.Books.AsNoTracking().ToListAsync();
+        }
+
+        public async Task<bool> ReserveBookAsync(int bookId)
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+            var book = await db.Books.FindAsync(bookId);
+
+            if (book != null && book.IsAvailable)
+            {
+                book.IsAvailable = false; // Mark as checked out
+                await db.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
         public async Task<List<CampusEvent>> GetEventsAsync()
         {
