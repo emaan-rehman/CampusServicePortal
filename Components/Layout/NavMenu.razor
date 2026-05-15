@@ -1,54 +1,43 @@
 ﻿@using CampusServicePortal.Data
 
 <nav class="flex-column">
-    @* ALWAYS VISIBLE *@
     <div class="nav-item px-3">
         <NavLink class="nav-link" href="" Match="NavLinkMatch.All">Dashboard</NavLink>
     </div>
 
     @if (UserSession.CurrentUser != null)
     {
-        @* STUDENT ONLY FEATURES *@
-        @if (UserSession.CurrentUser.Role?.RoleName == "Student")
+        var user = UserSession.CurrentUser;
+        // Get role name safely
+        var role = user.Role?.RoleName;
+
+        @* STUDENT SIDE: Show if Role is 'Student' OR RoleId is 2 *@
+        @if (role == "Student" || user.RoleId == 2)
         {
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="transport">Transport Booking</NavLink>
-            </div>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="Library">Library</NavLink>
-            </div>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="events">Events</NavLink>
-            </div>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="Complaints">Complaints</NavLink>
-            </div>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="courses">Courses</NavLink>
-            </div>
+            <div class="nav-item px-3"><NavLink class="nav-link" href="transport">Transport Booking</NavLink></div>
+            <div class="nav-item px-3"><NavLink class="nav-link" href="Library">Library</NavLink></div>
+            <div class="nav-item px-3"><NavLink class="nav-link" href="events">Events</NavLink></div>
+            <div class="nav-item px-3"><NavLink class="nav-link" href="Complaints">Complaints</NavLink></div>
+            <div class="nav-item px-3"><NavLink class="nav-link" href="courses">Courses</NavLink></div>
         }
 
-        @* ADMIN ONLY FEATURES *@
-        @if (UserSession.CurrentUser.Role?.RoleName == "Admin")
+        @* ADMIN SIDE: Show if Role is 'Admin' OR RoleId is 1 *@
+        @if (role == "Admin" || user.RoleId == 1)
         {
             <div class="nav-item px-3 border-top mt-2">
                 <p class="text-white-50 small ps-3 mb-1">Admin Tools</p>
-                <NavLink class="nav-link text-warning" href="RoleManagement">
-                    Role Management
-                </NavLink>
+                <NavLink class="nav-link text-warning" href="RoleManagement">Role Management</NavLink>
             </div>
         }
 
-        @* LOGOUT (Visible to anyone logged in) *@
         <div class="nav-item px-3 mt-4">
             <button class="btn btn-link nav-link text-danger" onclick="window.location.href='/login'">
-                Logout (@UserSession.CurrentUser.FullName)
+                Logout (@user.FullName)
             </button>
         </div>
     }
     else
     {
-        @* GUEST ONLY *@
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="login">Login</NavLink>
         </div>
