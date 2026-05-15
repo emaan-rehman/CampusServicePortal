@@ -40,19 +40,16 @@
 
     private async Task HandleLogin()
     {
-        errorMessage = "";
-        
-        // We'll add this method to the Repo in the next step
         var user = await Repo.AuthenticateUserAsync(loginEmail, loginPassword);
-
         if (user != null)
         {
             Session.Login(user);
+            // FORCE LOAD is the key. It restarts the app state so the Sidebar refreshes.
             Nav.NavigateTo("/", forceLoad: true);
         }
         else
         {
-            errorMessage = "Invalid email or password.";
+            errorMessage = "Invalid credentials.";
         }
     }
 }
