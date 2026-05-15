@@ -6,12 +6,51 @@
 @using System.ComponentModel.DataAnnotations
 
 <div class="container mt-4">
-    <h3>Upcoming Campus Events</h3>
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">Annual Tech Fest 2026</h5>
-            <p class="card-text">Date: June 15, 2026 | Location: Main Auditorium</p>
-            <button class="btn btn-primary">Register Now</button>
+    <h3 class="fw-bold text-primary">Upcoming Campus Events</h3>
+    <hr />
+
+    @if (events == null)
+    {
+        <div class="text-center mt-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p>Fetching events...</p>
         </div>
-    </div>
+    }
+    else if (!events.Any())
+    {
+        <div class="alert alert-info">No upcoming events found at this time.</div>
+    }
+    else
+    {
+        @foreach (var ev in events)
+        {
+            <div class="card mb-3 shadow-sm border-start border-primary border-4">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">@ev.Title</h5>
+                    <p class="card-text text-muted">
+                        <i class="bi bi-calendar-event"></i> Date: @ev.Date.ToLongDateString()
+                    </p>
+                    <button class="btn btn-primary btn-sm">Register Now</button>
+                </div>
+            </div>
+        }
+    }
 </div>
+
+@code {
+    private List<CampusEvent>? events;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Ensure this method exists in your Repo and uses the Factory!
+            events = await Repo.GetEventsAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Events Page Error: {ex.Message}");
+            events = new List<CampusEvent>(); // Set to empty list so UI doesn't hang
+        }
+    }
+}
