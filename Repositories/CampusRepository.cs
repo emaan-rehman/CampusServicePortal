@@ -25,6 +25,7 @@ namespace CampusServicePortal.Repositories
         Task UpdateUserRoleAsync(int userId, int newRoleId);
         Task<List<Faculty>> GetAllFacultyAsync();
         Task AddFacultyAsync(Faculty faculty);
+        Task<List<Fee>> GetStudentFeesAsync(int studentId);
     }
 
     public class CampusRepository : ICampusRepository
@@ -162,6 +163,14 @@ namespace CampusServicePortal.Repositories
             using var db = await _dbFactory.CreateDbContextAsync();
             db.Faculty.Add(faculty);
             await db.SaveChangesAsync();
+        }
+        public async Task<List<Fee>> GetStudentFeesAsync(int studentId)
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+            return await db.Fees
+                .Where(f => f.StudentId == studentId)
+                .OrderByDescending(f => f.DueDate)
+                .ToListAsync();
         }
     }
 }

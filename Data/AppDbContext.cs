@@ -53,6 +53,7 @@ namespace CampusServicePortal.Data
                 entity.Property(e => e.SubjectCode);
                 entity.Property(e => e.SubjectName);
             });
+            modelBuilder.Entity<Fee>().ToTable("Fees");
 
             base.OnModelCreating(modelBuilder);
         }

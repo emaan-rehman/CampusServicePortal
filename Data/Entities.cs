@@ -150,15 +150,11 @@ namespace CampusServicePortal.Data
 
     public class Fee
     {
-        [Key]
         public int Id { get; set; }
-
-        // FIXED: Using 'UserId' here as well to maintain inheritance consistency
-        public int UserId { get; set; }
-
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal Amount { get; set; }
-        public bool IsPaid { get; set; }
+        public int? StudentId { get; set; }
+        public decimal? Amount { get; set; }
+        public DateTime? DueDate { get; set; }
+        public bool? IsPaid { get; set; }
     }
 
     public class HostelRoom
