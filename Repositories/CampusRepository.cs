@@ -18,6 +18,7 @@ namespace CampusServicePortal.Repositories
         Task EnrollInCourseAsync(Enrollment enrollment);
       
         Task<List<ExamSchedule>> GetExamSchedulesAsync();
+        Task AddExamScheduleAsync(ExamSchedule schedule);
         Task<User?> AuthenticateUserAsync(string email, string password);
         Task<List<User>> GetUsersAsync();
         Task<List<Role>> GetRolesAsync();
@@ -99,6 +100,12 @@ namespace CampusServicePortal.Repositories
             return await db.ExamSchedules
                 .OrderBy(e => e.ExamDate)
                 .ToListAsync();
+        }
+        public async Task AddExamScheduleAsync(ExamSchedule schedule)
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+            db.ExamSchedules.Add(schedule);
+            await db.SaveChangesAsync();
         }
         public async Task<User?> AuthenticateUserAsync(string email, string password)
         {
