@@ -22,13 +22,12 @@ namespace CampusServicePortal.Data
         public DbSet<HostelRoom> HostelRooms { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Fixes the 'UserType' / Discriminator exception
             modelBuilder.Entity<User>()
-                .HasDiscriminator<string>("UserType")
-                .HasValue<User>("Base")
+                .HasDiscriminator<string>("UserType") // "UserType" is a column in your SQL table
+                .HasValue<User>("Admin")
                 .HasValue<Student>("Student");
-            modelBuilder.Entity<User>().HasNoDiscriminator();
-            base.OnModelCreating(modelBuilder);
+
+            // Ensure this matches your previous "materialize" error fix
         }
     }
 }
