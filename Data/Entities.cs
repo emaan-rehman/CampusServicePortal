@@ -159,10 +159,9 @@ namespace CampusServicePortal.Data
 
     public class HostelRoom
     {
-        [Key]
-        public int Id { get; set; }
-        public string RoomNumber { get; set; } = string.Empty;
-        public string Block { get; set; } = string.Empty;
-        public bool IsOccupied { get; set; }
+        public int RoomId { get; set; }
+        public string? RoomNumber { get; set; }
+        public int? Capacity { get; set; }
+        public bool? IsOccupied { get; set; }
     }
 }

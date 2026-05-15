@@ -1,0 +1,76 @@
+﻿@page "/hostel"
+@using CampusServicePortal.Data
+@using CampusServicePortal.Repositories
+@inject ICampusRepository Repo
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold"><i class="bi bi-building text-warning"></i> Hostel Accommodation</h2>
+        @if (IsAdmin)
+        {
+            <button class="btn btn-warning" @onclick="() => showForm = !showForm">
+                @(showForm ? "Close" : "Add Room")
+            </button>
+        }
+    </div>
+
+    @if (showForm && IsAdmin)
+    {
+        <div class="card card-body mb-4 border-warning shadow-sm">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" placeholder="Room Number" @bind="newRoom.RoomNumber" />
+                </div>
+                <div class="col-md-4">
+                    <input type="number" class="form-control" placeholder="Capacity" @bind="newRoom.Capacity" />
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-success w-100" @onclick="SaveRoom">Save Room</button>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="row">
+        @if (rooms != null)
+        {
+            @foreach (var room in rooms)
+            {
+                <div class="col-md-3 mb-3">
+                    <div class="card text-center @(room.IsOccupied == true ? "bg-light" : "border-success")">
+                        <div class="card-body">
+                            <h4 class="fw-bold">Room @room.RoomNumber</h4>
+                            <p class="text-muted mb-1">Capacity: @room.Capacity</p>
+                            <span class="badge @(room.IsOccupied == true ? "bg-secondary" : "bg-success")">
+                                @(room.IsOccupied == true ? "Full" : "Available")
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    private List<HostelRoom>? rooms;
+    private bool showForm = false;
+    private HostelRoom newRoom = new HostelRoom();
+    private bool IsAdmin => UserSession.CurrentUser?.Role?.RoleName == "Admin" || UserSession.CurrentUser?.RoleId == 1;
+
+    protected override async Task OnInitializedAsync() => await LoadRooms();
+
+    private async Task LoadRooms() => rooms = await Repo.GetAllRoomsAsync();
+
+    private async Task SaveRoom()
+    {
+        if (!string.IsNullOrEmpty(newRoom.RoomNumber))
+        {
+            newRoom.IsOccupied = false;
+            await Repo.AddRoomAsync(newRoom);
+            newRoom = new HostelRoom();
+            showForm = false;
+            await LoadRooms();
+        }
+    }
+}

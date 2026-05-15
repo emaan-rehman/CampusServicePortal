@@ -26,6 +26,8 @@ namespace CampusServicePortal.Repositories
         Task<List<Faculty>> GetAllFacultyAsync();
         Task AddFacultyAsync(Faculty faculty);
         Task<List<Fee>> GetStudentFeesAsync(int studentId);
+        Task<List<HostelRoom>> GetAllRoomsAsync();
+        Task AddRoomAsync(HostelRoom room);
     }
 
     public class CampusRepository : ICampusRepository
@@ -171,6 +173,18 @@ namespace CampusServicePortal.Repositories
                 .Where(f => f.StudentId == studentId)
                 .OrderByDescending(f => f.DueDate)
                 .ToListAsync();
+        }
+        public async Task<List<HostelRoom>> GetAllRoomsAsync()
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+            return await db.HostelRooms.ToListAsync();
+        }
+
+        public async Task AddRoomAsync(HostelRoom room)
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+            db.HostelRooms.Add(room);
+            await db.SaveChangesAsync();
         }
     }
 }
