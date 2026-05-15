@@ -9,6 +9,7 @@ namespace CampusServicePortal.Repositories
         Task<List<Complaint>> GetComplaintsAsync();
         Task CreateComplaintAsync(Complaint complaint);
         Task<List<TransportRoute>> GetTransportRoutesAsync();
+        Task CreateBookingAsync(TransportBooking booking);
         Task<List<Book>> GetBooksAsync();
         Task<List<CampusEvent>> GetEventsAsync();
         Task<List<MenuItem>> GetCafeteriaMenuAsync();
@@ -30,23 +31,36 @@ namespace CampusServicePortal.Repositories
             _dbFactory = dbFactory;
         }
 
-        public async Task<List<Complaint>> GetComplaintsAsync()
-        {
-            // Use the factory to prevent "Second operation started on this context"
-            using var db = await _dbFactory.CreateDbContextAsync();
-            return await db.Complaints
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
         public async Task CreateComplaintAsync(Complaint complaint)
         {
+            // Uses a fresh, private connection for the save operation
             using var db = await _dbFactory.CreateDbContextAsync();
             db.Complaints.Add(complaint);
             await db.SaveChangesAsync();
         }
 
-        public async Task<List<TransportRoute>> GetTransportRoutesAsync() => await _db.TransportRoutes.AsNoTracking().ToListAsync();
+        public async Task<List<Complaint>> GetComplaintsAsync()
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+            return await db.Complaints
+                .OrderByDescending(c => c.CreatedAt)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+
+        public async Task<List<TransportRoute>> GetTransportRoutesAsync()
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+            return await db.TransportRoutes.AsNoTracking().ToListAsync();
+        }
+
+        public async Task CreateBookingAsync(TransportBooking booking)
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+            db.TransportBookings.Add(booking);
+            await db.SaveChangesAsync();
+        }
         public async Task<List<Book>> GetBooksAsync()
         {
             // This ensures a fresh connection is opened specifically for this request

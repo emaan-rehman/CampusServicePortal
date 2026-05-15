@@ -3,24 +3,115 @@
 @using CampusServicePortal.Data
 @rendermode InteractiveServer
 @inject ICampusRepository Repo
-@using System.ComponentModel.DataAnnotations
-
 
 <PageTitle>Transport Booking</PageTitle>
 
 <div class="container mt-4">
-    <h2 class="text-primary fw-bold">Transport Booking</h2>
-    <hr />
-    <div class="card shadow-sm p-4">
-        <p>Available Routes: 12 Active</p>
-        <button class="btn btn-success" @onclick="BookTransport">Book Now</button>
+    <h2 class="text-primary fw-bold mb-4">Transport Booking</h2>
+
+    @if (!string.IsNullOrEmpty(statusMessage))
+    {
+        <div class="alert alert-success shadow-sm">@statusMessage</div>
+    }
+
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card shadow-sm border-0 p-4 bg-light">
+                <h5 class="mb-3">Reserve Your Seat</h5>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Select Route</label>
+                    <select class="form-select" @bind="selectedRouteName">
+                        <option value="">-- Choose a Route --</option>
+                        @if (availableRoutes != null)
+                        {
+                            @foreach (var route in availableRoutes)
+                            {
+                                <option value="@route.RouteName">@route.RouteName (@route.BusNumber)</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <button class="btn btn-success w-100 py-2 fw-bold"
+                        @onclick="BookTransport"
+                        disabled="@(string.IsNullOrEmpty(selectedRouteName) || isProcessing)">
+                    @if (isProcessing)
+                    {
+                        <span class="spinner-border spinner-border-sm me-2"></span>
+                    }
+                    Confirm Booking
+                </button>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="card shadow-sm border-0 p-4">
+                <p class="text-muted">Active Routes: @(availableRoutes?.Count ?? 0)</p>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Route</th>
+                            <th>Bus No.</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (availableRoutes == null)
+                        {
+                            <tr><td colspan="3" class="text-center">Loading routes...</td></tr>
+                        }
+                        else
+                        {
+                            @foreach (var route in availableRoutes)
+                            {
+                                <tr>
+                                    <td>@route.RouteName</td>
+                                    <td>@route.BusNumber</td>
+                                    <td><span class="badge bg-info">@route.Status</span></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
 @code {
-    private void BookTransport()
+    private List<TransportRoute>? availableRoutes;
+    private string selectedRouteName = "";
+    private string statusMessage = "";
+    private bool isProcessing = false;
+
+    protected override async Task OnInitializedAsync()
     {
-        // Interactivity test
-        Console.WriteLine("Transport Booked!");
+        availableRoutes = await Repo.GetTransportRoutesAsync();
+    }
+
+    private async Task BookTransport()
+    {
+        isProcessing = true;
+        try
+        {
+            var newBooking = new TransportBooking
+            {
+                RouteName = selectedRouteName,
+                BookingDate = DateTime.Now,
+                UserId = 1 // Placeholder for logged-in user
+            };
+
+            await Repo.CreateBookingAsync(newBooking);
+            
+            statusMessage = $"Successfully booked seat for {selectedRouteName}!";
+            selectedRouteName = ""; // Reset
+        }
+        catch (Exception ex)
+        {
+            statusMessage = "Error: " + ex.Message;
+        }
+        finally
+        {
+            isProcessing = false;
+        }
     }
 }

@@ -1,45 +1,61 @@
 ﻿@page "/complaints"
 @using CampusServicePortal.Repositories
 @using CampusServicePortal.Data
-@rendermode InteractiveServer
-@inject ICampusRepository Repo
 @using System.ComponentModel.DataAnnotations
-
+@inject ICampusRepository Repo
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 <div class="container mt-4">
-    <h3 class="mb-4">Campus Complaint Portal</h3>
+    <h3 class="mb-4 fw-bold">Campus Complaint Portal</h3>
 
-    <EditForm Model="@newComplaint" OnValidSubmit="HandleSubmit" class="card p-4 shadow-sm mb-5">
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success">@successMessage</div>
+    }
+
+    <EditForm Model="@newComplaint" OnValidSubmit="HandleSubmit" class="card p-4 shadow-sm mb-5 border-0 bg-light">
         <DataAnnotationsValidator />
         <div class="mb-3">
-            <label>Issue Title</label>
-            <InputText @bind-Value="newComplaint.Title" class="form-control" />
+            <label class="form-label">Issue Title</label>
+            <InputText @bind-Value="newComplaint.Title" class="form-control" placeholder="Brief summary of the issue" />
             <ValidationMessage For="@(() => newComplaint.Title)" />
         </div>
         <div class="mb-3">
-            <label>Detailed Description</label>
-            <InputTextArea @bind-Value="newComplaint.Description" class="form-control" />
+            <label class="form-label">Detailed Description</label>
+            <InputTextArea @bind-Value="newComplaint.Description" class="form-control" rows="3" />
         </div>
-        <button type="submit" class="btn btn-primary">Submit Complaint</button>
+        <button type="submit" class="btn btn-primary px-4" disabled="@isProcessing">
+            @if (isProcessing)
+            {
+                <span class="spinner-border spinner-border-sm"></span>
+            }
+            Submit Complaint
+        </button>
     </EditForm>
 
-    <table class="table">
+    <h5 class="mb-3">Recent Submissions</h5>
+    <table class="table table-hover bg-white shadow-sm">
+        <thead class="table-light">
+            <tr>
+                <th>Issue</th>
+                <th>Status</th>
+                <th>Date</th>
+            </tr>
+        </thead>
         <tbody>
-            @foreach (var complaint in complaintList)
+            @if (complaintList == null)
             {
-                <tr>
-                    <td><strong>@complaint.Title</strong></td>
-                    <td>
-                        @if (complaint.Status == "Pending")
-                        {
-                            <span class="badge bg-warning text-dark"><i class="bi bi-clock-history"></i> Pending</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-success"><i class="bi bi-check-circle"></i> Resolved</span>
-                        }
-                    </td>
-                    <td>@complaint.CreatedAt.ToShortDateString()</td>
-                </tr>
+                <tr><td colspan="3">Loading...</td></tr>
+            }
+            else
+            {
+                @foreach (var complaint in complaintList)
+                {
+                    <tr>
+                        <td><strong>@complaint.Title</strong></td>
+                        <td><span class="badge @(complaint.Status == "Pending" ? "bg-warning" : "bg-success")">@complaint.Status</span></td>
+                        <td>@complaint.CreatedAt.ToShortDateString()</td>
+                    </tr>
+                }
             }
         </tbody>
     </table>
@@ -47,25 +63,65 @@
 
 @code {
     private Complaint newComplaint = new();
-    private List<Complaint> complaintList = new();
+    private List<Complaint>? complaintList;
+    private bool isProcessing = false;
+    private string successMessage = "";
 
     protected override async Task OnInitializedAsync()
     {
-        complaintList = await Repo.GetComplaintsAsync();
+        await RefreshList();
     }
 
+    private async Task RefreshList()
+    {
+        try
+        {
+            complaintList = await Repo.GetComplaintsAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Load Error: {ex.Message}");
+            complaintList = new List<Complaint>();
+        }
+    }
+
+    
     private async Task HandleSubmit()
     {
-        // Ensure the ID is set to something valid in your DB for now
-        // In a real app, this would be the logged-in User's ID
-        newComplaint.UserId = 1;
-        newComplaint.CreatedAt = DateTime.Now;
-        newComplaint.Status = "Pending";
+        if (isProcessing) return;
+        isProcessing = true;
+        Console.WriteLine("Button Clicked: Starting Submission..."); // Debug check 1
 
-        await Repo.CreateComplaintAsync(newComplaint);
-    
-        // Refresh and Reset
-        complaintList = await Repo.GetComplaintsAsync();
-        newComplaint = new();
+        try
+        {
+            // 1. Manually set all required fields to avoid DB Null constraints
+            newComplaint.UserId = 1;
+            newComplaint.CreatedAt = DateTime.Now;
+            newComplaint.Status = "Pending";
+            newComplaint.Description ??= "No description provided";
+
+            Console.WriteLine($"Sending to Repo: {newComplaint.Title}"); // Debug check 2
+
+            // 2. Call Repo with a dedicated context (Factory)
+            await Repo.CreateComplaintAsync(newComplaint);
+        
+            Console.WriteLine("Save Successful!"); // Debug check 3
+
+            // 3. Clear and Refresh
+            successMessage = "Complaint submitted successfully!";
+            newComplaint = new();
+            await RefreshList();
+        }
+        catch (Exception ex)
+        {
+            // This will print the REAL error in your "Output" tab
+            Console.WriteLine($"CRITICAL ERROR: {ex.Message}");
+            successMessage = "Error: " + ex.Message;
+        }
+        finally
+        {
+            isProcessing = false;
+            await InvokeAsync(StateHasChanged); // Force UI update
+        }
     }
 }

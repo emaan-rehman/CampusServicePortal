@@ -63,22 +63,26 @@ namespace CampusServicePortal.Data
     }
 
     // --- Supporting Classes Kept for Consistency ---
+    public class TransportBooking
+    {
+        [Key] // This resolves the InvalidOperationException
+        public int BookingId { get; set; }
+
+        // Add these to fix the CS0117/CS1061 missing definition errors
+        public string RouteName { get; set; } = string.Empty;
+        public DateTime BookingDate { get; set; } = DateTime.Now;
+        public int UserId { get; set; }
+    }
 
     public class TransportRoute
     {
         [Key]
         public int Id { get; set; }
         public string RouteName { get; set; } = string.Empty;
-        public string Status { get; set; } = "Active";
-    }
 
-    public class TransportBooking
-    {
-        [Key]
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public int RouteId { get; set; }
-        public DateTime BookingDate { get; set; } = DateTime.Now;
+        // Add this to match your SQL 'BusNumber' column
+        public string BusNumber { get; set; } = string.Empty;
+        public string Status { get; set; } = "Active";
     }
 
     public class CampusEvent
