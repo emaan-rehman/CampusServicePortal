@@ -86,3 +86,144 @@ h1:focus {
         padding: 10px;
     }
 }
+/* Core Layout Wrapper Fixes overriding default Blazor isolates */
+.page {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+}
+
+/* Sidebar Specific Palette Setup */
+.sidebar {
+    width: 280px;
+    background: #0B192C !important;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.bg-primary-dark {
+    background-color: #001E3D !important;
+}
+
+.bg-navy-gradient {
+    background: linear-gradient(180deg, #0B192C 0%, #1E3E62 100%) !important;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.border-blue-glow {
+    border-color: rgba(0, 119, 255, 0.15) !important;
+}
+
+/* Navigation Anchor Refinement Styles */
+.custom-nav-link {
+    color: #E2F1E7 !important;
+    transition: all 0.2s ease-in-out;
+}
+
+    .custom-nav-link i {
+        color: #4A90E2;
+        transition: transform 0.2s ease;
+    }
+
+    .custom-nav-link:hover, .custom-nav-link.active {
+        background-color: rgba(0, 119, 255, 0.2) !important;
+        color: #FFFFFF !important;
+        box-shadow: inset 3px 0 0 #0077FF;
+    }
+
+        .custom-nav-link:hover i, .custom-nav-link.active i {
+            color: #00E5FF !important;
+            transform: scale(1.05);
+        }
+
+.text-info-muted {
+    color: #8FA0B4 !important;
+}
+
+/* Dashboard Card UI Elements */
+.bg-light {
+    background-color: #F4F7FA !important;
+}
+
+.hero-banner-card {
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 30, 61, 0.06) !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02) !important;
+}
+
+.fw-black {
+    font-weight: 850 !important;
+}
+
+.text-navy {
+    color: #001E3D !important;
+}
+
+.badge-premium {
+    background-color: rgba(0, 119, 255, 0.08) !important;
+    color: #0077FF !important;
+    border: 1px solid rgba(0, 119, 255, 0.12);
+}
+
+/* Soft Metrics Context Blobs */
+.metric-card {
+    background: #FFFFFF !important;
+    transition: transform 0.25s cubic-bezier(0.1, 0.8, 0.2, 1);
+}
+
+    .metric-card:hover {
+        transform: translateY(-3px);
+    }
+
+.bg-primary-soft {
+    background-color: rgba(0, 119, 255, 0.08) !important;
+}
+
+.bg-info-soft {
+    background-color: rgba(0, 229, 255, 0.08) !important;
+}
+
+.bg-warning-soft {
+    background-color: rgba(255, 193, 7, 0.08) !important;
+}
+
+.bg-success-soft {
+    background-color: rgba(40, 167, 69, 0.08) !important;
+}
+
+/* Bulletin Adjustments */
+.badge-alert {
+    background-color: #DC3545 !important;
+    color: white;
+}
+
+.bulletin-row:hover {
+    background-color: rgba(0, 30, 61, 0.01);
+}
+
+/* Quick Navigation Anchor Responses */
+.quick-nav-action-card {
+    border: 1px solid rgba(0,0,0,0.06) !important;
+}
+
+    .quick-nav-action-card:hover {
+        border-color: #0077FF !important;
+        background-color: rgba(0, 119, 255, 0.02) !important;
+        transform: scale(1.01);
+    }
+
+.user-meta-capsule {
+    background: rgba(255,255,255,0.04);
+}
+
+.meta-avatar {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+}
