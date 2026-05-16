@@ -90,38 +90,34 @@
     {
         if (isProcessing) return;
         isProcessing = true;
-        Console.WriteLine("Button Clicked: Starting Submission..."); // Debug check 1
+        Console.WriteLine("Button Clicked: Starting Submission..."); 
 
         try
         {
-            // 1. Manually set all required fields to avoid DB Null constraints
             newComplaint.UserId = 1;
             newComplaint.CreatedAt = DateTime.Now;
             newComplaint.Status = "Pending";
             newComplaint.Description ??= "No description provided";
 
-            Console.WriteLine($"Sending to Repo: {newComplaint.Title}"); // Debug check 2
+            Console.WriteLine($"Sending to Repo: {newComplaint.Title}"); 
 
-            // 2. Call Repo with a dedicated context (Factory)
             await Repo.CreateComplaintAsync(newComplaint);
         
-            Console.WriteLine("Save Successful!"); // Debug check 3
+            Console.WriteLine("Save Successful!"); 
 
-            // 3. Clear and Refresh
             successMessage = "Complaint submitted successfully!";
             newComplaint = new();
             await RefreshList();
         }
         catch (Exception ex)
         {
-            // This will print the REAL error in your "Output" tab
             Console.WriteLine($"CRITICAL ERROR: {ex.Message}");
             successMessage = "Error: " + ex.Message;
         }
         finally
         {
             isProcessing = false;
-            await InvokeAsync(StateHasChanged); // Force UI update
+            await InvokeAsync(StateHasChanged); 
         }
     }
 
