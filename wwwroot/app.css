@@ -1,105 +1,139 @@
-/* Master Core Canvas Architecture Structure Sheets */
+/* Master Structural Reset Matrix Overhaul */
 html, body {
-    height: 100vh;
-    width: 100vw;
-    margin: 0;
-    padding: 0;
-    background-color: #F8FAFC;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    overflow: hidden;
-}
-
-/* Master Fixed Core Grid Frame Layout Overhaul */
-.portal-frame {
-    display: flex;
-    flex-wrap: nowrap;
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-}
-
-/* Sidebar Structural Dimensions Block Specification Profile */
-.portal-sidebar-area {
-    width: 280px;
-    min-width: 280px;
-    max-width: 280px;
-    background-color: #0A192F !important;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid rgba(255, 255, 255, 0.06);
-    flex-shrink: 0;
-    z-index: 1000;
-}
-
-/* Main Screen Workspace Element Frame Canvas */
-.portal-content-area {
-    flex-grow: 1;
-    height: 100vh;
-    overflow: hidden;
+    height: 100vh !important;
+    width: 100vw !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
     background-color: #F4F7FE;
-    display: flex;
-    flex-direction: column;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* Outer Padding Control Matrix Configurations */
-.workspace-outer {
-    padding: 2.25rem;
-    width: 100%;
-    overflow-y: auto;
+/* Hard structural framework lists clearing targets */
+.portal-sidebar-area ul,
+.portal-sidebar-area li,
+.portal-sidebar-area nav {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
 }
 
-/* Side Navigation Anchors Layout Component Restyling Rules */
+/* --- PREMIUM SIDEBAR NAVIGATION ITEM DESIGN ENGINE --- */
 .nav-item-link {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 0.8rem 1.25rem;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0.75rem 1rem !important;
     color: #94A3B8 !important;
     text-decoration: none !important;
-    font-weight: 500;
-    font-size: 0.925rem;
-    border-radius: 8px;
-    transition: all 0.2s ease-in-out;
-    margin-bottom: 2px;
+    font-weight: 500 !important;
+    font-size: 0.9rem !important;
+    border-radius: 10px !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    border: 1px solid transparent !important;
+    margin-bottom: 4px !important;
 }
 
-    .nav-item-link:hover {
-        background-color: rgba(255, 255, 255, 0.05) !important;
-        color: #FFFFFF !important;
-    }
+/* Inner Icon Container Matrix Settings */
+.icon-box-wrapper {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    border-radius: 8px !important;
+    background-color: rgba(255, 255, 255, 0.02) !important;
+    color: #64748B !important;
+    margin-right: 12px !important;
+    font-size: 1.1rem !important;
+    transition: all 0.2s ease !important;
+    border: 1px solid rgba(255, 255, 255, 0.03) !important;
+}
 
-    .nav-item-link.active {
-        background: rgba(14, 165, 233, 0.15) !important;
+.link-label-text {
+    transition: transform 0.2s ease !important;
+}
+
+/* Hover State Animation Configurations */
+.nav-item-link:hover {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+    color: #F8FAFC !important;
+    border-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+    .nav-item-link:hover .icon-box-wrapper {
         color: #38BDF8 !important;
-        border: 1px solid rgba(14, 165, 233, 0.25) !important;
+        background-color: rgba(14, 165, 233, 0.1) !important;
+        border-color: rgba(14, 165, 233, 0.15) !important;
     }
 
-/* Action Interactive Element Cards Hover Animations profiles */
+    .nav-item-link:hover .link-label-text {
+        transform: translateX(3px) !important;
+    }
+
+/* Active State Configuration Styling Rules */
+.nav-item-link.active {
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0.05) 100%) !important;
+    color: #38BDF8 !important;
+    font-weight: 600 !important;
+    border: 1px solid rgba(14, 165, 233, 0.25) !important;
+    box-shadow: inset 0 0 12px rgba(14, 165, 233, 0.05) !important;
+}
+
+    .nav-item-link.active .icon-box-wrapper {
+        background-color: #38BDF8 !important;
+        color: #0A192F !important;
+        border-color: #38BDF8 !important;
+        box-shadow: 0 2px 8px rgba(56, 189, 248, 0.3) !important;
+    }
+
+/* ENHANCED SPECIFIC: Top Master Dashboard Button Highlight Style */
+.dashboard-btn-premium {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* --- SIDEBAR DECORATION SEGMENT HEADERS --- */
+.sidebar-category-divider {
+    font-family: 'Inter', monospace !important;
+    font-weight: 700 !important;
+    text-uppercase: uppercase !important;
+    font-size: 0.675rem !important;
+    letter-spacing: 1.75px !important;
+    color: #64FFDA !important;
+    opacity: 0.85 !important;
+    padding: 1.5rem 0.75rem 0.5rem 0.75rem !important;
+    text-transform: uppercase;
+}
+
+.administrative-divider {
+    color: #F59E0B !important;
+}
+
+/* Main Display Application Panel Workspace Action Cards Animation Profiles */
 .interactive-action-card {
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid #E2E8F0 !important;
 }
 
     .interactive-action-card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04) !important;
+        box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05) !important;
         border-color: #CBD5E1 !important;
     }
 
-/* Mobile Adaptive Grid Breakpoint Profiles Queries */
-@media (max-width: 768px) {
-    .portal-frame {
-        flex-direction: column;
-    }
+/* Sidebar clean tracking scroll bar logic core overrides */
+.overflow-auto::-webkit-scrollbar {
+    width: 4px;
+}
 
-    .portal-sidebar-area {
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-    }
-
-    .portal-content-area {
-        height: auto;
-    }
+.overflow-auto::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
 }
