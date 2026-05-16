@@ -1,15 +1,15 @@
 ﻿@using CampusServicePortal.Data
 
-<div class="w-100 d-flex flex-column h-100" style="background-color: #0A192F; min-height: 100vh;">
+<div class="w-100 d-flex flex-column h-100" style="background-color: #0A192F; min-height: calc(100vh - 2rem);">
     <div class="d-flex align-items-center px-4" style="height: 70px; background-color: #020C1B; border-bottom: 1px solid rgba(255,255,255,0.06);">
         <i class="bi bi-mortarboard-fill text-info fs-3 me-2"></i>
         <span class="text-white fw-bold fs-5 tracking-wider" style="letter-spacing: 0.5px;">Smart Campus</span>
     </div>
 
-    <div class="flex-grow-1 overflow-auto px-3 py-4">
+    <div class="flex-grow-1 px-3 py-4" style="overflow-y: auto;">
         <ul class="nav nav-pills flex-column mb-auto gap-1" style="list-style: none; padding-left: 0;">
             <li class="nav-item">
-                <NavLink class="nav-link text-white d-flex align-items-center gap-3 px-3 py-2.5 active" href="" Match="NavLinkMatch.All" style="border-radius: 8px; font-weight: 500; background: rgba(2, 132, 199, 0.2); color: #64FFDA !important; border: 1px solid rgba(2, 132, 199, 0.3);">
+                <NavLink class="nav-link text-white d-flex align-items-center gap-3 px-3 py-2.5 active" href="" Match="NavLinkMatch.All" style="border-radius: 8px; font-weight: 500; background: rgba(2, 132, 199, 0.2); color: #64FFDA !important; border: 1px solid rgba(2, 132, 199, 0.25);">
                     <i class="bi bi-columns-gap fs-5" style="color: #64FFDA;"></i>
                     <span>Dashboard Panel</span>
                 </NavLink>
@@ -22,36 +22,36 @@
 
                 @if (role == "Student" || user.RoleId == 2)
                 {
-                    <li class="nav-item text-info fw-bold text-uppercase font-monospace px-3 mt-4 mb-2" style="font-size: 0.65rem; letter-spacing: 1.5px; opacity: 0.8; color: #64FFDA !important;">
+                    <li class="nav-item fw-bold text-uppercase font-monospace px-3 mt-4 mb-2" style="font-size: 0.65rem; letter-spacing: 1.5px; opacity: 0.8; color: #64FFDA;">
                         Academic Core
                     </li>
                     <li class="nav-item">
-                        <NavLink class="nav-link d-flex align-items-center gap-2 px-3 py-2.5 text-white-50" href="courses" style="border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='#FFF';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.5)';"><i class="bi bi-book fs-5"></i> <span>My Courses</span></NavLink>
+                        <NavLink class="nav-link d-flex align-items-center gap-3 px-3 py-2 text-white-50" href="courses" style="border-radius: 6px; transition: all 0.2s; font-size: 0.9rem;" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='#FFF';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.5)';"><i class="bi bi-book fs-5"></i> <span>My Courses</span></NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="nav-link d-flex align-items-center gap-2 px-3 py-2.5 text-white-50" href="transport" style="border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='#FFF';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.5)';"><i class="bi bi-bus-front fs-5"></i> <span>Transport Route</span></NavLink>
+                        <NavLink class="nav-link d-flex align-items-center gap-3 px-3 py-2 text-white-50" href="transport" style="border-radius: 6px; transition: all 0.2s; font-size: 0.9rem;" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='#FFF';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.5)';"><i class="bi bi-bus-front fs-5"></i> <span>Transport Route</span></NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="nav-link d-flex align-items-center gap-2 px-3 py-2.5 text-white-50" href="Library" style="border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='#FFF';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.5)';"><i class="bi bi-journal-bookmark fs-5"></i> <span>Digital Library</span></NavLink>
+                        <NavLink class="nav-link d-flex align-items-center gap-3 px-3 py-2 text-white-50" href="Library" style="border-radius: 6px; transition: all 0.2s; font-size: 0.9rem;" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='#FFF';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.5)';"><i class="bi bi-journal-bookmark fs-5"></i> <span>Digital Library</span></NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="nav-link d-flex align-items-center gap-2 px-3 py-2.5 text-white-50" href="fees" style="border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='#FFF';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.5)';"><i class="bi bi-credit-card fs-5"></i> <span>Tuition Fees</span></NavLink>
+                        <NavLink class="nav-link d-flex align-items-center gap-3 px-3 py-2 text-white-50" href="fees" style="border-radius: 6px; transition: all 0.2s; font-size: 0.9rem;" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='#FFF';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.5)';"><i class="bi bi-credit-card fs-5"></i> <span>Tuition Fees</span></NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="nav-link d-flex align-items-center gap-2 px-3 py-2.5 text-white-50" href="Complaints" style="border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='#FFF';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.5)';"><i class="bi bi-chat-left-dots fs-5"></i> <span>Helpdesk Tickets</span></NavLink>
+                        <NavLink class="nav-link d-flex align-items-center gap-3 px-3 py-2 text-white-50" href="Complaints" style="border-radius: 6px; transition: all 0.2s; font-size: 0.9rem;" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='#FFF';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.5)';"><i class="bi bi-chat-left-dots fs-5"></i> <span>Helpdesk Tickets</span></NavLink>
                     </li>
                 }
 
                 @if (role == "Admin" || user.RoleId == 1)
                 {
-                    <li class="nav-item text-warning fw-bold text-uppercase font-monospace px-3 mt-4 mb-2" style="font-size: 0.65rem; letter-spacing: 1.5px; opacity: 0.8; color: #F59E0B !important;">
+                    <li class="nav-item fw-bold text-uppercase font-monospace px-3 mt-4 mb-2" style="font-size: 0.65rem; letter-spacing: 1.5px; opacity: 0.8; color: #F59E0B;">
                         Administration
                     </li>
                     <li class="nav-item">
-                        <NavLink class="nav-link d-flex align-items-center gap-2 px-3 py-2.5 text-white-50" href="RoleManagement" style="border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='#FFF';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.5)';"><i class="bi bi-shield-lock fs-5"></i> <span>Access Control</span></NavLink>
+                        <NavLink class="nav-link d-flex align-items-center gap-3 px-3 py-2 text-white-50" href="RoleManagement" style="border-radius: 6px; transition: all 0.2s; font-size: 0.9rem;" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='#FFF';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.5)';"><i class="bi bi-shield-lock fs-5"></i> <span>Access Control</span></NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="nav-link d-flex align-items-center gap-2 px-3 py-2.5 text-white-50" href="faculty" style="border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='#FFF';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.5)';"><i class="bi bi-person-badge fs-5"></i> <span>Faculty Registry</span></NavLink>
+                        <NavLink class="nav-link d-flex align-items-center gap-3 px-3 py-2 text-white-50" href="faculty" style="border-radius: 6px; transition: all 0.2s; font-size: 0.9rem;" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='#FFF';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.5)';"><i class="bi bi-person-badge fs-5"></i> <span>Faculty Registry</span></NavLink>
                     </li>
                 }
             }
@@ -61,14 +61,14 @@
     @if (UserSession.CurrentUser != null)
     {
         <div class="p-3 mt-auto">
-            <div class="p-3" style="background-color: #112240; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="background-color: #112240; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); padding: 1rem;">
                 <div class="d-flex align-items-center">
-                    <div class="bg-info text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold me-2 shadow-sm" style="width: 38px; height: 38px; min-width: 38px; font-size: 0.9rem;">
+                    <div class="bg-info text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold me-2" style="width: 38px; height: 38px; min-width: 38px;">
                         @UserSession.CurrentUser.FullName.Substring(0, 1).ToUpper()
                     </div>
                     <div class="overflow-hidden">
-                        <div class="text-white text-truncate fw-bold" style="font-size: 0.85rem;">@UserSession.CurrentUser.FullName</div>
-                        <small class="text-muted d-block font-monospace" style="font-size: 0.7rem; opacity: 0.6;">ID: #@UserSession.CurrentUser.UserId</small>
+                        <div class="text-white text-truncate fw-bold small">@UserSession.CurrentUser.FullName</div>
+                        <small class="text-muted d-block font-monospace" style="font-size: 0.7rem;">ID: #@UserSession.CurrentUser.UserId</small>
                     </div>
                 </div>
             </div>
