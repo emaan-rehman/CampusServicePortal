@@ -1,65 +1,15 @@
 ﻿@using CampusServicePortal.Data
 
-<style>
-    .custom-sidebar {
-        background: linear-gradient(180deg, #0A192F 0%, #112240 100%) !important;
-        min-height: 100vh;
-        box-shadow: 4px 0 10px rgba(0,0,0,0.15);
-    }
-
-    .brand-section {
-        background-color: #020C1B !important;
-        border-bottom: 1px solid rgba(100, 255, 218, 0.1);
-    }
-
-    .menu-heading {
-        font-size: 0.75rem !important;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        color: #64FFDA !important;
-        font-weight: 700;
-        opacity: 0.8;
-    }
-
-    .custom-pill-link {
-        color: #CCD6F6 !important;
-        transition: all 0.2s ease-in-out !important;
-        border-left: 3px solid transparent;
-    }
-
-        .custom-pill-link:hover, .custom-pill-link.active {
-            background: rgba(100, 255, 218, 0.08) !important;
-            color: #64FFDA !important;
-            border-left-color: #64FFDA !important;
-            padding-left: 20px !important;
-        }
-
-        .custom-pill-link i {
-            color: #8892B0;
-        }
-
-        .custom-pill-link:hover i, .custom-pill-link.active i {
-            color: #64FFDA !important;
-        }
-
-    .user-profile-box {
-        background: rgba(2 Paradise, 30, 61, 0.25);
-        border: 1px solid rgba(255,255,255,0.05);
-    }
-</style>
-
-<div class="custom-sidebar d-flex flex-column h-100">
-    <div class="brand-section px-4 py-3 d-flex align-items-center">
+<div class="d-flex flex-column h-100 w-100">
+    <div class="brand-header">
         <i class="bi bi-mortarboard-fill text-info fs-3 me-2"></i>
-        <span class="text-white fw-bold fs-5 tracking-wider">CAMPUS PORTAL</span>
+        <span class="text-white fw-bold tracking-wider fs-5">Smart Campus</span>
     </div>
 
-    <div class="flex-grow-1 overflow-auto p-3">
-        <nav class="nav flex-column gap-1">
-            
-            <NavLink class="nav-link custom-pill-link d-flex align-items-center rounded px-3 py-2" href="" Match="NavLinkMatch.All">
-                <i class="bi bi-speedometer2 me-3 fs-5"></i>
-                <span class="fw-medium">Dashboard Hub</span>
+    <div class="nav-scroller">
+        <nav class="nav flex-column">
+            <NavLink class="nav-item-link" href="" Match="NavLinkMatch.All">
+                <i class="bi bi-columns-gap"></i> <span>Dashboard Center</span>
             </NavLink>
 
             @if (UserSession.CurrentUser != null)
@@ -67,87 +17,41 @@
                 var user = UserSession.CurrentUser;
                 var role = user.Role?.RoleName;
 
-                @* STUDENT SYSTEM PORTALS *@
                 @if (role == "Student" || user.RoleId == 2)
                 {
-                    <div class="menu-heading mt-4 mb-2 ps-3">Student Workspace</div>
-                    
-                    <NavLink class="nav-link custom-pill-link d-flex align-items-center rounded px-3 py-2" href="courses">
-                        <i class="bi bi-book me-3 fs-5"></i> My Courses
-                    </NavLink>
-                    
-                    <NavLink class="nav-link custom-pill-link d-flex align-items-center rounded px-3 py-2" href="transport">
-                        <i class="bi bi-bus-front me-3 fs-5"></i> Transport Track
-                    </NavLink>
-                    
-                    <NavLink class="nav-link custom-pill-link d-flex align-items-center rounded px-3 py-2" href="Library">
-                        <i class="bi bi-journal-bookmark me-3 fs-5"></i> Digital Library
-                    </NavLink>
-                    
-                    <NavLink class="nav-link custom-pill-link d-flex align-items-center rounded px-3 py-2" href="fees">
-                        <i class="bi bi-credit-card me-3 fs-5"></i> Financial Ledger
-                    </NavLink>
-                    
-                    <NavLink class="nav-link custom-pill-link d-flex align-items-center rounded px-3 py-2" href="events">
-                        <i class="bi bi-calendar-event me-3 fs-5"></i> Campus Events
-                    </NavLink>
-                    
-                    <NavLink class="nav-link custom-pill-link d-flex align-items-center rounded px-3 py-2" href="Complaints">
-                        <i class="bi bi-chat-square-text me-3 fs-5"></i> File a Complaint
-                    </NavLink>
+                    <div class="section-divider-title">Academic Services</div>
+                    <NavLink class="nav-item-link" href="courses"><i class="bi bi-journal-text"></i> My Courses</NavLink>
+                    <NavLink class="nav-item-link" href="transport"><i class="bi bi-bus-front"></i> Transport Track</NavLink>
+                    <NavLink class="nav-item-link" href="Library"><i class="bi bi-book"></i> Digital Library</NavLink>
+                    <NavLink class="nav-item-link" href="fees"><i class="bi bi-wallet2"></i> Tuition Fees</NavLink>
+                    <NavLink class="nav-item-link" href="events"><i class="bi bi-calendar-event"></i> Campus Events</NavLink>
+                    <NavLink class="nav-item-link" href="Complaints"><i class="bi bi-chat-left-dots"></i> Helpdesk Tickets</NavLink>
                 }
 
-                @* ADMINISTRATIVE MANAGEMENT DOCK *@
                 @if (role == "Admin" || user.RoleId == 1)
                 {
-                    <div class="menu-heading mt-4 mb-2 ps-3 text-warning">Administration</div>
-                    
-                    <NavLink class="nav-link custom-pill-link d-flex align-items-center rounded px-3 py-2" href="RoleManagement">
-                        <i class="bi bi-shield-lock me-3 fs-5"></i> Access Roles
-                    </NavLink>
-                    
-                    <NavLink class="nav-link custom-pill-link d-flex align-items-center rounded px-3 py-2" href="faculty">
-                        <i class="bi bi-people me-3 fs-5"></i> Faculty Registry
-                    </NavLink>
+                    <div class="section-divider-title text-warning">Administration</div>
+                    <NavLink class="nav-item-link" href="RoleManagement"><i class="bi bi-shield-lock"></i> Access Control</NavLink>
+                    <NavLink class="nav-item-link" href="faculty"><i class="bi bi-person-workspace"></i> Faculty Registry</NavLink>
                 }
 
-                @* GENERAL UTILITIES SECTION *@
-                <div class="menu-heading mt-4 mb-2 ps-3">General Portals</div>
-                
-                <NavLink class="nav-link custom-pill-link d-flex align-items-center rounded px-3 py-2" href="exams">
-                    <i class="bi bi-calendar3 me-3 fs-5"></i> Exam Schedules
-                </NavLink>
-                
-                <NavLink class="nav-link custom-pill-link d-flex align-items-center rounded px-3 py-2" href="hostel">
-                    <i class="bi bi-building me-3 fs-5"></i> Hostel Units
-                </NavLink>
-                
-                <NavLink class="nav-link custom-pill-link d-flex align-items-center rounded px-3 py-2" href="cafe">
-                    <i class="bi bi-cup-hot me-3 fs-5"></i> Campus Café
-                </NavLink>
+                <div class="section-divider-title">General Portals</div>
+                <NavLink class="nav-item-link" href="exams"><i class="bi bi-file-earmark-spreadsheet"></i> Examinations</NavLink>
+                <NavLink class="nav-item-link" href="hostel"><i class="bi bi-building"></i> Hostel Portals</NavLink>
+                <NavLink class="nav-item-link" href="cafe"><i class="bi bi-cup-hot"></i> Café Lounge</NavLink>
 
-                <div class="mt-4 pt-3 border-top border-secondary">
-                    <div class="user-profile-box d-flex align-items-center p-2 rounded mb-2">
-                        <div class="bg-info text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold me-2" style="width: 32px; height: 32px; min-width:32px;">
-                            @user.FullName.Substring(0, 1).ToUpper()
-                        </div>
-                        <div class="text-truncate">
-                            <div class="text-white small fw-bold text-truncate">@user.FullName</div>
-                            <small class="text-muted font-monospace" style="font-size:0.7rem;">ID: #@user.UserId</small>
+                <div class="mt-4 pt-3 border-top border-secondary border-opacity-20">
+                    <div class="user-footer-card">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-info text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold me-2" style="width: 36px; height: 36px; min-width: 36px;">
+                                @user.FullName.Substring(0, 1).ToUpper()
+                            </div>
+                            <div class="text-truncate">
+                                <div class="text-white small fw-bold text-truncate">@user.FullName</div>
+                                <span class="text-muted font-monospace" style="font-size: 0.75rem;">ID: #@user.UserId</span>
+                            </div>
                         </div>
                     </div>
-                    <button class="btn btn-link nav-link text-danger w-100 text-start d-flex align-items-center px-3 py-2 rounded custom-pill-link" style="border:none;" onclick="window.location.href='/login'">
-                        <i class="bi bi-box-arrow-left me-3 fs-5 text-danger"></i>
-                        <span class="text-danger fw-bold">Sign Out</span>
-                    </button>
-                </div>
-            }
-            else
-            {
-                <div class="mt-4">
-                    <NavLink class="nav-link custom-pill-link d-flex align-items-center rounded px-3 py-2 bg-success bg-opacity-10 text-success" href="login">
-                        <i class="bi bi-box-arrow-in-right me-3 fs-5"></i> Secure Gateway Login
-                    </NavLink>
                 </div>
             }
         </nav>
