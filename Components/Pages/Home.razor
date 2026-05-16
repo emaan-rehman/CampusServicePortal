@@ -4,150 +4,204 @@
 
 <PageTitle>Dashboard Infrastructure</PageTitle>
 
-<div class="dashboard-viewport container-fluid px-4 py-4">
-    
-    @* PRIMARY MANAGEMENT HERO PROFILE *@
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="hero-banner-card p-4 rounded-3 shadow-sm border-0 d-flex justify-content-between align-items-center flex-wrap gap-3">
-                <div class="hero-text">
-                    <h1 class="fw-black text-navy display-6 mb-1">
-                        @((UserSession.CurrentUser?.Role?.RoleName == "Admin") ? "Admin Control Center" : "Student Command Hub")
-                    </h1>
-                    <p class="text-secondary mb-0">System services operating securely. Access all integrated modules below.</p>
-                </div>
-                <div class="hero-pill">
-                    <span class="badge badge-premium px-4 py-2.5 fs-6 rounded-pill">
-                        <i class="bi bi-person-circle text-primary me-2"></i> @(UserSession.CurrentUser?.FullName ?? "Guest Profile")
-                    </span>
+<style>
+    .page-wrapper {
+        background-color: #F8FAFC !important;
+        min-height: 100vh;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+    .custom-hero {
+        background: linear-gradient(135deg, #1E3A8A 0%, #0F172A 100%) !important;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(30, 58, 138, 0.15);
+    }
+    .custom-card {
+        background: #FFFFFF !important;
+        border: 1px solid #E2E8F0 !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03) !important;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .custom-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08) !important;
+    }
+    .metric-icon-box {
+        width: 52px;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+    }
+    .shortcut-btn {
+        background: #F1F5F9;
+        border: 1px solid #E2E8F0;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        text-decoration: none !important;
+    }
+    .shortcut-btn:hover {
+        background: #E0F2FE;
+        border-color: #0EA5E9;
+    }
+    .bulletin-item {
+        border-left: 4px solid #3B82F6;
+        background: #F8FAFC;
+    }
+    .bulletin-item-urgent {
+        border-left: 4px solid #EF4444;
+        background: #FEF2F2;
+    }
+</style>
+
+<div class="page-wrapper p-4">
+    <div class="container-fluid m-0 p-0">
+        
+        <div class="row mb-4 m-0">
+            <div class="col-12 p-0">
+                <div class="custom-hero p-4 text-white d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div>
+                        <span class="text-info font-monospace text-uppercase small tracking-wider fw-bold">System Online</span>
+                        <h1 class="fw-bold m-0 mt-1">
+                            @(UserSession.CurrentUser?.Role?.RoleName == "Admin" ? "Admin Control Center" : "Student Command Hub")
+                        </h1>
+                        <p class="text-white-50 m-0 mt-1">Manage core infrastructure services, track profiles, and access service lines safely.</p>
+                    </div>
+                    <div>
+                        <div class="bg-white bg-opacity-10 border border-white border-opacity-20 px-3 py-2 rounded-pill d-flex align-items-center">
+                            <i class="bi bi-person-badge-fill text-info me-2 fs-5"></i>
+                            <span class="fw-semibold">@(UserSession.CurrentUser?.FullName ?? "Guest Profile")</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        @if (UserSession.CurrentUser?.Role?.RoleName == "Admin" || UserSession.CurrentUser?.RoleId == 1)
+        {
+            <div class="row g-4 m-0 row-cols-1 row-cols-md-2 row-cols-xl-4">
+                <div class="col p-0 pe-md-3 pb-3">
+                    <div class="card custom-card h-100 p-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="text-muted text-uppercase small font-monospace fw-bold">Active Records</span>
+                                <h2 class="fw-bold text-dark m-0 mt-1">150 Users</h2>
+                            </div>
+                            <div class="metric-icon-box bg-primary bg-opacity-10 text-primary">
+                                <i class="bi bi-people-fill fs-3"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col p-0 pe-xl-3 pb-3">
+                    <div class="card custom-card h-100 p-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="text-muted text-uppercase small font-monospace fw-bold">Course Units</span>
+                                <h2 class="fw-bold text-dark m-0 mt-1">12 Catalogs</h2>
+                            </div>
+                            <div class="metric-icon-box bg-success bg-opacity-10 text-success">
+                                <i class="bi bi-journal-bookmark-fill fs-3"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col p-0 pe-md-3 pb-3">
+                    <div class="card custom-card h-100 p-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="text-muted text-uppercase small font-monospace fw-bold">Active Issues</span>
+                                <h2 class="fw-bold text-danger m-0 mt-1">5 Pending</h2>
+                            </div>
+                            <div class="metric-icon-box bg-danger bg-opacity-10 text-danger">
+                                <i class="bi bi-exclamation-octagon-fill fs-3"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col p-0 pb-3">
+                    <div class="card custom-card h-100 p-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="text-muted text-uppercase small font-monospace fw-bold">System State</span>
+                                <h2 class="fw-bold text-info m-0 mt-1">Operational</h2>
+                            </div>
+                            <div class="metric-icon-box bg-info bg-opacity-10 text-info">
+                                <i class="bi bi-cpu-fill fs-3"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4 m-0">
+                
+                <div class="col-lg-8 p-0 pe-lg-3 mb-4">
+                    <div class="card custom-card h-100">
+                        <div class="card-header bg-white py-3 border-bottom d-flex align-items-center px-4">
+                            <i class="bi bi-info-circle-fill text-primary me-2 fs-5"></i>
+                            <h5 class="m-0 fw-bold text-dark">Verified Campus Information Boards</h5>
+                        </div>
+                        <div class="card-body p-4 d-flex flex-column gap-3">
+                            
+                            <div class="bulletin-item-urgent p-3 rounded">
+                                <div class="d-flex justify-content-between flex-wrap align-items-center gap-2 mb-1">
+                                    <h6 class="fw-bold text-danger m-0"><i class="bi bi-calendar-check-fill me-2"></i>Fall 2024 Exam Timetables Published</h6>
+                                    <span class="badge bg-danger">Critical</span>
+                                </div>
+                                <p class="text-muted small m-0">The complete examination roadmap has been signed off. Access the Exam Schedule portal view to cross-reference dates and locations.</p>
+                            </div>
+
+                            <div class="bulletin-item p-3 rounded">
+                                <div class="d-flex justify-content-between flex-wrap align-items-center gap-2 mb-1">
+                                    <h6 class="fw-bold text-primary m-0"><i class="bi bi-bus-front-fill me-2"></i>New Bus Transit Core Routes Active</h6>
+                                    <span class="badge bg-primary">Transit</span>
+                                </div>
+                                <p class="text-muted small m-0">Shuttle fleet deployment numbers have been extended to fulfill peak hours for South City lines. Track real-time status in the transport module.</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 p-0 mb-4">
+                    <div class="card custom-card h-100">
+                        <div class="card-header bg-white py-3 border-bottom px-4">
+                            <h5 class="m-0 fw-bold text-dark"><i class="bi bi-lightning-charge-fill text-warning me-2"></i>Quick Actions</h5>
+                        </div>
+                        <div class="card-body p-4 d-flex flex-column gap-3">
+                            
+                            <a href="courses" class="shortcut-btn p-3 d-flex align-items-center text-dark">
+                                <div class="bg-primary bg-opacity-10 text-primary p-2 rounded me-3">
+                                    <i class="bi bi-journal-check fs-4"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-navy">My Enrollments</div>
+                                    <small class="text-muted d-block">Manage and view registered curriculum core paths</small>
+                                </div>
+                            </a>
+
+                            <a href="transport" class="shortcut-btn p-3 d-flex align-items-center text-dark">
+                                <div class="bg-success bg-opacity-10 text-success p-2 rounded me-3">
+                                    <i class="bi bi-geo-alt-fill fs-4"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-navy">Check Bus Status</div>
+                                    <small class="text-muted d-block">Track institutional logistics and shuttle assignments</small>
+                                </div>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
     </div>
-
-    @if (UserSession.CurrentUser?.Role?.RoleName == "Admin" || UserSession.CurrentUser?.RoleId == 1)
-    {
-        @* ANALYTICS GRID *@
-        <div class="row g-4">
-            <div class="col-xl-3 col-sm-6">
-                <div class="card metric-card border-0 shadow-sm rounded-3 overflow-hidden border-start border-5 border-primary h-100">
-                    <div class="card-body d-flex align-items-center justify-content-between p-4">
-                        <div>
-                            <h6 class="text-secondary text-uppercase small tracking-wider font-monospace mb-2">Enrolled Users</h6>
-                            <h2 class="fw-black text-navy mb-0">150</h2>
-                        </div>
-                        <div class="icon-blob bg-primary-soft text-primary p-3 rounded-3">
-                            <i class="bi bi-people-fill fs-3"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-xl-3 col-sm-6">
-                <div class="card metric-card border-0 shadow-sm rounded-3 overflow-hidden border-start border-5 border-info h-100">
-                    <div class="card-body d-flex align-items-center justify-content-between p-4">
-                        <div>
-                            <h6 class="text-secondary text-uppercase small tracking-wider font-monospace mb-2">Curriculum Blocks</h6>
-                            <h2 class="fw-black text-navy mb-0">12 Active</h2>
-                        </div>
-                        <div class="icon-blob bg-info-soft text-info p-3 rounded-3">
-                            <i class="bi bi-journal-code fs-3"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-sm-6">
-                <div class="card metric-card border-0 shadow-sm rounded-3 overflow-hidden border-start border-5 border-warning h-100">
-                    <div class="card-body d-flex align-items-center justify-content-between p-4">
-                        <div>
-                            <h6 class="text-secondary text-uppercase small tracking-wider font-monospace mb-2">Open Discrepancies</h6>
-                            <h2 class="fw-black text-navy mb-0">5 Alerts</h2>
-                        </div>
-                        <div class="icon-blob bg-warning-soft text-warning p-3 rounded-3">
-                            <i class="bi bi-envelope-exclamation-fill fs-3"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-sm-6">
-                <div class="card metric-card border-0 shadow-sm rounded-3 overflow-hidden border-start border-5 border-success h-100">
-                    <div class="card-body d-flex align-items-center justify-content-between p-4">
-                        <div>
-                            <h6 class="text-secondary text-uppercase small tracking-wider font-monospace mb-2">System Engines</h6>
-                            <h2 class="fw-black text-success mb-0">Live Audit</h2>
-                        </div>
-                        <div class="icon-blob bg-success-soft text-success p-3 rounded-3">
-                            <i class="bi bi-cpu-fill fs-3"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-    else
-    {
-        @* ASYMMETRIC VISUAL STUDENT INTERFACES *@
-        <div class="row g-4">
-            
-            @* DISPATCH AND ANNOUNCEMENT FEED *@
-            <div class="col-lg-8">
-                <div class="card content-panel-card border-0 shadow-sm rounded-3 bg-white h-100">
-                    <div class="card-header bg-white border-bottom py-3 d-flex align-items-center justify-content-between px-4">
-                        <div class="d-flex align-items-center">
-                            <i class="bi bi-shield-shaded text-primary me-2.5 fs-5"></i>
-                            <h5 class="card-title fw-black text-navy mb-0">Verified Institutional Bulletins</h5>
-                        </div>
-                        <span class="badge bg-light text-primary border border-primary-soft rounded-pill font-monospace px-2.5 py-1">Synced</span>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="bulletin-feed-container">
-                            <div class="bulletin-row p-4 border-bottom position-relative">
-                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <h6 class="fw-bold text-navy mb-0">Fall Timetables Published</h6>
-                                    <span class="badge badge-alert rounded-pill">Urgent</span>
-                                </div>
-                                <p class="text-secondary small mb-0">The full examination matrix has been successfully processed. Check details under the Examination tab.</p>
-                            </div>
-                            <div class="bulletin-row p-4 position-relative">
-                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <h6 class="fw-bold text-navy mb-0">Transit Routes Updated</h6>
-                                    <span class="badge badge-info rounded-pill">Transit</span>
-                                </div>
-                                <p class="text-secondary small mb-0">An additional transit fleet servicing South City lines has been allocated for peak operation hours.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            @* QUICK UTILITY LINKS *@
-            <div class="col-lg-4">
-                <div class="card content-panel-card border-0 shadow-sm rounded-3 bg-white h-100">
-                    <div class="card-header bg-white border-bottom py-3 px-4">
-                        <h5 class="card-title fw-black text-navy mb-0"><i class="bi bi-lightning-charge-fill text-warning me-2"></i>Workspace Shortcuts</h5>
-                    </div>
-                    <div class="card-body p-4 d-flex flex-column gap-3 justify-content-start">
-                        <a href="courses" class="quick-nav-action-card d-flex align-items-center p-3 rounded-3 text-start border bg-light bg-opacity-20 text-decoration-none transition-all">
-                            <div class="bg-primary-soft p-2.5 rounded-3 text-primary me-3"><i class="bi bi-file-earmark-code-fill fs-4"></i></div>
-                            <div>
-                                <div class="fw-bold text-navy mb-0">My Enrollments</div>
-                                <small class="text-secondary text-wrap d-block">Manage active degree streams</small>
-                            </div>
-                        </a>
-                        
-                        <a href="transport" class="quick-nav-action-card d-flex align-items-center p-3 rounded-3 text-start border bg-light bg-opacity-20 text-decoration-none transition-all">
-                            <div class="bg-success-soft p-2.5 rounded-3 text-success me-3"><i class="bi bi-geo-alt-fill fs-4"></i></div>
-                            <div>
-                                <div class="fw-bold text-navy mb-0">Check Bus Status</div>
-                                <small class="text-secondary text-wrap d-block">Track shuttle deployments</small>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    }
 </div>
