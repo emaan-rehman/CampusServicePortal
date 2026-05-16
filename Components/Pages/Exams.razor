@@ -12,14 +12,13 @@
         </h2>
         
         <div class="d-flex align-items-center gap-3">
-            @* --- CRITICAL ROLE CHECK: Button strictly restricted for Admin --- *@
             @if (IsAdmin)
             {
                 <button class="btn btn-danger shadow-sm fw-bold d-flex align-items-center gap-2"
                         style="border-radius: 8px; padding: 10px 16px; font-size: 0.9rem;"
-                        @onclick="() => showForm = !showForm">
+                        @onclick="ToggleFormPanel">
                     <i class="bi @(showForm ? "bi-x-circle" : "bi-plus-circle")"></i>
-                    @(showForm ? "Close Form" : "Add New Schedule")
+                    @(showForm ? "Close Form" : isEditing ? "Cancel Edit" : "Add New Schedule")
                 </button>
             }
 
@@ -34,12 +33,13 @@
         </div>
     </div>
 
-    @* --- CRITICAL ROLE CHECK: Form Module strictly rendered only for Admin --- *@
+    @* --- DYNAMIC FORM PANEL: HANDLING BOTH INSERT AND UPDATE --- *@
     @if (showForm && IsAdmin)
     {
-        <div class="card card-body mb-4 shadow-sm border-0 p-4" style="border-radius: 16px; border-left: 5px solid #DC3545 !important; background-color: #FFFFFF;">
+        <div class="card card-body mb-4 shadow-sm border-0 p-4" style="border-radius: 16px; border-left: 5px solid #(isEditing ? " 0D6EFD" : "DC3545" ) !important; background-color: #FFFFFF;">
             <h5 class="fw-bold mb-3 text-dark d-flex align-items-center gap-2">
-                <i class="bi bi-plus-square-fill text-danger"></i> Add New Exam Entry
+                <i class="bi @(isEditing ? "bi-pencil-square text-primary" : "bi-plus-square-fill text-danger")"></i>
+                @(isEditing ? "Modify Existing Exam Record" : "Add New Exam Entry")
             </h5>
             <div class="row g-3">
                 <div class="col-md-3">
@@ -59,15 +59,15 @@
                     <input type="text" class="form-control bg-light" placeholder="e.g., Room 204" @bind="newExam.Room" />
                 </div>
                 <div class="col-md-2 d-flex align-items-end">
-                    <button class="btn btn-success w-100 fw-bold py-2" style="border-radius: 8px;" @onclick="SaveExam">
-                        <i class="bi bi-cloud-arrow-up-fill me-1"></i> Save Schedule
+                    <button class="btn @(isEditing ? "btn-primary" : "btn-success") w-100 fw-bold py-2" style="border-radius: 8px;" @onclick="SaveExam">
+                        <i class="bi bi-cloud-arrow-up-fill me-1"></i> @(isEditing ? "Update" : "Save")
                     </button>
                 </div>
             </div>
         </div>
     }
 
-    @* --- DATA RENDERING DATA-GRID TABLE --- *@
+    @* --- DATA TABLE MATRIX --- *@
     @if (exams == null)
     {
         <div class="text-center py-5">
@@ -89,14 +89,14 @@
                                 <th class="py-3">Venue / Hall</th>
                                 @if (IsAdmin)
                                 {
-                                    <th class="py-3 text-center">Management Actions</th>
+                                    <th class="py-3 text-center">Actions</th>
                                 }
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var exam in exams)
                             {
-                                <tr>
+                                <tr class="@(newExam.Id == exam.Id && isEditing ? "table-primary-subtle" : "")">
                                     <td class="ps-4 fw-bold text-dark">@exam.SubjectName</td>
                                     <td><span class="badge bg-light text-dark border fw-semibold">@exam.SubjectCode</span></td>
                                     <td class="text-muted font-monospace">@(exam.ExamDate?.ToString("MMMM dd, yyyy | hh:mm tt") ?? "TBA")</td>
@@ -105,8 +105,16 @@
                                     {
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center gap-1">
-                                                <button class="btn btn-sm btn-outline-primary btn-actions" title="Edit"><i class="bi bi-pencil"></i></button>
-                                                <button class="btn btn-sm btn-outline-danger btn-actions" title="Delete"><i class="bi bi-trash"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary btn-actions"
+                                                        title="Edit Context"
+                                                        @onclick="() => PrepareEditMode(exam)">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger btn-actions"
+                                                        title="Purge Entry"
+                                                        @onclick="() => ConfirmDeleteSchedule(exam.Id, exam.SubjectName)">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
                                             </div>
                                         </td>
                                     }
@@ -118,12 +126,10 @@
             </div>
         </div>
         
-        @* --- COMPLIANCE INSTRUCTIONS BOX --- *@
         <div class="mt-4 p-3 alert alert-warning border border-warning-subtle d-flex align-items-center gap-3" style="border-radius: 10px;">
             <i class="bi bi-exclamation-octagon-fill text-warning fs-3"></i>
             <small class="text-dark">
-                <strong>Important Student Advisory Note:</strong> Please reach the examination hall strictly 15 minutes before the scheduled start time.
-                Bringing your physical printed University ID Card and clean clipboard accessories is mandatory. Digital smartwatches or active cellular bands are banned.
+                <strong>Important Student Advisory Note:</strong> Please reach the examination hall strictly 15 minutes before the scheduled start time. Bringing your physical printed University ID Card is mandatory.
             </small>
         </div>
     }
@@ -137,24 +143,26 @@
     .btn-actions {
         border-radius: 6px;
         padding: 4px 8px;
+        transition: all 0.2s;
     }
+
+        .btn-actions:hover {
+            transform: scale(1.08);
+        }
 </style>
 
 @code {
     private List<ExamSchedule>? exams;
     private bool showForm = false;
+    private bool isEditing = false;
     private ExamSchedule newExam = new ExamSchedule { ExamDate = DateTime.Now };
 
-    // Notification telemetry fields
     private string alertMessage = string.Empty;
     private string alertClass = "success";
 
     private bool IsAdmin => UserSession.CurrentUser?.Role?.RoleName == "Admin" || UserSession.CurrentUser?.RoleId == 1;
 
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadExams();
-    }
+    protected override async Task OnInitializedAsync() => await LoadExams();
 
     private async Task LoadExams()
     {
@@ -165,40 +173,98 @@
         catch (Exception ex)
         {
             TriggerNotification($"Data loading exception: {ex.Message}", "danger");
-            exams = new List<ExamSchedule>();
         }
     }
 
-    private async Task SaveExam()
+    private void PrepareEditMode(ExamSchedule exam)
     {
-        // Double safety structural check block to secure state pipeline boundary
-        if (!IsAdmin)
+        // Pura data editing model me map karenge shallow copy crash prevention ke liye
+        newExam = new ExamSchedule
         {
-            TriggerNotification("Unauthorized transaction context sequence interrupted.", "danger");
-            return;
-        }
+            Id = exam.Id,
+            SubjectName = exam.SubjectName,
+            SubjectCode = exam.SubjectCode,
+            ExamDate = exam.ExamDate,
+            Room = exam.Room
+        };
+        isEditing = true;
+        showForm = true;
+        TriggerNotification($"Loaded data stream for '{exam.SubjectName}' ready to edit.", "primary");
+    }
 
-        if (string.IsNullOrWhiteSpace(newExam.SubjectName) || string.IsNullOrWhiteSpace(newExam.SubjectCode))
-        {
-            TriggerNotification("Subject Name and Code entries cannot be evaluated blank.", "danger");
-            return;
-        }
-
+    private async Task ConfirmDeleteSchedule(int id, string targetName)
+    {
         try
         {
-            await Repo.AddExamScheduleAsync(newExam);
-            TriggerNotification($"Exam entry for '{newExam.SubjectName}' successfully compiled into scheduling lists!", "success");
+            await Repo.DeleteExamScheduleAsync(id);
+            TriggerNotification($"Exam configuration record for '{targetName}' permanently dropped.", "success");
             
-            // State tracking parameter adjustments
-            newExam = new ExamSchedule { ExamDate = DateTime.Now };
-            showForm = false;
+            // State reset tracking optimization
+            if (isEditing && newExam.Id == id) ResetFormState();
             
             await LoadExams();
         }
         catch (Exception ex)
         {
-            TriggerNotification($"Database transmission synchronization failed: {ex.Message}", "danger");
+            TriggerNotification($"Pipeline validation error during deletion: {ex.Message}", "danger");
         }
+    }
+
+    private async Task SaveExam()
+    {
+        if (!IsAdmin)
+        {
+            TriggerNotification("Unauthorized contextual scope context interrupted.", "danger");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(newExam.SubjectName) || string.IsNullOrWhiteSpace(newExam.SubjectCode))
+        {
+            TriggerNotification("Subject Name and Code validations mismatch.", "danger");
+            return;
+        }
+
+        try
+        {
+            if (isEditing)
+            {
+                // Update transaction call
+                await Repo.UpdateExamScheduleAsync(newExam);
+                TriggerNotification($"Exam configurations updated for '{newExam.SubjectName}'!", "success");
+            }
+            else
+            {
+                // Core Add tracking call
+                await Repo.AddExamScheduleAsync(newExam);
+                TriggerNotification($"Successfully registered exam for '{newExam.SubjectName}' into directory structure.", "success");
+            }
+            
+            ResetFormState();
+            await LoadExams();
+        }
+        catch (Exception ex)
+        {
+            TriggerNotification($"Database synchronization fault: {ex.Message}", "danger");
+        }
+    }
+
+    private void ToggleFormPanel()
+    {
+        if (showForm)
+        {
+            ResetFormState();
+        }
+        else
+        {
+            showForm = true;
+        }
+    }
+
+    private void ResetFormState()
+    {
+        newExam = new ExamSchedule { ExamDate = DateTime.Now };
+        isEditing = false;
+        showForm = false;
     }
 
     private void TriggerNotification(string msg, string type)
@@ -207,8 +273,5 @@
         alertClass = type;
     }
 
-    private void ClearAlert()
-    {
-        alertMessage = string.Empty;
-    }
+    private void ClearAlert() => alertMessage = string.Empty;
 }

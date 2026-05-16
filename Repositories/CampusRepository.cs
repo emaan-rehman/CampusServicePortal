@@ -23,6 +23,8 @@ namespace CampusServicePortal.Repositories
 
         Task<List<ExamSchedule>> GetExamSchedulesAsync();
         Task AddExamScheduleAsync(ExamSchedule schedule);
+        Task DeleteExamScheduleAsync(int id);
+        Task UpdateExamScheduleAsync(ExamSchedule schedule);
         Task<User?> AuthenticateUserAsync(string email, string password);
         Task<List<User>> GetUsersAsync();
         Task<List<Role>> GetRolesAsync();
@@ -248,6 +250,23 @@ namespace CampusServicePortal.Repositories
                 return true;
             }
             return false;
+        }
+        public async Task DeleteExamScheduleAsync(int id)
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+            var exam = await db.ExamSchedules.FindAsync(id);
+            if (exam != null)
+            {
+                db.ExamSchedules.Remove(exam);
+                await db.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdateExamScheduleAsync(ExamSchedule schedule)
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+            db.ExamSchedules.Update(schedule);
+            await db.SaveChangesAsync();
         }
     }
 }
