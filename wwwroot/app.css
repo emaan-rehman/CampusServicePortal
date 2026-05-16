@@ -256,74 +256,7 @@ html, body {
             color: #0A192F !important;
         }
 
-/* --- THE ULTRABRIGHT SHINY GLASSMORPHIC 3D ENGINE --- */
-.sidebar-wrapper .custom-nav-tile {
-    display: flex !important;
-    align-items: center !important;
-    padding: 14px 18px !important;
-    margin-bottom: 12px !important;
-    border-radius: 14px !important;
-    text-decoration: none !important;
-    position: relative !important;
-    overflow: hidden !important;
-    /* Strong Glass Gradient Background (Dullness Terminator) */
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.04) 100%) !important;
-    /* 3D Specular Borders */
-    border-top: 1.5px solid rgba(255, 255, 255, 0.35) !important;
-    border-left: 1.5px solid rgba(255, 255, 255, 0.25) !important;
-    border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-    /* Double Depth Shadow Matrix (Drop Shadow + Inner Glow) */
-    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.4), 0 8px 16px rgba(0, 0, 0, 0.45) !important;
-    backdrop-filter: blur(14px) !important;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-    /* 3D Glossy Light Flare Overlay Across Upper Half */
-    .sidebar-wrapper .custom-nav-tile::before {
-        content: '' !important;
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 48% !important;
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
-        pointer-events: none !important;
-        z-index: 2 !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-    }
-
-/* Premium Icon Frame Container */
-.sidebar-wrapper .tile-icon-frame {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 38px !important;
-    height: 38px !important;
-    min-width: 38px !important;
-    border-radius: 9px !important;
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    color: #E2E8F0 !important;
-    margin-right: 14px !important;
-    font-size: 1.25rem !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
-    transition: all 0.2s ease !important;
-    z-index: 3 !important;
-}
-
-/* Glowing Label Text Settings */
-.sidebar-wrapper .tile-text-lbl {
-    color: #F8FAFC !important;
-    font-weight: 600 !important;
-    font-size: 0.975rem !important;
-    letter-spacing: 0.4px !important;
-    transition: all 0.25s ease !important;
-    z-index: 3 !important;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important;
-}
-
- /* --- FIX: REMOVE LINE BORDER ACROSS STUDENT SERVICE PORTAL --- */
+/* --- REMOVE LINE BORDER ACROSS STUDENT SERVICE PORTAL --- */
 .sidebar-wrapper + div h1,
 .sidebar-wrapper + main h1,
 [class*="CommandHub"] h1,
@@ -338,7 +271,7 @@ h1:has(+ p) {
     margin-bottom: 8px !important;
 }
 
-/* --- NEW PREMIUM NEON-GLOW 3D BUTTON ENGINE --- */
+/* --- THE NEW PREMIUM NO-LINE BUTTON ENGINE (FIXED STYLE) --- */
 .sidebar-wrapper .custom-nav-tile,
 .nav-item-link,
 .sidebar-wrapper a.nav-link {
@@ -359,6 +292,21 @@ h1:has(+ p) {
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
 }
 
+    /* KILL ALL BACKGROUND pseudo LINE STROKES EFFECT (CRITICAL LINE REMOVER) */
+    .sidebar-wrapper .custom-nav-tile::before,
+    .sidebar-wrapper .custom-nav-tile::after,
+    .nav-item-link::before,
+    .nav-item-link::after,
+    .sidebar-wrapper a.nav-link::before,
+    .sidebar-wrapper a.nav-link::after {
+        display: none !important;
+        content: none !important;
+        height: 0 !important;
+        border: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+    }
+
     /* Subtle Hover Accent Motion */
     .sidebar-wrapper .custom-nav-tile:hover,
     .nav-item-link:hover,
@@ -373,14 +321,12 @@ h1:has(+ p) {
     .sidebar-wrapper .custom-nav-tile.active,
     .nav-item-link.active,
     .sidebar-wrapper a.nav-link.active {
-        /* Deep Rich Cyan Premium Core Background */
         background: linear-gradient(135deg, rgba(14, 165, 233, 0.25) 0%, rgba(14, 165, 233, 0.05) 100%) !important;
         /* Dual 3D Cyber Border Injection */
         border-top: 1.5px solid rgba(56, 189, 248, 0.6) !important;
         border-left: 1.5px solid rgba(56, 189, 248, 0.4) !important;
         border-right: 1px solid rgba(14, 165, 233, 0.2) !important;
         border-bottom: 1px solid rgba(14, 165, 233, 0.1) !important;
-        /* Outward Neon Blueprint Radial Shadow */
         box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.25), 0 0 20px rgba(56, 189, 248, 0.35), 0 4px 10px rgba(0, 0, 0, 0.3) !important;
     }
 
@@ -398,3 +344,61 @@ h1:has(+ p) {
     color: #0A192F !important;
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.5) !important;
 }
+
+/* ==========================================
+   GLOBAL SIDEBAR FIX: TEXT READING & ICON STABILITY
+   ========================================== */
+
+/* 1. Prevent Text from squeezing or distorting icons */
+.sidebar-wrapper .custom-nav-tile i,
+.sidebar-wrapper .custom-nav-tile svg,
+.nav-item-link i,
+.nav-item-link svg,
+.sidebar-wrapper a.nav-link i,
+.sidebar-wrapper a.nav-link svg,
+.tile-icon-frame i,
+.icon-box-wrapper i {
+    display: inline-block !important;
+    font-size: 1.25rem !important;
+    width: auto !important;
+    height: auto !important;
+    line-height: 1 !important;
+    vertical-align: middle !important;
+    transform: none !important;
+    flex-shrink: 0 !important;
+}
+
+/* 2. Global High Visibility Fix for All Dull/Inactive Links */
+.sidebar-wrapper a,
+.sidebar-wrapper .custom-nav-tile,
+.nav-item-link,
+.sidebar-wrapper a.nav-link {
+    color: #E2E8F0 !important; /* Brighter high contrast modern off-white */
+    text-decoration: none !important;
+}
+
+    /* Force override text styling labels inside navigation blocks */
+    .sidebar-wrapper .custom-nav-tile span,
+    .sidebar-wrapper .custom-nav-tile div,
+    .nav-item-link .link-label-text,
+    .sidebar-wrapper a.nav-link span,
+    .tile-text-lbl {
+        color: #E2E8F0 !important;
+        opacity: 1 !important; /* Completely neutralizes fade out effects */
+    }
+
+    /* 3. Smooth Bright Hover Transitions for Inactive Buttons */
+    .sidebar-wrapper .custom-nav-tile:hover span,
+    .nav-item-link:hover .link-label-text,
+    .sidebar-wrapper a.nav-link:hover span {
+        color: #38BDF8 !important;
+    }
+
+    /* Ensure Active State wins over high visibility fallback */
+    .sidebar-wrapper .custom-nav-tile.active span,
+    .nav-item-link.active .link-label-text,
+    .sidebar-wrapper a.nav-link.active span,
+    .sidebar-wrapper a.nav-link.active .tile-text-lbl {
+        color: #38BDF8 !important;
+        font-weight: 600 !important;
+    }
