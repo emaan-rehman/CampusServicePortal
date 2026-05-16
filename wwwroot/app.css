@@ -38,8 +38,28 @@ html, body {
     cursor: pointer !important;
 }
 
-    /* --- MASTER FIXED ICON CONTROLLER ENGINE --- */
-    /* Restores standard proportional size, box frame structure, and explicit spacing */
+/* --- MODERN GRAPHIC CONTAINER BOX INSIDE SIDEBAR BUTTONS --- */
+.icon-box-wrapper, .tile-icon-frame {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    max-width: 38px !important;
+    border-radius: 10px !important;
+    background-color: rgba(255, 255, 255, 0.04) !important;
+    color: #38BDF8 !important; /* Premium Cyan Blue default tone tint */
+    margin-right: 14px !important;
+    transition: all 0.2s ease !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    overflow: hidden !important; /* Lock bounds */
+    flex-shrink: 0 !important;
+    padding: 0 !important;
+}
+
+    /* --- MASTER PERFECT FIT ICON RESOLUTION CONTROLLER --- */
+    /* Forces inner raw icons to align exactly at 0,0 center with scalable dynamic constraints */
     .sidebar-wrapper .custom-nav-tile i,
     .sidebar-wrapper .custom-nav-tile svg,
     .nav-item-link i,
@@ -48,41 +68,24 @@ html, body {
     .sidebar-wrapper a.nav-link svg,
     .tile-icon-frame i,
     .icon-box-wrapper i,
-    .tile-icon-frame svg {
+    .tile-icon-frame svg,
+    .icon-box-wrapper svg,
+    [class*="nav"] i,
+    [class*="nav"] svg {
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        font-size: 1.2rem !important; /* Perfect uniform size */
-        width: 22px !important; /* Bound structure boundaries */
-        height: 22px !important;
-        min-width: 22px !important;
+        text-align: center !important;
+        font-size: 1.25rem !important; /* Crisp high-end standard dashboard font-sizing */
+        width: 100% !important; /* Occupy full center layout bounds fluidly */
+        height: auto !important;
         line-height: 1 !important;
-        margin-right: 12px !important; /* Fixed clean separation from text */
-        flex-shrink: 0 !important; /* Absolute restriction against stretching/squeezing */
-        vertical-align: middle !important;
+        margin: 0 !important; /* Erase baseline default shifts */
+        padding: 0 !important;
+        flex-shrink: 0 !important;
         transform: none !important;
-    }
-
-/* Modern Graphic Container Inside Sidebar Buttons */
-.icon-box-wrapper, .tile-icon-frame {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 36px !important;
-    height: 36px !important;
-    min-width: 36px !important;
-    border-radius: 8px !important;
-    background-color: rgba(255, 255, 255, 0.03) !important;
-    color: #64748B !important;
-    margin-right: 12px !important;
-    transition: all 0.2s ease !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-}
-
-    /* If font-awesome/bootstrap icons are inside a box frame wrapper, clear double margin */
-    .icon-box-wrapper i, .tile-icon-frame i,
-    .icon-box-wrapper svg, .tile-icon-frame svg {
-        margin-right: 0px !important;
+        vertical-align: middle !important;
+        box-sizing: border-box !important;
     }
 
 .link-label-text {
@@ -105,7 +108,8 @@ html, body {
     }
 
     .nav-item-link:hover .icon-box-wrapper,
-    .nav-item-link:hover .tile-icon-frame {
+    .nav-item-link:hover .tile-icon-frame,
+    .sidebar-wrapper .custom-nav-tile:hover .tile-icon-frame {
         color: #38BDF8 !important;
         background-color: rgba(14, 165, 233, 0.12) !important;
         border-color: rgba(14, 165, 233, 0.2) !important;
@@ -396,4 +400,11 @@ h1:has(+ p) {
 /* If it's a dynamic header rule or standard block, make sure it stays perfectly aligned */
 .sidebar-wrapper + div, main {
     position: relative !important;
+}
+
+/* Active Highlight Profiles Override Inside Framework Loops */
+.sidebar-wrapper .custom-nav-tile.active .tile-icon-frame {
+    background-color: #38BDF8 !important;
+    color: #0A192F !important;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.6) !important;
 }
