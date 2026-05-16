@@ -11,6 +11,7 @@ namespace CampusServicePortal.Repositories
         Task<List<TransportRoute>> GetTransportRoutesAsync();
         Task CreateBookingAsync(TransportBooking booking);
         Task<List<Book>> GetBooksAsync();
+        Task AddBookAsync(Book book);
         Task<bool> ReserveBookAsync(int bookId);
         Task<List<CampusEvent>> GetEventsAsync();
 
@@ -272,6 +273,13 @@ namespace CampusServicePortal.Repositories
         public async Task AddCourseAsync(Course course) { 
             using var db = await _dbFactory.CreateDbContextAsync();
             db.Courses.Add(course); 
-            await db.SaveChangesAsync(); }
+            await db.SaveChangesAsync();
+        }
+        public async Task AddBookAsync(Book book)
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+            db.Books.Add(book);
+            await db.SaveChangesAsync();
+        }
     }
 }

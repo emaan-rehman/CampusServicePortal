@@ -36,11 +36,18 @@
     @* --- DYNAMIC FORM PANEL: HANDLING BOTH INSERT AND UPDATE --- *@
     @if (showForm && IsAdmin)
     {
-        <div class="card card-body mb-4 shadow-sm border-0 p-4" style="border-radius: 16px; border-left: 5px solid #(isEditing ? " 0D6EFD" : "DC3545" ) !important; background-color: #FFFFFF;">
+        @* Dynamic styling properties processed safely outside the HTML layout string constraints *@
+        var borderIndicatorColor = isEditing ? "#0D6EFD" : "#DC3545";
+        var formHeadingText = isEditing ? "Modify Existing Exam Record" : "Add New Exam Entry";
+        var headingIconClass = isEditing ? "bi-pencil-square text-primary" : "bi-plus-square-fill text-danger";
+
+        <div class="card card-body mb-4 shadow-sm border-0 p-4"
+             style="border-radius: 16px; border-left: 5px solid @borderIndicatorColor !important; background-color: #FFFFFF;">
+            
             <h5 class="fw-bold mb-3 text-dark d-flex align-items-center gap-2">
-                <i class="bi @(isEditing ? "bi-pencil-square text-primary" : "bi-plus-square-fill text-danger")"></i>
-                @(isEditing ? "Modify Existing Exam Record" : "Add New Exam Entry")
+                <i class="bi @headingIconClass"></i> @formHeadingText
             </h5>
+            
             <div class="row g-3">
                 <div class="col-md-3">
                     <label class="form-label small fw-bold text-muted">Subject Name</label>

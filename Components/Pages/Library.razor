@@ -17,57 +17,112 @@
 }
 
 <div class="container mt-4">
+    @* --- TOP HEADER AND ADMIN MANAGEMENT CONTROL --- *@
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-primary">Campus Library Catalog</h2>
-        @if (!string.IsNullOrEmpty(statusMessage))
-        {
-            <div class="alert alert-info py-1 px-3 mb-0">@statusMessage</div>
-        }
+        <h2 class="fw-bold text-primary m-0">
+            <i class="bi bi-journal-bookmark-fill me-2"></i>
+            @(IsAdmin ? "Library Management Portal" : "Campus Library Catalog")
+        </h2>
+        
+        <div class="d-flex align-items-center gap-3">
+            @* --- CRITICAL ROLE CHECK: Add Book triggering panel strictly for Admin --- *@
+            @if (IsAdmin)
+            {
+                <button class="btn btn-primary shadow-sm fw-bold d-flex align-items-center gap-2"
+                        style="background-color: #0D6EFD; border: none; border-radius: 8px; padding: 10px 16px; font-size: 0.9rem;"
+                        @onclick="() => showForm = !showForm">
+                    <i class="bi @(showForm ? "bi-x-circle" : "bi-plus-circle")"></i>
+                    @(showForm ? "Close Form" : "Add New Book")
+                </button>
+            }
+
+            @if (!string.IsNullOrEmpty(statusMessage))
+            {
+                <div class="alert alert-@alertClass alert-dismissible fade show m-0 py-1 px-3 shadow-sm" role="alert" style="border-radius: 8px; font-size: 0.9rem;">
+                    @statusMessage
+                    <button type="button" class="btn-close py-2" @onclick='() => statusMessage = ""'></button>
+                </div>
+            }
+        </div>
     </div>
 
-    <div class="input-group mb-3 shadow-sm">
-        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
-        <input type="text" class="form-control border-start-0"
-               placeholder="Search by book title..."
+    @* --- CRITICAL ROLE CHECK: Book Registration Form strictly for Admin --- *@
+    @if (showForm && IsAdmin)
+    {
+        <div class="card card-body mb-4 shadow-sm border-0 p-4" style="border-radius: 16px; border-left: 5px solid #0D6EFD !important; background-color: #FFFFFF;">
+            <h5 class="fw-bold mb-3 text-dark d-flex align-items-center gap-2">
+                <i class="bi bi-book-half text-primary"></i> Register New Book to Catalog
+            </h5>
+            <div class="row g-3">
+                <div class="col-md-5">
+                    <label class="form-label small fw-bold text-muted">Book Title</label>
+                    <input type="text" class="form-control bg-light" placeholder="e.g., Introduction to Algorithms" @bind="newBook.Title" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold text-muted">Author Name</label>
+                    <input type="text" class="form-control bg-light" placeholder="e.g., Thomas H. Cormen" @bind="newBook.Author" />
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button class="btn btn-success w-100 fw-bold py-2" style="border-radius: 8px;" @onclick="SaveBook">
+                        <i class="bi bi-cloud-arrow-up-fill me-1"></i> Save Book
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+
+    @* --- GLOBAL CATALOG SEARCH BAR --- *@
+    <div class="input-group mb-3 shadow-sm" style="border-radius: 8px; overflow: hidden;">
+        <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+        <input type="text" class="form-control border-start-0 bg-white"
+               placeholder="Search inventory by book title or keywords..."
                @bind="searchTerm" @bind:event="oninput" />
     </div>
 
+    @* --- INVENTORY DATA LISTINGS MATRIX --- *@
     @if (FilteredBooks == null)
     {
         <div class="text-center mt-5">
             <div class="spinner-border text-primary"></div>
-            <p>Loading library records...</p>
+            <p class="mt-2 text-muted">Loading library records and tracking states...</p>
+        </div>
+    }
+    else if (!FilteredBooks.Any())
+    {
+        <div class="alert alert-info text-center py-4 border-0 shadow-sm" style="border-radius: 10px;">
+            <i class="bi bi-exclamation-circle me-2"></i> No books matching your search query were found in this shelf catalog.
         </div>
     }
     else
     {
-        <div class="card shadow border-0">
+        <div class="card shadow border-0" style="border-radius: 12px; overflow: hidden;">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-dark">
                         <tr>
-                            <th class="ps-4">Title</th>
-                            <th>Author</th>
-                            <th>Status</th>
-                            <th class="text-center pe-4">Action</th>
+                            <th class="ps-4 py-3">Book Title</th>
+                            <th class="py-3">Author</th>
+                            <th class="py-3">Availability Status</th>
+                            <th class="text-center pe-4 py-3">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var book in FilteredBooks)
                         {
                             <tr>
-                                <td class="ps-4 fw-semibold">@book.Title</td>
-                                <td class="text-muted">@(book.Author ?? "Unknown")</td>
+                                <td class="ps-4 fw-semibold text-dark">@book.Title</td>
+                                <td class="text-muted">@(book.Author ?? "Unknown Author")</td>
                                 <td>
-                                    <span class="badge rounded-pill @(book.IsAvailable ? "bg-success" : "bg-danger")">
+                                    <span class="badge rounded-pill @(book.IsAvailable ? "bg-success" : "bg-danger")" style="padding: 6px 12px;">
                                         @(book.IsAvailable ? "Available" : "Checked Out")
                                     </span>
                                 </td>
                                 <td class="text-center pe-4">
-                                    <button class="btn btn-sm @(book.IsAvailable ? "btn-primary" : "btn-outline-secondary")"
+                                    <button class="btn btn-sm fw-bold px-3 @(book.IsAvailable ? "btn-primary" : "btn-outline-secondary")"
                                             disabled="@(!book.IsAvailable)"
+                                            style="border-radius: 6px;"
                                             @onclick="() => ReserveBook(book)">
-                                        <i class="bi bi-bookmark-plus"></i> Reserve
+                                        <i class="bi bi-bookmark-plus me-1"></i> Reserve
                                     </button>
                                 </td>
                             </tr>
@@ -83,6 +138,13 @@
     private List<Book>? books;
     private string searchTerm = "";
     private string statusMessage = "";
+    private string alertClass = "info";
+
+    // Admin module extensions
+    private bool showForm = false;
+    private Book newBook = new Book { IsAvailable = true };
+
+    private bool IsAdmin => UserSession.CurrentUser?.Role?.RoleName == "Admin" || UserSession.CurrentUser?.RoleId == 1;
 
     private List<Book>? FilteredBooks => string.IsNullOrWhiteSpace(searchTerm)
         ? books
@@ -99,17 +161,55 @@
         catch { books = new(); }
     }
 
+    private async Task SaveBook()
+    {
+        if (!IsAdmin)
+        {
+            TriggerNotification("Unauthorized security boundary violation.", "danger");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(newBook.Title))
+        {
+            TriggerNotification("Book Title cannot be left blank.", "danger");
+            return;
+        }
+
+        try
+        {
+            // Apne repository system ke mutabiq Add code fallback logic check karein
+            await Repo.AddBookAsync(newBook);
+            TriggerNotification($"Successfully cataloged '{newBook.Title}' into system inventory!", "success");
+
+            // Form states flash cleanup
+            newBook = new Book { IsAvailable = true };
+            showForm = false;
+
+            await LoadBooks();
+        }
+        catch (Exception ex)
+        {
+            TriggerNotification($"Database save breakdown: {ex.Message}", "danger");
+        }
+    }
+
     private async Task ReserveBook(Book book)
     {
         var success = await Repo.ReserveBookAsync(book.Id);
         if (success)
         {
-            statusMessage = $"Reserved: {book.Title}";
-            await LoadBooks(); // Refresh UI to show "Checked Out" status
+            TriggerNotification($"Reserved: '{book.Title}' successfully allocated to your card.", "success");
+            await LoadBooks();
         }
         else
         {
-            statusMessage = "Error: Book is no longer available.";
+            TriggerNotification("Error: This book copy has just been checked out by another entity.", "danger");
         }
+    }
+
+    private void TriggerNotification(string message, string cssClass)
+    {
+        statusMessage = message;
+        alertClass = cssClass;
     }
 }
