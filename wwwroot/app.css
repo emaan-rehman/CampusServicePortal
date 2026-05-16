@@ -1,4 +1,4 @@
-/* Master Structural Reset Matrix Overhaul */
+/* Core Grid Canvas Reset Standards Matrix */
 html, body {
     height: 100vh !important;
     width: 100vw !important;
@@ -10,7 +10,7 @@ html, body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* Hard structural framework lists clearing targets */
+/* Hard resetting default nested list layout engines inside blazor templates */
 .portal-sidebar-area ul,
 .portal-sidebar-area li,
 .portal-sidebar-area nav {
@@ -22,24 +22,24 @@ html, body {
     width: 100% !important;
 }
 
-/* --- PREMIUM SIDEBAR NAVIGATION ITEM DESIGN ENGINE --- */
+/* --- THE SIDEBAR NAVIGATION CONTROLS FRAMEWORK ENGINE --- */
 .nav-item-link {
     display: flex !important;
     align-items: center !important;
-    padding: 0.75rem 1rem !important;
-    color: #94A3B8 !important;
+    padding: 0.8rem 1.15rem !important;
+    color: #94A3B8 !important; /* Soft premium grey text by default */
     text-decoration: none !important;
     font-weight: 500 !important;
-    font-size: 0.9rem !important;
+    font-size: 0.925rem !important;
     border-radius: 10px !important;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
     width: 100% !important;
     box-sizing: border-box !important;
     border: 1px solid transparent !important;
-    margin-bottom: 4px !important;
+    margin-bottom: 5px !important;
 }
 
-/* Inner Icon Container Matrix Settings */
+/* Standard Visual Icon Boxes Structural Layers */
 .icon-box-wrapper {
     display: flex !important;
     align-items: center !important;
@@ -48,75 +48,122 @@ html, body {
     height: 34px !important;
     min-width: 34px !important;
     border-radius: 8px !important;
-    background-color: rgba(255, 255, 255, 0.02) !important;
-    color: #64748B !important;
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    color: #64748B !important; /* Muted contrast graphic vector by default */
     margin-right: 12px !important;
-    font-size: 1.1rem !important;
+    font-size: 1.05rem !important;
     transition: all 0.2s ease !important;
-    border: 1px solid rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.04) !important;
 }
 
 .link-label-text {
     transition: transform 0.2s ease !important;
 }
 
-/* Hover State Animation Configurations */
+/* Global Link Interaction Hover Animations Configurations */
 .nav-item-link:hover {
-    background-color: rgba(255, 255, 255, 0.04) !important;
-    color: #F8FAFC !important;
-    border-color: rgba(255, 255, 255, 0.02) !important;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: #F8FAFC !important; /* Extreme White crisp contrast pop */
 }
 
     .nav-item-link:hover .icon-box-wrapper {
         color: #38BDF8 !important;
-        background-color: rgba(14, 165, 233, 0.1) !important;
-        border-color: rgba(14, 165, 233, 0.15) !important;
+        background-color: rgba(14, 165, 233, 0.12) !important;
+        border-color: rgba(14, 165, 233, 0.2) !important;
     }
 
     .nav-item-link:hover .link-label-text {
-        transform: translateX(3px) !important;
+        transform: translateX(4px) !important;
     }
 
-/* Active State Configuration Styling Rules */
+/* Global Navigation Link Active Status Configurations */
 .nav-item-link.active {
-    background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0.05) 100%) !important;
-    color: #38BDF8 !important;
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.16) 0%, rgba(14, 165, 233, 0.04) 100%) !important;
+    color: #38BDF8 !important; /* Premium Cyan Pop color profile */
     font-weight: 600 !important;
     border: 1px solid rgba(14, 165, 233, 0.25) !important;
-    box-shadow: inset 0 0 12px rgba(14, 165, 233, 0.05) !important;
 }
 
     .nav-item-link.active .icon-box-wrapper {
         background-color: #38BDF8 !important;
         color: #0A192F !important;
         border-color: #38BDF8 !important;
-        box-shadow: 0 2px 8px rgba(56, 189, 248, 0.3) !important;
+        box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35) !important;
     }
 
-/* ENHANCED SPECIFIC: Top Master Dashboard Button Highlight Style */
-.dashboard-btn-premium {
-    background-color: rgba(255, 255, 255, 0.02) !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-}
-
-/* --- SIDEBAR DECORATION SEGMENT HEADERS --- */
+/* --- ADMINISTRATIVE OVERRIDES (FIX FOR IMAGE_7221A3) --- */
 .sidebar-category-divider {
-    font-family: 'Inter', monospace !important;
+    display: flex !important;
+    align-items: center !important;
+    font-family: 'Inter', system-ui, sans-serif !important;
     font-weight: 700 !important;
-    text-uppercase: uppercase !important;
-    font-size: 0.675rem !important;
-    letter-spacing: 1.75px !important;
-    color: #64FFDA !important;
-    opacity: 0.85 !important;
-    padding: 1.5rem 0.75rem 0.5rem 0.75rem !important;
-    text-transform: uppercase;
+    font-size: 0.725rem !important;
+    letter-spacing: 1.5px !important;
+    padding: 1.75rem 0.75rem 0.65rem 0.75rem !important;
+    text-transform: uppercase !important;
 }
 
+/* High Contrast Student Section Label Color */
+.student-core-divider {
+    color: #64FFDA !important; /* Vibrant Emerald Mint green */
+}
+
+/* High Contrast Admin Section Label Color (No more low visibility dark text) */
 .administrative-divider {
-    color: #F59E0B !important;
+    color: #F59E0B !important; /* High Visibility Warm Gold Amber */
 }
 
-/* Main Display Application Panel Workspace Action Cards Animation Profiles */
+/* Internal aesthetic accent bullet dots */
+.divider-dot, .divider-dot-admin {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 8px;
+    display: inline-block;
+}
+
+.divider-dot {
+    background-color: #64FFDA;
+    box-shadow: 0 0 6px rgba(100, 255, 218, 0.6);
+}
+
+.divider-dot-admin {
+    background-color: #F59E0B;
+    box-shadow: 0 0 6px rgba(245, 158, 11, 0.6);
+}
+
+/* High-contrast styling tweaks specifically for administrative node links */
+.admin-node-anchor {
+    color: #CBD5E1 !important; /* Crisp, readable ash white links for admin elements */
+}
+
+    .admin-node-anchor:hover {
+        color: #FFFFFF !important;
+        background-color: rgba(245, 158, 11, 0.06) !important;
+        border-color: rgba(245, 158, 11, 0.1) !important;
+    }
+
+        .admin-node-anchor:hover .icon-box-wrapper {
+            color: #F59E0B !important;
+            background-color: rgba(245, 158, 11, 0.12) !important;
+            border-color: rgba(245, 158, 11, 0.25) !important;
+        }
+
+    /* When an admin element becomes active, it transforms beautifully into gold layout accents */
+    .admin-node-anchor.active {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.04) 100%) !important;
+        color: #F59E0B !important;
+        border: 1px solid rgba(245, 158, 11, 0.3) !important;
+    }
+
+        .admin-node-anchor.active .icon-box-wrapper {
+            background-color: #F59E0B !important;
+            color: #0A192F !important;
+            border-color: #F59E0B !important;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4) !important;
+        }
+
+/* --- EXTRA CORE WORKSPACE ENHANCEMENTS --- */
 .interactive-action-card {
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid #E2E8F0 !important;
@@ -128,7 +175,6 @@ html, body {
         border-color: #CBD5E1 !important;
     }
 
-/* Sidebar clean tracking scroll bar logic core overrides */
 .overflow-auto::-webkit-scrollbar {
     width: 4px;
 }
