@@ -1,83 +1,89 @@
-/* Core Styling Overhauls */
-body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background-color: #F8FAFC;
+/* Core App Workspace Variables */
+html, body {
+    height: 100%;
     margin: 0;
     padding: 0;
-    color: #1E293B;
+    background-color: #F8FAFC;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* Master Grid Framework Layout */
+/* Master Fixed Core Grid Separation */
 .portal-frame {
     display: flex;
-    flex-direction: row;
-    min-height: 100vh;
+    flex-wrap: nowrap;
+    height: 100vh;
     width: 100vw;
     overflow: hidden;
 }
 
-/* Sidebar Wrapper Layout */
+/* Sidebar Custom Dimensions and Enforced Dark Palette */
 .portal-sidebar-area {
     width: 280px;
     min-width: 280px;
     max-width: 280px;
-    background-color: #0A192F;
-    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    background-color: #0A192F !important;
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    z-index: 100;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    flex-shrink: 0;
+    z-index: 1000;
 }
 
-/* Content Container Wrapper Layout */
+/* Main Display Application Panel Dashboard Screen */
 .portal-content-area {
     flex-grow: 1;
-    background-color: #F8FAFC;
-    overflow-y: auto;
     height: 100vh;
+    overflow-y: auto;
+    background-color: #F4F7FE;
+    display: flex;
+    flex-direction: column;
 }
 
 .workspace-outer {
-    padding: 2.5rem;
+    padding: 2rem;
+    width: 100%;
 }
 
-/* Navigation Links Smooth Hover Design */
+/* Navigation Interactive Component Anchors CSS Overhauls */
 .nav-item-link {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 0.75rem 1.25rem;
+    padding: 0.8rem 1.25rem;
     color: #94A3B8 !important;
     text-decoration: none !important;
     font-weight: 500;
     font-size: 0.925rem;
     border-radius: 8px;
     transition: all 0.2s ease-in-out;
+    margin-bottom: 2px;
 }
 
     .nav-item-link:hover {
-        background-color: rgba(255, 255, 255, 0.04);
-        color: #F8FAFC !important;
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        color: #FFFFFF !important;
     }
 
     .nav-item-link.active {
         background: rgba(14, 165, 233, 0.15) !important;
         color: #38BDF8 !important;
-        border: 1px solid rgba(14, 165, 233, 0.2);
+        border: 1px solid rgba(14, 165, 233, 0.25) !important;
     }
 
-/* Dynamic Hover Effects for Cards */
+/* Action Hover Animation Profiles for Cards */
 .interactive-action-card {
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid #E2E8F0 !important;
 }
 
     .interactive-action-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 20px -8px rgba(0,0,0,0.08) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05) !important;
         border-color: #CBD5E1 !important;
     }
 
-/* Mobile Responsive Adjustments */
+/* Mobile Display Viewport Queries Matrix */
 @media (max-width: 768px) {
     .portal-frame {
         flex-direction: column;
@@ -86,7 +92,7 @@ body {
     .portal-sidebar-area {
         width: 100%;
         max-width: 100%;
-        min-height: auto;
+        height: auto;
     }
 
     .portal-content-area {
