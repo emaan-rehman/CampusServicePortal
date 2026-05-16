@@ -13,10 +13,14 @@ namespace CampusServicePortal.Repositories
         Task<List<Book>> GetBooksAsync();
         Task<bool> ReserveBookAsync(int bookId);
         Task<List<CampusEvent>> GetEventsAsync();
+
+        // Strictly matched declaration signature for Admin Events
+        Task AddEventAsync(CampusEvent campusEvent);
+
         Task<List<MenuItem>> GetCafeteriaMenuAsync();
         Task<List<Course>> GetAllCoursesAsync();
         Task EnrollInCourseAsync(Enrollment enrollment);
-      
+
         Task<List<ExamSchedule>> GetExamSchedulesAsync();
         Task AddExamScheduleAsync(ExamSchedule schedule);
         Task<User?> AuthenticateUserAsync(string email, string password);
@@ -36,7 +40,6 @@ namespace CampusServicePortal.Repositories
 
     public class CampusRepository : ICampusRepository
     {
-
         private readonly AppDbContext _db;
         private readonly IDbContextFactory<AppDbContext> _dbFactory;
 
@@ -63,7 +66,6 @@ namespace CampusServicePortal.Repositories
                 .ToListAsync();
         }
 
-
         public async Task<List<TransportRoute>> GetTransportRoutesAsync()
         {
             using var db = await _dbFactory.CreateDbContextAsync();
@@ -77,6 +79,7 @@ namespace CampusServicePortal.Repositories
             db.TransportBookings.Add(booking);
             await db.SaveChangesAsync();
         }
+
         public async Task<List<Book>> GetBooksAsync()
         {
             using var db = await _dbFactory.CreateDbContextAsync();
@@ -96,13 +99,24 @@ namespace CampusServicePortal.Repositories
             }
             return false;
         }
+
         public async Task<List<CampusEvent>> GetEventsAsync()
         {
             using var db = await _dbFactory.CreateDbContextAsync();
             // AsNoTracking() improves performance for read-only lists
             return await db.Events.AsNoTracking().OrderBy(e => e.Date).ToListAsync();
         }
+
+        // Fresh factory isolated configuration for AddEvent operation
+        public async Task AddEventAsync(CampusEvent campusEvent)
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+            db.Events.Add(campusEvent);
+            await db.SaveChangesAsync();
+        }
+
         public async Task<List<MenuItem>> GetCafeteriaMenuAsync() => await _db.MenuItems.AsNoTracking().ToListAsync();
+
         public async Task<List<ExamSchedule>> GetExamSchedulesAsync()
         {
             using var db = await _dbFactory.CreateDbContextAsync();
@@ -110,12 +124,14 @@ namespace CampusServicePortal.Repositories
                 .OrderBy(e => e.ExamDate)
                 .ToListAsync();
         }
+
         public async Task AddExamScheduleAsync(ExamSchedule schedule)
         {
             using var db = await _dbFactory.CreateDbContextAsync();
             db.ExamSchedules.Add(schedule);
             await db.SaveChangesAsync();
         }
+
         public async Task<User?> AuthenticateUserAsync(string email, string password)
         {
             using var db = await _dbFactory.CreateDbContextAsync();
@@ -124,6 +140,7 @@ namespace CampusServicePortal.Repositories
                 .AsNoTracking()      // Helps prevent the 'Materialization' error
                 .FirstOrDefaultAsync(u => u.Email == email && u.PasswordHash == password);
         }
+
         public async Task<List<User>> GetUsersAsync()
         {
             using var db = await _dbFactory.CreateDbContextAsync();
@@ -146,6 +163,7 @@ namespace CampusServicePortal.Repositories
                 await db.SaveChangesAsync();
             }
         }
+
         public async Task<List<Course>> GetAllCoursesAsync()
         {
             using var db = await _dbFactory.CreateDbContextAsync();
@@ -158,6 +176,7 @@ namespace CampusServicePortal.Repositories
             db.Enrollments.Add(enrollment);
             await db.SaveChangesAsync();
         }
+
         public async Task<List<Faculty>> GetAllFacultyAsync()
         {
             using var db = await _dbFactory.CreateDbContextAsync();
@@ -170,6 +189,7 @@ namespace CampusServicePortal.Repositories
             db.Faculty.Add(faculty);
             await db.SaveChangesAsync();
         }
+
         public async Task<List<Fee>> GetStudentFeesAsync(int studentId)
         {
             using var db = await _dbFactory.CreateDbContextAsync();
@@ -178,6 +198,7 @@ namespace CampusServicePortal.Repositories
                 .OrderByDescending(f => f.DueDate)
                 .ToListAsync();
         }
+
         public async Task<List<HostelRoom>> GetAllRoomsAsync()
         {
             using var db = await _dbFactory.CreateDbContextAsync();
@@ -190,6 +211,7 @@ namespace CampusServicePortal.Repositories
             db.HostelRooms.Add(room);
             await db.SaveChangesAsync();
         }
+
         public async Task<List<MenuItem>> GetCafeMenuAsync()
         {
             using var db = await _dbFactory.CreateDbContextAsync();
@@ -202,11 +224,10 @@ namespace CampusServicePortal.Repositories
             db.MenuItems.Add(item);
             await db.SaveChangesAsync();
         }
+
         public async Task DeleteFacultyAsync(int id)
         {
-            // _dbFactory use karke safe isolated database state handle karenge
             using var db = await _dbFactory.CreateDbContextAsync();
-
             var faculty = await db.Faculty.FindAsync(id);
             if (faculty != null)
             {
@@ -214,18 +235,15 @@ namespace CampusServicePortal.Repositories
                 await db.SaveChangesAsync();
             }
         }
+
         public async Task<bool> BookHostelRoomAsync(int roomId)
         {
             using var db = await _dbFactory.CreateDbContextAsync();
-
-            // Model property RoomId ke mutabiq find lagayein
             var room = await db.HostelRooms.FindAsync(roomId);
 
-            // Agar room valid hai aur pehle se Occupied nahi hai (IsOccupied == false ya null)
             if (room != null && (room.IsOccupied == false || room.IsOccupied == null))
             {
-                room.IsOccupied = true; // Mark as occupied/booked
-
+                room.IsOccupied = true;
                 await db.SaveChangesAsync();
                 return true;
             }
