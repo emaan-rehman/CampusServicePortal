@@ -4,101 +4,150 @@
 @inject ICampusRepository Repo
 
 <div class="container mt-4">
+    @* --- TOP HEADER AND ADMIN CONSOLE PANEL --- *@
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">@(IsAdmin ? "Exam Management Portal" : "Exam Schedule")</h2>
+        <h2 class="fw-bold text-dark d-flex align-items-center gap-2 m-0">
+            <i class="bi bi-file-earmark-text text-danger fs-2"></i>
+            @(IsAdmin ? "Exam Management Portal" : "Exam Schedule")
+        </h2>
         
-        @if (IsAdmin)
-        {
-            <button class="btn btn-danger" @onclick="() => showForm = !showForm">
-                <i class="bi bi-plus-circle"></i> @(showForm ? "Close Form" : "Add New Schedule")
-            </button>
-        }
+        <div class="d-flex align-items-center gap-3">
+            @* --- CRITICAL ROLE CHECK: Button strictly restricted for Admin --- *@
+            @if (IsAdmin)
+            {
+                <button class="btn btn-danger shadow-sm fw-bold d-flex align-items-center gap-2"
+                        style="border-radius: 8px; padding: 10px 16px; font-size: 0.9rem;"
+                        @onclick="() => showForm = !showForm">
+                    <i class="bi @(showForm ? "bi-x-circle" : "bi-plus-circle")"></i>
+                    @(showForm ? "Close Form" : "Add New Schedule")
+                </button>
+            }
+
+            @if (!string.IsNullOrEmpty(alertMessage))
+            {
+                <div class="alert alert-@alertClass alert-dismissible fade show m-0 py-2 px-3 align-middle shadow-sm" role="alert" style="border-radius: 8px; font-size: 0.9rem;">
+                    <i class="bi @(alertClass == "success" ? "bi-check-circle-fill" : "bi-exclamation-triangle-fill") me-2"></i>
+                    @alertMessage
+                    <button type="button" class="btn-close py-2.5" @onclick="ClearAlert" aria-label="Close"></button>
+                </div>
+            }
+        </div>
     </div>
 
-    @* THE HIDDEN FORM (Only shows when Admin clicks the button) *@
+    @* --- CRITICAL ROLE CHECK: Form Module strictly rendered only for Admin --- *@
     @if (showForm && IsAdmin)
     {
-        <div class="card card-body mb-4 shadow-sm border-danger">
-            <h5 class="card-title">Add New Exam Entry</h5>
+        <div class="card card-body mb-4 shadow-sm border-0 p-4" style="border-radius: 16px; border-left: 5px solid #DC3545 !important; background-color: #FFFFFF;">
+            <h5 class="fw-bold mb-3 text-dark d-flex align-items-center gap-2">
+                <i class="bi bi-plus-square-fill text-danger"></i> Add New Exam Entry
+            </h5>
             <div class="row g-3">
                 <div class="col-md-3">
-                    <input type="text" class="form-control" placeholder="Subject Name" @bind="newExam.SubjectName" />
+                    <label class="form-label small fw-bold text-muted">Subject Name</label>
+                    <input type="text" class="form-control bg-light" placeholder="e.g., Software Engineering" @bind="newExam.SubjectName" />
                 </div>
                 <div class="col-md-2">
-                    <input type="text" class="form-control" placeholder="Code (e.g. CS-101)" @bind="newExam.SubjectCode" />
+                    <label class="form-label small fw-bold text-muted">Course Code</label>
+                    <input type="text" class="form-control bg-light" placeholder="e.g., CS-101" @bind="newExam.SubjectCode" />
                 </div>
                 <div class="col-md-3">
-                    <input type="datetime-local" class="form-control" @bind="newExam.ExamDate" />
+                    <label class="form-label small fw-bold text-muted">Date & Time</label>
+                    <input type="datetime-local" class="form-control bg-light" @bind="newExam.ExamDate" />
                 </div>
                 <div class="col-md-2">
-                    <input type="text" class="form-control" placeholder="Room/Venue" @bind="newExam.Room" />
+                    <label class="form-label small fw-bold text-muted">Room / Venue</label>
+                    <input type="text" class="form-control bg-light" placeholder="e.g., Room 204" @bind="newExam.Room" />
                 </div>
-                <div class="col-md-2">
-                    <button class="btn btn-success w-100" @onclick="SaveExam">Save</button>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button class="btn btn-success w-100 fw-bold py-2" style="border-radius: 8px;" @onclick="SaveExam">
+                        <i class="bi bi-cloud-arrow-up-fill me-1"></i> Save Schedule
+                    </button>
                 </div>
             </div>
         </div>
     }
-    </div>
 
+    @* --- DATA RENDERING DATA-GRID TABLE --- *@
     @if (exams == null)
     {
         <div class="text-center py-5">
             <div class="spinner-border text-danger" role="status"></div>
-            <p class="mt-2">Fetching examination data...</p>
+            <p class="mt-2 text-muted">Fetching examination data configuration rosters...</p>
         </div>
     }
     else
     {
-        <div class="card shadow-sm border-0">
+        <div class="card shadow-sm border-0 transition-style" style="border-radius: 12px; overflow: hidden;">
             <div class="card-body p-0">
-                <table class="table table-hover mb-0">
-                    <thead class="@(IsAdmin ? "table-dark" : "table-danger text-white")">
-                        <tr>
-                            <th class="ps-4">Subject</th>
-                            <th>Code</th>
-                            <th>Date & Time</th>
-                            <th>Venue</th>
-                            @if (IsAdmin)
-                            {
-                                <th>Actions</th>
-                            }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var exam in exams)
-                        {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="@(IsAdmin ? "table-dark" : "table-danger text-white")">
                             <tr>
-                                <td class="ps-4 fw-bold">@exam.SubjectName</td>
-                                <td><span class="badge bg-light text-dark border">@exam.SubjectCode</span></td>
-                                <td>@(exam.ExamDate?.ToString("MMMM dd, yyyy | hh:mm tt") ?? "TBA")</td>
-                                <td><i class="bi bi-geo-alt text-danger"></i> @exam.Room</td>
+                                <th class="ps-4 py-3">Subject Name</th>
+                                <th class="py-3">Subject Code</th>
+                                <th class="py-3">Date & Time</th>
+                                <th class="py-3">Venue / Hall</th>
                                 @if (IsAdmin)
                                 {
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
-                                        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                                    </td>
+                                    <th class="py-3 text-center">Management Actions</th>
                                 }
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var exam in exams)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-bold text-dark">@exam.SubjectName</td>
+                                    <td><span class="badge bg-light text-dark border fw-semibold">@exam.SubjectCode</span></td>
+                                    <td class="text-muted font-monospace">@(exam.ExamDate?.ToString("MMMM dd, yyyy | hh:mm tt") ?? "TBA")</td>
+                                    <td><i class="bi bi-geo-alt-fill text-danger me-1"></i> @exam.Room</td>
+                                    @if (IsAdmin)
+                                    {
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center gap-1">
+                                                <button class="btn btn-sm btn-outline-primary btn-actions" title="Edit"><i class="bi bi-pencil"></i></button>
+                                                <button class="btn btn-sm btn-outline-danger btn-actions" title="Delete"><i class="bi bi-trash"></i></button>
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         
-        <div class="mt-3 p-3 bg-light rounded border">
-            <small class="text-muted">
-                <strong>Note:</strong> Please reach the examination hall 15 minutes before the start time.
-                Bring your University ID card.
+        @* --- COMPLIANCE INSTRUCTIONS BOX --- *@
+        <div class="mt-4 p-3 alert alert-warning border border-warning-subtle d-flex align-items-center gap-3" style="border-radius: 10px;">
+            <i class="bi bi-exclamation-octagon-fill text-warning fs-3"></i>
+            <small class="text-dark">
+                <strong>Important Student Advisory Note:</strong> Please reach the examination hall strictly 15 minutes before the scheduled start time.
+                Bringing your physical printed University ID Card and clean clipboard accessories is mandatory. Digital smartwatches or active cellular bands are banned.
             </small>
         </div>
     }
+</div>
+
+<style>
+    .transition-style {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .btn-actions {
+        border-radius: 6px;
+        padding: 4px 8px;
+    }
+</style>
 
 @code {
     private List<ExamSchedule>? exams;
     private bool showForm = false;
     private ExamSchedule newExam = new ExamSchedule { ExamDate = DateTime.Now };
+
+    // Notification telemetry fields
+    private string alertMessage = string.Empty;
+    private string alertClass = "success";
 
     private bool IsAdmin => UserSession.CurrentUser?.Role?.RoleName == "Admin" || UserSession.CurrentUser?.RoleId == 1;
 
@@ -109,17 +158,57 @@
 
     private async Task LoadExams()
     {
-        exams = await Repo.GetExamSchedulesAsync();
+        try
+        {
+            exams = await Repo.GetExamSchedulesAsync();
+        }
+        catch (Exception ex)
+        {
+            TriggerNotification($"Data loading exception: {ex.Message}", "danger");
+            exams = new List<ExamSchedule>();
+        }
     }
 
     private async Task SaveExam()
     {
-        if (!string.IsNullOrEmpty(newExam.SubjectName) && !string.IsNullOrEmpty(newExam.SubjectCode))
+        // Double safety structural check block to secure state pipeline boundary
+        if (!IsAdmin)
         {
-            await Repo.AddExamScheduleAsync(newExam); // Save to DB
-            newExam = new ExamSchedule { ExamDate = DateTime.Now }; // Reset form
-            showForm = false; // Hide form
-            await LoadExams(); // Refresh table immediately
+            TriggerNotification("Unauthorized transaction context sequence interrupted.", "danger");
+            return;
         }
+
+        if (string.IsNullOrWhiteSpace(newExam.SubjectName) || string.IsNullOrWhiteSpace(newExam.SubjectCode))
+        {
+            TriggerNotification("Subject Name and Code entries cannot be evaluated blank.", "danger");
+            return;
+        }
+
+        try
+        {
+            await Repo.AddExamScheduleAsync(newExam);
+            TriggerNotification($"Exam entry for '{newExam.SubjectName}' successfully compiled into scheduling lists!", "success");
+            
+            // State tracking parameter adjustments
+            newExam = new ExamSchedule { ExamDate = DateTime.Now };
+            showForm = false;
+            
+            await LoadExams();
+        }
+        catch (Exception ex)
+        {
+            TriggerNotification($"Database transmission synchronization failed: {ex.Message}", "danger");
+        }
+    }
+
+    private void TriggerNotification(string msg, string type)
+    {
+        alertMessage = msg;
+        alertClass = type;
+    }
+
+    private void ClearAlert()
+    {
+        alertMessage = string.Empty;
     }
 }
