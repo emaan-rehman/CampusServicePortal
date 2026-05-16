@@ -2,18 +2,19 @@
 @using CampusServicePortal.Data
 @inject UserSession Session
 
-<div class="portal-frame">
-    <aside class="portal-sidebar-area">
+<div class="portal-master-container" style="display: flex; flex-direction: row; width: 100vw; height: 100vh; overflow: hidden; background-color: #F4F7FE; margin:0; padding:0;">
+    
+    <aside class="portal-sidebar-area" style="width: 280px; min-width: 280px; max-width: 280px; height: 100vh; background-color: #0A192F; display: flex; flex-direction: column; flex-shrink: 0; border-right: 1px solid rgba(255, 255, 255, 0.06); z-index: 1000;">
         <NavMenu />
     </aside>
 
-    <div class="portal-content-area">
+    <div class="portal-content-area" style="flex-grow: 1; height: 100vh; display: flex; flex-direction: column; overflow: hidden;">
         
-        <header class="d-flex align-items-center justify-content-end px-4 border-bottom bg-white" style="height: 70px; border-color: #E2E8F0 !important;">
+        <header class="d-flex align-items-center justify-content-end px-4 border-bottom bg-white shadow-sm" style="height: 70px; min-height: 70px; border-color: #E2E8F0 !important; flex-shrink: 0;">
             @if (UserSession.CurrentUser != null)
             {
                 <div class="d-flex align-items-center gap-3">
-                    <span class="badge bg-success bg-opacity-10 text-success px-3 py-2.5 rounded-pill d-flex align-items-center gap-2 fw-semibold border border-success border-opacity-10" style="font-size: 0.825rem;">
+                    <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill d-flex align-items-center gap-2 fw-semibold border border-success border-opacity-10" style="font-size: 0.825rem;">
                         <span class="spinner-grow spinner-grow-sm text-success" style="width: 6px; height: 6px; animation-duration: 2s;"></span>
                         <i class="bi bi-shield-check-fill"></i> Connected Securely
                     </span>
@@ -31,7 +32,7 @@
             }
         </header>
 
-        <main class="workspace-outer overflow-auto flex-grow-1">
+        <main class="workspace-outer overflow-auto flex-grow-1" style="padding: 2.25rem; overflow-y: auto; width: 100%;">
             @Body
         </main>
     </div>

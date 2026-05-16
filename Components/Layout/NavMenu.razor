@@ -1,14 +1,14 @@
 ﻿@using CampusServicePortal.Data
 
-<div class="w-100 d-flex flex-column h-100" style="background-color: #0A192F;">
+<div class="sidebar-wrapper d-flex flex-column h-100 w-100" style="background-color: #0A192F; height: 100vh; overflow: hidden;">
     
-    <div class="d-flex align-items-center px-4" style="height: 70px; background-color: #020C1B; border-bottom: 1px solid rgba(255,255,255,0.06);">
+    <div class="d-flex align-items-center px-4" style="height: 70px; min-height: 70px; background-color: #020C1B; border-bottom: 1px solid rgba(255,255,255,0.06);">
         <i class="bi bi-mortarboard-fill text-info fs-3 me-2"></i>
         <span class="text-white fw-bold fs-5 tracking-wider" style="letter-spacing: 0.5px;">Smart Campus</span>
     </div>
 
-    <div class="flex-grow-1 overflow-auto px-3 py-4">
-        <nav class="d-flex flex-column">
+    <div class="flex-grow-1 overflow-auto px-3 py-4" style="overflow-y: auto;">
+        <nav class="d-flex flex-column gap-1" style="display: flex; flex-direction: column;">
             
             <NavLink class="nav-item-link" href="" Match="NavLinkMatch.All">
                 <i class="bi bi-columns-gap fs-5"></i>
@@ -67,7 +67,7 @@
 
     @if (UserSession.CurrentUser != null)
     {
-        <div class="p-3" style="margin-top: auto;">
+        <div class="p-3" style="margin-top: auto; padding-bottom: 1.5rem; flex-shrink: 0;">
             <div style="background-color: #112240; padding: 1rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
                 <div class="d-flex align-items-center">
                     <div class="bg-info text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold me-2 shadow-sm" style="width: 38px; height: 38px; min-width: 38px; font-size: 0.9rem;">
