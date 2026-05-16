@@ -4,63 +4,219 @@
 @inject ICampusRepository Repo
 
 <div class="container mt-4">
-    <h3 class="fw-bold mb-4">Available Courses</h3>
+    @* --- TOP HEADER AND ADMIN CONSOLE PANEL --- *@
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold text-dark m-0">
+            <i class="bi bi-book-half text-primary me-2"></i>
+            @(IsAdmin ? "Course Management Portal" : "Available Courses")
+        </h3>
+        
+        <div class="d-flex align-items-center gap-3">
+            @if (courseList != null)
+            {
+                <span class="badge bg-secondary p-2">@courseList.Count Courses Loaded</span>
+            }
 
+            @* --- CRITICAL ROLE CHECK: "Add Course" Button is strictly ONLY for Admin --- *@
+            @if (IsAdmin)
+            {
+                <button class="btn btn-primary shadow-sm fw-bold d-flex align-items-center gap-2"
+                        style="background-color: #1E293B; border: none; border-radius: 8px; padding: 10px 16px; font-size: 0.85rem;"
+                        @onclick="() => showForm = !showForm">
+                    <i class="bi @(showForm ? "bi-x-circle" : "bi-plus-circle")"></i>
+                    @(showForm ? "Close Form" : "Add Course")
+                </button>
+            }
+        </div>
+    </div>
+    <hr />
+
+    @* --- STATUS NOTIFICATION FEEDBACK --- *@
     @if (!string.IsNullOrEmpty(successMessage))
     {
-        <div class="alert alert-success">@successMessage</div>
+        <div class="alert alert-@alertClass alert-dismissible fade show shadow-sm" style="border-radius: 8px;">
+            <i class="bi @(alertClass == "success" ? "bi-check-circle-fill" : "bi-exclamation-triangle-fill") me-2"></i>
+            @successMessage
+            <button type="button" class="btn-close" @onclick='() => successMessage = ""'></button>
+        </div>
     }
 
-    <div class="table-responsive">
-        <table class="table table-hover border">
-            <thead class="table-dark">
-                <tr>
-                    <th>Code</th>
-                    <th>Course Name</th>
-                    <th>Credits</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (courseList != null)
-                {
-                    @foreach (var c in courseList)
-                    {
-                        <tr>
-                            <td>@c.CourseCode</td>
-                            <td>@c.CourseName</td>
-                            <td>@c.Credits</td>
-                            <td>
-                                <button class="btn btn-sm btn-success" @onclick="() => HandleEnroll(c.CourseId)">
-                                    Enroll
-                                </button>
-                            </td>
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
-    </div>
+    @* --- CRITICAL ROLE CHECK: Course Insertion Module is strictly ONLY rendered for Admin --- *@
+    @if (showForm && IsAdmin)
+    {
+        <div class="card card-body mb-4 shadow-sm border-0 p-4" style="border-radius: 16px; border-left: 5px solid #0D6EFD !important; background-color: #FFFFFF;">
+            <h5 class="fw-bold mb-3 text-dark d-flex align-items-center gap-2">
+                <i class="bi bi-plus-square-fill text-primary"></i> Create New Academic Course
+            </h5>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold text-muted">Course Code</label>
+                    <input type="text" class="form-control bg-light" placeholder="e.g., CS-201" @bind="newCourse.CourseCode" />
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label small fw-bold text-muted">Course Title Name</label>
+                    <input type="text" class="form-control bg-light" placeholder="e.g., Object Oriented Programming" @bind="newCourse.CourseName" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-muted">Credit Hours</label>
+                    <select class="form-select bg-light" @bind="newCourse.Credits">
+                        <option value="1">1 Cr. Hour</option>
+                        <option value="2">2 Cr. Hours</option>
+                        <option value="3">3 Cr. Hours</option>
+                        <option value="4">4 Cr. Hours</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button class="btn btn-success w-100 fw-bold py-2" style="border-radius: 8px;" @onclick="SaveCourse">
+                        <i class="bi bi-cloud-arrow-up-fill me-1"></i> Save Course
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+
+    @* --- ACADEMIC ROSTER DATA GRID --- *@
+    @if (courseList == null)
+    {
+        <div class="text-center mt-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 text-muted">Connecting to academic curriculum engine...</p>
+        </div>
+    }
+    else if (!courseList.Any())
+    {
+        <div class="alert alert-info shadow-sm text-center py-5" style="border-radius: 12px;">
+            <i class="bi bi-book-x fs-1 d-block mb-3"></i>
+            No academic courses are registered in the portal database at this moment.
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm border-0 transition-style" style="border-radius: 12px; overflow: hidden;">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="ps-4 py-3">Course Code</th>
+                                <th class="py-3">Course Name / Title</th>
+                                <th class="py-3">Credit Configuration</th>
+                                <th class="py-3 text-center">Operational Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var c in courseList)
+                            {
+                                <tr>
+                                    <td class="ps-4"><span class="badge bg-light text-dark border fw-semibold">@c.CourseCode</span></td>
+                                    <td class="fw-bold text-dark">@c.CourseName</td>
+                                    <td class="text-muted">@c.Credits CH (Lecture + Lab)</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-success fw-bold px-3" style="border-radius: 6px;" @onclick="() => HandleEnroll(c.CourseId)">
+                                            <i class="bi bi-check-all me-1"></i> Enroll Course
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
 </div>
+
+<style>
+    .transition-style {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+</style>
 
 @code {
     private List<Course>? courseList;
+    private Course newCourse = new Course { Credits = 3 };
+    private bool showForm = false;
+
+    // Feedback parameters
     private string successMessage = "";
+    private string alertClass = "success";
+
+    private bool IsAdmin => UserSession.CurrentUser?.Role?.RoleName == "Admin" || UserSession.CurrentUser?.RoleId == 1;
 
     protected override async Task OnInitializedAsync()
     {
-        courseList = await Repo.GetAllCoursesAsync();
+        await LoadCourses();
+    }
+
+    private async Task LoadCourses()
+    {
+        try
+        {
+            courseList = await Repo.GetAllCoursesAsync();
+        }
+        catch (Exception ex)
+        {
+            TriggerNotification($"Database loading error: {ex.Message}", "danger");
+            courseList = new List<Course>();
+        }
+    }
+
+    private async Task SaveCourse()
+    {
+        // Double safety layer role validation
+        if (!IsAdmin)
+        {
+            TriggerNotification("Unauthorized contextual thread execution blocked.", "danger");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(newCourse.CourseCode) || string.IsNullOrWhiteSpace(newCourse.CourseName))
+        {
+            TriggerNotification("Course Code and Course Title validations cannot be evaluate blank.", "danger");
+            return;
+        }
+
+        try
+        {
+            // Apne repository model structure ke mutabiq Add code initialize karein
+            // Agar repository me naya method add nahi hai, toh use niche note me dekhlein
+            await Repo.AddCourseAsync(newCourse);
+            TriggerNotification($"Course '{newCourse.CourseName}' successfully verified and injected into catalogs!", "success");
+
+            // Forms values state resets
+            newCourse = new Course { Credits = 3 };
+            showForm = false;
+
+            await LoadCourses();
+        }
+        catch (Exception ex)
+        {
+            TriggerNotification($"Database synchronization broken: {ex.Message}", "danger");
+        }
     }
 
     private async Task HandleEnroll(int courseId)
     {
-        var enrollment = new Enrollment
+        try
         {
-            CourseId = courseId,
-            UserId = UserSession.CurrentUser?.UserId ?? 0
-        };
+            var enrollment = new Enrollment
+            {
+                CourseId = courseId,
+                UserId = UserSession.CurrentUser?.UserId ?? 0
+            };
 
-        await Repo.EnrollInCourseAsync(enrollment);
-        successMessage = "Successfully enrolled in the course!";
+            await Repo.EnrollInCourseAsync(enrollment);
+            TriggerNotification("Success! Your academic enrollment registration requested properly.", "success");
+        }
+        catch (Exception ex)
+        {
+            TriggerNotification($"Enrollment processing error: {ex.Message}", "danger");
+        }
+    }
+
+    private void TriggerNotification(string msg, string type)
+    {
+        successMessage = msg;
+        alertClass = type;
     }
 }

@@ -19,6 +19,7 @@ namespace CampusServicePortal.Repositories
 
         Task<List<MenuItem>> GetCafeteriaMenuAsync();
         Task<List<Course>> GetAllCoursesAsync();
+        Task AddCourseAsync(Course course);
         Task EnrollInCourseAsync(Enrollment enrollment);
 
         Task<List<ExamSchedule>> GetExamSchedulesAsync();
@@ -268,5 +269,9 @@ namespace CampusServicePortal.Repositories
             db.ExamSchedules.Update(schedule);
             await db.SaveChangesAsync();
         }
+        public async Task AddCourseAsync(Course course) { 
+            using var db = await _dbFactory.CreateDbContextAsync();
+            db.Courses.Add(course); 
+            await db.SaveChangesAsync(); }
     }
 }
