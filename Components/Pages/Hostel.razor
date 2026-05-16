@@ -1,76 +1,92 @@
-﻿@page "/hostel"
+﻿@page "/Hostel"
 @using CampusServicePortal.Data
 @using CampusServicePortal.Repositories
 @inject ICampusRepository Repo
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold"><i class="bi bi-building text-warning"></i> Hostel Accommodation</h2>
-        @if (IsAdmin)
-        {
-            <button class="btn btn-warning" @onclick="() => showForm = !showForm">
-                @(showForm ? "Close" : "Add Room")
-            </button>
-        }
+<div class="p-4" style="background-color: #F8FAFC; min-height: 100vh;">
+    
+    <div class="d-flex align-items-center mb-4">
+        <h2 class="fw-bold text-dark d-flex align-items-center gap-2">
+            <i class="bi bi-building text-warning fs-1"></i> Hostel Accommodation
+        </h2>
     </div>
 
-    @if (showForm && IsAdmin)
+    @if (roomsList == null)
     {
-        <div class="card card-body mb-4 border-warning shadow-sm">
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <input type="text" class="form-control" placeholder="Room Number" @bind="newRoom.RoomNumber" />
-                </div>
-                <div class="col-md-4">
-                    <input type="number" class="form-control" placeholder="Capacity" @bind="newRoom.Capacity" />
-                </div>
-                <div class="col-md-4">
-                    <button class="btn btn-success w-100" @onclick="SaveRoom">Save Room</button>
-                </div>
-            </div>
-        </div>
+        <div class="text-muted"><i class="fa fa-spinner fa-spin me-2"></i> Fetching room configurations...</div>
     }
-
-    <div class="row">
-        @if (rooms != null)
-        {
-            @foreach (var room in rooms)
+    else if (!roomsList.Any())
+    {
+        <div class="alert alert-info">No hostel accommodations are currently listed in the system database.</div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            @foreach (var room in roomsList)
             {
-                <div class="col-md-3 mb-3">
-                    <div class="card text-center @(room.IsOccupied == true ? "bg-light" : "border-success")">
-                        <div class="card-body">
-                            <h4 class="fw-bold">Room @room.RoomNumber</h4>
-                            <p class="text-muted mb-1">Capacity: @room.Capacity</p>
-                            <span class="badge @(room.IsOccupied == true ? "bg-secondary" : "bg-success")">
-                                @(room.IsOccupied == true ? "Full" : "Available")
-                            </span>
+                <div class="col">
+                    <div class="card h-100 text-center p-3 shadow-sm border"
+                         style="border-radius: 12px; background-color: #FFFFFF; min-width: 220px; transition: transform 0.2s;">
+                        
+                        <div class="card-body p-2 d-flex flex-column justify-content-between">
+                            
+                            <div>
+                                @* Room Title String *@
+                                <h3 class="fw-bold text-dark mb-1" style="font-size: 1.6rem;">@room.RoomNumber</h3>
+                                
+                                @* Dynamic Capacity Text *@
+                                <p class="text-muted small mb-3">Capacity: @(room.Capacity ?? 0)</p>
+                            </div>
+
+                            <div>
+                                @* IsOccupied True/False Engine Mapping *@
+                                @if (room.IsOccupied == false || room.IsOccupied == null)
+                                {
+                                    <span class="badge px-3 py-2 text-white bg-success mb-3"
+                                          style="border-radius: 6px; font-weight: 600; font-size: 0.75rem; cursor: pointer;"
+                                          @onclick="() => ProcessRoomBooking(room.RoomId)">
+                                        Available
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge px-3 py-2 text-white bg-secondary mb-3"
+                                          style="border-radius: 6px; font-weight: 600; font-size: 0.75rem; opacity: 0.75;">
+                                        Full
+                                    </span>
+                                }
+                            </div>
+
                         </div>
+                        
                     </div>
                 </div>
             }
-        }
-    </div>
+        </div>
+    }
 </div>
 
 @code {
-    private List<HostelRoom>? rooms;
-    private bool showForm = false;
-    private HostelRoom newRoom = new HostelRoom();
-    private bool IsAdmin => UserSession.CurrentUser?.Role?.RoleName == "Admin" || UserSession.CurrentUser?.RoleId == 1;
+    private List<HostelRoom>? roomsList;
 
-    protected override async Task OnInitializedAsync() => await LoadRooms();
-
-    private async Task LoadRooms() => rooms = await Repo.GetAllRoomsAsync();
-
-    private async Task SaveRoom()
+    protected override async Task OnInitializedAsync()
     {
-        if (!string.IsNullOrEmpty(newRoom.RoomNumber))
+        await SyncRoomsDataset();
+    }
+
+    private async Task SyncRoomsDataset()
+    {
+        roomsList = await Repo.GetAllRoomsAsync();
+    }
+
+    private async Task ProcessRoomBooking(int roomId)
+    {
+        // Primary key 'RoomId' dispatch pass ho rahi hai
+        bool isSuccess = await Repo.BookHostelRoomAsync(roomId);
+        
+        if (isSuccess)
         {
-            newRoom.IsOccupied = false;
-            await Repo.AddRoomAsync(newRoom);
-            newRoom = new HostelRoom();
-            showForm = false;
-            await LoadRooms();
+            await SyncRoomsDataset();
         }
     }
 }

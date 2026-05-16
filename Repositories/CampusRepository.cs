@@ -29,6 +29,7 @@ namespace CampusServicePortal.Repositories
         Task<List<Fee>> GetStudentFeesAsync(int studentId);
         Task<List<HostelRoom>> GetAllRoomsAsync();
         Task AddRoomAsync(HostelRoom room);
+        Task<bool> BookHostelRoomAsync(int roomId);
         Task<List<MenuItem>> GetCafeMenuAsync();
         Task AddMenuItemAsync(MenuItem item);
     }
@@ -212,6 +213,23 @@ namespace CampusServicePortal.Repositories
                 db.Faculty.Remove(faculty);
                 await db.SaveChangesAsync();
             }
+        }
+        public async Task<bool> BookHostelRoomAsync(int roomId)
+        {
+            using var db = await _dbFactory.CreateDbContextAsync();
+
+            // Model property RoomId ke mutabiq find lagayein
+            var room = await db.HostelRooms.FindAsync(roomId);
+
+            // Agar room valid hai aur pehle se Occupied nahi hai (IsOccupied == false ya null)
+            if (room != null && (room.IsOccupied == false || room.IsOccupied == null))
+            {
+                room.IsOccupied = true; // Mark as occupied/booked
+
+                await db.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
     }
 }
