@@ -3,14 +3,14 @@
 <div class="sidebar-wrapper d-flex flex-column h-100 w-100" style="background-color: #0A192F; height: 100vh; overflow: hidden; box-sizing: border-box;">
     
     <div class="d-flex align-items-center px-4" style="height: 70px; min-height: 70px; background-color: #020C1B; border-bottom: 1px solid rgba(255,255,255,0.06); flex-shrink: 0;">
-        <div class="d-flex align-items-center justify-content-center bg-info bg-opacity-10 rounded-3 me-3 shadow-sm" style="width: 38px; height: 38px; border: 1px solid rgba(100, 255, 218, 0.25);">
+        <div class="d-flex align-items-center justify-content-center bg-info bg-opacity-10 rounded-3 me-3" style="width: 38px; height: 38px; border: 1px solid rgba(100, 255, 218, 0.25);">
             <i class="bi bi-mortarboard-fill text-info fs-4"></i>
         </div>
         <span class="text-white fw-bold tracking-wider m-0" style="letter-spacing: 0.75px; font-size: 1.15rem; font-family: 'Inter', sans-serif;">Smart Campus</span>
     </div>
 
     <div class="flex-grow-1 overflow-auto px-3 py-4" style="overflow-y: auto;">
-        <nav class="d-flex flex-column gap-1" style="display: flex; flex-direction: column; width: 100%;">
+        <nav class="d-flex flex-column" style="display: flex; flex-direction: column; width: 100%;">
             
             <NavLink class="nav-item-link" href="" Match="NavLinkMatch.All">
                 <div class="icon-box-wrapper">
@@ -79,14 +79,14 @@
     @if (UserSession.CurrentUser != null)
     {
         <div class="p-3" style="margin-top: auto; padding-bottom: 1.5rem; flex-shrink: 0;">
-            <div class="profile-card-footer" style="background-color: #112240; padding: 1rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+            <div style="background-color: #112240; padding: 1rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
                 <div class="d-flex align-items-center">
                     <div class="bg-info text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm" style="width: 40px; height: 40px; min-width: 40px; font-size: 0.95rem; border: 2px solid rgba(100, 255, 218, 0.25);">
                         @UserSession.CurrentUser.FullName.Substring(0, 1).ToUpper()
                     </div>
                     <div class="overflow-hidden">
-                        <div class="text-white text-truncate fw-semibold" style="font-size: 0.875rem; letter-spacing: 0.25px;">@UserSession.CurrentUser.FullName</div>
-                        <small class="text-muted d-block font-monospace mt-0.5" style="font-size: 0.725rem; opacity: 0.7; color: #94A3B8 !important; letter-spacing: 0.5px;">ID: #@UserSession.CurrentUser.UserId</small>
+                        <div class="text-white text-truncate fw-semibold" style="font-size: 0.875rem;">@UserSession.CurrentUser.FullName</div>
+                        <small class="text-muted d-block font-monospace mt-0.5" style="font-size: 0.725rem; color: #94A3B8 !important; opacity: 0.8;">ID: #@UserSession.CurrentUser.UserId</small>
                     </div>
                 </div>
             </div>

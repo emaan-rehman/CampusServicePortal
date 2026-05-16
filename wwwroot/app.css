@@ -1,70 +1,78 @@
-/* Core Grid Canvas Reset Standards Matrix */
+/* Hard Reset & Structural Layout Locks */
 html, body {
     height: 100vh !important;
     width: 100vw !important;
     margin: 0 !important;
     padding: 0 !important;
     overflow: hidden !important;
-    background-color: #F4F7FE;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: #F4F7FE !important;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
     -webkit-font-smoothing: antialiased;
 }
 
-/* Hard resetting default nested list layout engines inside blazor templates */
-.portal-sidebar-area ul,
-.portal-sidebar-area li,
-.portal-sidebar-area nav {
+/* Kill Blazor Default list formatting & bullet structures completely */
+.portal-sidebar-area nav,
+.portal-sidebar-area div,
+.portal-sidebar-area a {
+    text-decoration: none !important;
     list-style: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100% !important;
+    list-style-type: none !important;
+    box-sizing: border-box !important;
 }
 
-/* --- THE SIDEBAR NAVIGATION CONTROLS FRAMEWORK ENGINE --- */
+/* --- THE ULTIMATE NAVIGATION ITEM BLOCK ENGINE --- */
 .nav-item-link {
     display: flex !important;
     align-items: center !important;
-    padding: 0.8rem 1.15rem !important;
-    color: #94A3B8 !important; /* Soft premium grey text by default */
-    text-decoration: none !important;
+    flex-direction: row !important;
+    padding: 12px 16px !important;
+    color: #94A3B8 !important; /* Premium sleek ash grey text override */
     font-weight: 500 !important;
     font-size: 0.925rem !important;
     border-radius: 10px !important;
-    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
     width: 100% !important;
-    box-sizing: border-box !important;
+    background-color: transparent !important;
     border: 1px solid transparent !important;
-    margin-bottom: 5px !important;
+    margin-bottom: 6px !important;
+    cursor: pointer !important;
 }
 
-/* Standard Visual Icon Boxes Structural Layers */
+/* Modern Graphic Container Inside Sidebar Buttons */
 .icon-box-wrapper {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    width: 34px !important;
-    height: 34px !important;
-    min-width: 34px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
     border-radius: 8px !important;
     background-color: rgba(255, 255, 255, 0.03) !important;
-    color: #64748B !important; /* Muted contrast graphic vector by default */
+    color: #64748B !important;
     margin-right: 12px !important;
-    font-size: 1.05rem !important;
+    font-size: 1.1rem !important;
     transition: all 0.2s ease !important;
-    border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
 }
 
 .link-label-text {
-    transition: transform 0.2s ease !important;
+    color: #94A3B8 !important; /* Force override browser standard blue anchor links */
+    transition: transform 0.2s ease, color 0.2s ease !important;
+    font-size: 0.925rem !important;
+    font-weight: 500 !important;
 }
 
-/* Global Link Interaction Hover Animations Configurations */
+/* Hover Interactive State Animations overrides */
 .nav-item-link:hover {
     background-color: rgba(255, 255, 255, 0.05) !important;
-    color: #F8FAFC !important; /* Extreme White crisp contrast pop */
+    color: #FFFFFF !important;
+    text-decoration: none !important;
 }
+
+    .nav-item-link:hover .link-label-text {
+        color: #FFFFFF !important;
+        transform: translateX(4px) !important;
+    }
 
     .nav-item-link:hover .icon-box-wrapper {
         color: #38BDF8 !important;
@@ -72,17 +80,18 @@ html, body {
         border-color: rgba(14, 165, 233, 0.2) !important;
     }
 
-    .nav-item-link:hover .link-label-text {
-        transform: translateX(4px) !important;
-    }
-
-/* Global Navigation Link Active Status Configurations */
+/* --- ACTIVE LINK STATES (CYAN POP FOR ACTIVE VIEW) --- */
 .nav-item-link.active {
     background: linear-gradient(135deg, rgba(14, 165, 233, 0.16) 0%, rgba(14, 165, 233, 0.04) 100%) !important;
-    color: #38BDF8 !important; /* Premium Cyan Pop color profile */
+    color: #38BDF8 !important;
     font-weight: 600 !important;
     border: 1px solid rgba(14, 165, 233, 0.25) !important;
 }
+
+    .nav-item-link.active .link-label-text {
+        color: #38BDF8 !important;
+        font-weight: 600 !important;
+    }
 
     .nav-item-link.active .icon-box-wrapper {
         background-color: #38BDF8 !important;
@@ -91,7 +100,7 @@ html, body {
         box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35) !important;
     }
 
-/* --- ADMINISTRATIVE OVERRIDES (FIX FOR IMAGE_7221A3) --- */
+/* --- HIGH VISIBILITY HEADERS CONTROL MATRIX --- */
 .sidebar-category-divider {
     display: flex !important;
     align-items: center !important;
@@ -99,21 +108,18 @@ html, body {
     font-weight: 700 !important;
     font-size: 0.725rem !important;
     letter-spacing: 1.5px !important;
-    padding: 1.75rem 0.75rem 0.65rem 0.75rem !important;
+    padding: 1.75rem 0.5rem 0.65rem 0.5rem !important;
     text-transform: uppercase !important;
 }
 
-/* High Contrast Student Section Label Color */
 .student-core-divider {
-    color: #64FFDA !important; /* Vibrant Emerald Mint green */
+    color: #64FFDA !important;
 }
 
-/* High Contrast Admin Section Label Color (No more low visibility dark text) */
 .administrative-divider {
-    color: #F59E0B !important; /* High Visibility Warm Gold Amber */
+    color: #F59E0B !important;
 }
 
-/* Internal aesthetic accent bullet dots */
 .divider-dot, .divider-dot-admin {
     width: 6px;
     height: 6px;
@@ -132,49 +138,42 @@ html, body {
     box-shadow: 0 0 6px rgba(245, 158, 11, 0.6);
 }
 
-/* High-contrast styling tweaks specifically for administrative node links */
-.admin-node-anchor {
-    color: #CBD5E1 !important; /* Crisp, readable ash white links for admin elements */
+/* --- ADMIN NODES HIGH-CONTRAST CUSTOM DESIGN --- */
+.admin-node-anchor .link-label-text {
+    color: #CBD5E1 !important; /* Clear, sharp off-white text for dark mode admin rules */
 }
 
-    .admin-node-anchor:hover {
-        color: #FFFFFF !important;
-        background-color: rgba(245, 158, 11, 0.06) !important;
-        border-color: rgba(245, 158, 11, 0.1) !important;
+.admin-node-anchor:hover {
+    background-color: rgba(245, 158, 11, 0.05) !important;
+}
+
+    .admin-node-anchor:hover .link-label-text {
+        color: #FFF !important;
     }
 
-        .admin-node-anchor:hover .icon-box-wrapper {
-            color: #F59E0B !important;
-            background-color: rgba(245, 158, 11, 0.12) !important;
-            border-color: rgba(245, 158, 11, 0.25) !important;
-        }
-
-    /* When an admin element becomes active, it transforms beautifully into gold layout accents */
-    .admin-node-anchor.active {
-        background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.04) 100%) !important;
+    .admin-node-anchor:hover .icon-box-wrapper {
         color: #F59E0B !important;
-        border: 1px solid rgba(245, 158, 11, 0.3) !important;
+        background-color: rgba(245, 158, 11, 0.12) !important;
+        border-color: rgba(245, 158, 11, 0.2) !important;
     }
 
-        .admin-node-anchor.active .icon-box-wrapper {
-            background-color: #F59E0B !important;
-            color: #0A192F !important;
-            border-color: #F59E0B !important;
-            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4) !important;
-        }
-
-/* --- EXTRA CORE WORKSPACE ENHANCEMENTS --- */
-.interactive-action-card {
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid #E2E8F0 !important;
+.admin-node-anchor.active {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.04) 100%) !important;
+    border-color: rgba(245, 158, 11, 0.3) !important;
 }
 
-    .interactive-action-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05) !important;
-        border-color: #CBD5E1 !important;
+    .admin-node-anchor.active .link-label-text {
+        color: #F59E0B !important;
     }
 
+    .admin-node-anchor.active .icon-box-wrapper {
+        background-color: #F59E0B !important;
+        color: #0A192F !important;
+        border-color: #F59E0B !important;
+        box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4) !important;
+    }
+
+/* Custom Mini Scrollbars */
 .overflow-auto::-webkit-scrollbar {
     width: 4px;
 }
