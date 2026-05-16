@@ -56,7 +56,10 @@
                             <td><span class="badge bg-info text-dark">@f.Department</span></td>
                             <td>@f.Email</td>
                             <td>
-                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                @* --- FUNCTIONAL ASYNC DELETE BUTTON --- *@
+                                <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteFaculty(f.FacultyId)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
                             </td>
                         </tr>
                     }
@@ -87,5 +90,15 @@
             showForm = false;
             await LoadFaculty();
         }
+    }
+
+    // --- REPOSITORY BACKEND DISPATCH ENGINE ---
+    private async Task DeleteFaculty(int id)
+    {
+        // Database service layer se record remove karne ke liye click handle command
+        await Repo.DeleteFacultyAsync(id);
+        
+        // Dynamic dynamic state handling for visual refresh
+        await LoadFaculty();
     }
 }

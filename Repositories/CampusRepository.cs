@@ -25,6 +25,7 @@ namespace CampusServicePortal.Repositories
         Task UpdateUserRoleAsync(int userId, int newRoleId);
         Task<List<Faculty>> GetAllFacultyAsync();
         Task AddFacultyAsync(Faculty faculty);
+        Task DeleteFacultyAsync(int id);
         Task<List<Fee>> GetStudentFeesAsync(int studentId);
         Task<List<HostelRoom>> GetAllRoomsAsync();
         Task AddRoomAsync(HostelRoom room);
@@ -199,6 +200,18 @@ namespace CampusServicePortal.Repositories
             using var db = await _dbFactory.CreateDbContextAsync();
             db.MenuItems.Add(item);
             await db.SaveChangesAsync();
+        }
+        public async Task DeleteFacultyAsync(int id)
+        {
+            // _dbFactory use karke safe isolated database state handle karenge
+            using var db = await _dbFactory.CreateDbContextAsync();
+
+            var faculty = await db.Faculty.FindAsync(id);
+            if (faculty != null)
+            {
+                db.Faculty.Remove(faculty);
+                await db.SaveChangesAsync();
+            }
         }
     }
 }
