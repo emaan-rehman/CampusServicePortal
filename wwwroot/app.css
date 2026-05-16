@@ -38,8 +38,33 @@ html, body {
     cursor: pointer !important;
 }
 
+    /* --- MASTER FIXED ICON CONTROLLER ENGINE --- */
+    /* Restores standard proportional size, box frame structure, and explicit spacing */
+    .sidebar-wrapper .custom-nav-tile i,
+    .sidebar-wrapper .custom-nav-tile svg,
+    .nav-item-link i,
+    .nav-item-link svg,
+    .sidebar-wrapper a.nav-link i,
+    .sidebar-wrapper a.nav-link svg,
+    .tile-icon-frame i,
+    .icon-box-wrapper i,
+    .tile-icon-frame svg {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 1.2rem !important; /* Perfect uniform size */
+        width: 22px !important; /* Bound structure boundaries */
+        height: 22px !important;
+        min-width: 22px !important;
+        line-height: 1 !important;
+        margin-right: 12px !important; /* Fixed clean separation from text */
+        flex-shrink: 0 !important; /* Absolute restriction against stretching/squeezing */
+        vertical-align: middle !important;
+        transform: none !important;
+    }
+
 /* Modern Graphic Container Inside Sidebar Buttons */
-.icon-box-wrapper {
+.icon-box-wrapper, .tile-icon-frame {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -50,10 +75,15 @@ html, body {
     background-color: rgba(255, 255, 255, 0.03) !important;
     color: #64748B !important;
     margin-right: 12px !important;
-    font-size: 1.1rem !important;
     transition: all 0.2s ease !important;
     border: 1px solid rgba(255, 255, 255, 0.05) !important;
 }
+
+    /* If font-awesome/bootstrap icons are inside a box frame wrapper, clear double margin */
+    .icon-box-wrapper i, .tile-icon-frame i,
+    .icon-box-wrapper svg, .tile-icon-frame svg {
+        margin-right: 0px !important;
+    }
 
 .link-label-text {
     color: #94A3B8 !important; /* Force override browser standard blue anchor links */
@@ -74,7 +104,8 @@ html, body {
         transform: translateX(4px) !important;
     }
 
-    .nav-item-link:hover .icon-box-wrapper {
+    .nav-item-link:hover .icon-box-wrapper,
+    .nav-item-link:hover .tile-icon-frame {
         color: #38BDF8 !important;
         background-color: rgba(14, 165, 233, 0.12) !important;
         border-color: rgba(14, 165, 233, 0.2) !important;
@@ -93,7 +124,9 @@ html, body {
         font-weight: 600 !important;
     }
 
-    .nav-item-link.active .icon-box-wrapper {
+    .nav-item-link.active .icon-box-wrapper,
+    .nav-item-link.active .tile-icon-frame,
+    .sidebar-wrapper a.nav-link.active div {
         background-color: #38BDF8 !important;
         color: #0A192F !important;
         border-color: #38BDF8 !important;
@@ -200,12 +233,6 @@ html, body {
         .sidebar-wrapper a.nav-link.active span {
             color: #38BDF8 !important;
             font-weight: 600 !important;
-        }
-
-        .sidebar-wrapper a.nav-link.active div {
-            background-color: #38BDF8 !important;
-            color: #0A192F !important;
-            box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35) !important;
         }
 
     /* Hover behaviors */
@@ -330,45 +357,7 @@ h1:has(+ p) {
         box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.25), 0 0 20px rgba(56, 189, 248, 0.35), 0 4px 10px rgba(0, 0, 0, 0.3) !important;
     }
 
-/* Icon Frame Adjustments for New Style */
-.sidebar-wrapper .tile-icon-frame,
-.icon-box-wrapper {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-
-.sidebar-wrapper .custom-nav-tile.active .tile-icon-frame,
-.nav-item-link.active .icon-box-wrapper,
-.sidebar-wrapper a.nav-link.active div {
-    background-color: #38BDF8 !important;
-    color: #0A192F !important;
-    box-shadow: 0 0 10px rgba(56, 189, 248, 0.5) !important;
-}
-
-/* ==========================================
-   GLOBAL SIDEBAR FIX: TEXT READING & ICON STABILITY
-   ========================================== */
-
-/* 1. Prevent Text from squeezing or distorting icons */
-.sidebar-wrapper .custom-nav-tile i,
-.sidebar-wrapper .custom-nav-tile svg,
-.nav-item-link i,
-.nav-item-link svg,
-.sidebar-wrapper a.nav-link i,
-.sidebar-wrapper a.nav-link svg,
-.tile-icon-frame i,
-.icon-box-wrapper i {
-    display: inline-block !important;
-    font-size: 1.25rem !important;
-    width: auto !important;
-    height: auto !important;
-    line-height: 1 !important;
-    vertical-align: middle !important;
-    transform: none !important;
-    flex-shrink: 0 !important;
-}
-
-/* 2. Global High Visibility Fix for All Dull/Inactive Links */
+/* Global High Visibility Fix for All Dull/Inactive Links */
 .sidebar-wrapper a,
 .sidebar-wrapper .custom-nav-tile,
 .nav-item-link,
@@ -387,7 +376,7 @@ h1:has(+ p) {
         opacity: 1 !important; /* Completely neutralizes fade out effects */
     }
 
-    /* 3. Smooth Bright Hover Transitions for Inactive Buttons */
+    /* Smooth Bright Hover Transitions for Inactive Buttons */
     .sidebar-wrapper .custom-nav-tile:hover span,
     .nav-item-link:hover .link-label-text,
     .sidebar-wrapper a.nav-link:hover span {
@@ -402,3 +391,9 @@ h1:has(+ p) {
         color: #38BDF8 !important;
         font-weight: 600 !important;
     }
+
+/* --- FIX FOR SYSTEM PORTAL LOGIN ROW DISPLACEMENT --- */
+/* If it's a dynamic header rule or standard block, make sure it stays perfectly aligned */
+.sidebar-wrapper + div, main {
+    position: relative !important;
+}
