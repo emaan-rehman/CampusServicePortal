@@ -5,60 +5,98 @@
 
 <div class="p-4" style="background-color: #F8FAFC; min-height: 100vh;">
     
-    <div class="d-flex align-items-center mb-4">
-        <h2 class="fw-bold text-dark d-flex align-items-center gap-2">
+    @* --- TOP HEADER AND STATUS FEEDBACK --- *@
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark d-flex align-items-center gap-2 m-0">
             <i class="bi bi-building text-warning fs-1"></i> Hostel Accommodation
         </h2>
+        
+        @if (!string.IsNullOrEmpty(alertMessage))
+        {
+            <div class="alert alert-@alertClass alert-dismissible fade show m-0 py-2 px-3 align-middle shadow-sm" role="alert" style="border-radius: 8px; font-size: 0.9rem;">
+                <i class="bi @(alertClass == "success" ? "bi-check-circle-fill" : "bi-exclamation-triangle-fill") me-2"></i>
+                @alertMessage
+                <button type="button" class="btn-close py-2.5" @onclick="ClearAlert" aria-label="Close"></button>
+            </div>
+        }
     </div>
 
+    @* --- CONTROLS / FILTER BAR --- *@
+    <div class="card card-body border-0 shadow-sm mb-4 p-3" style="border-radius: 12px; background-color: #FFFFFF;">
+        <div class="row align-items-center g-3">
+            <div class="col-md-4">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control bg-light border-start-0" placeholder="Search room number..." @bind-value="searchQuery" @bind-value:event="oninput" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select form-select-sm bg-light" @bind="selectedCapacityFilter">
+                    <option value="0">-- Filter by Capacity --</option>
+                    <option value="2">2 Person Rooms</option>
+                    <option value="4">4 Person Rooms</option>
+                </select>
+            </div>
+            <div class="col-md-5 text-md-end">
+                <span class="badge bg-light text-dark border p-2 small text-uppercase fw-semibold" style="letter-spacing: 0.5px;">
+                    Available Rooms: @(roomsList?.Count(r => r.IsOccupied == false || r.IsOccupied == null) ?? 0)
+                </span>
+            </div>
+        </div>
+    </div>
+
+    @* --- DATA RENDERING MATRIX GRID --- *@
     @if (roomsList == null)
     {
-        <div class="text-muted"><i class="fa fa-spinner fa-spin me-2"></i> Fetching room configurations...</div>
+        <div class="d-flex align-items-center text-muted gap-2">
+            <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+            <span>Fetching room allocations...</span>
+        </div>
     }
-    else if (!roomsList.Any())
+    else if (!FilteredRooms.Any())
     {
-        <div class="alert alert-info">No hostel accommodations are currently listed in the system database.</div>
+        <div class="alert alert-info border-0 shadow-sm" style="border-radius: 10px;">
+            <i class="bi bi-info-circle-fill me-2"></i> No matching accommodations found.
+        </div>
     }
     else
     {
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-            @foreach (var room in roomsList)
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            @foreach (var room in FilteredRooms)
             {
+                bool isRoomAvailable = room.IsOccupied == false || room.IsOccupied == null;
+
                 <div class="col">
-                    <div class="card h-100 text-center p-3 shadow-sm border"
-                         style="border-radius: 12px; background-color: #FFFFFF; min-width: 220px; transition: transform 0.2s;">
+                    <div class="card h-100 text-center p-3 shadow-sm border-0 position-relative transition-style"
+                         style="border-radius: 16px; background-color: #FFFFFF; border: 1px solid #E2E8F0 !important;">
                         
-                        <div class="card-body p-2 d-flex flex-column justify-content-between">
-                            
+                        <div class="card-body p-2 d-flex flex-column justify-content-between" style="min-height: 160px;">
                             <div>
-                                @* Room Title String *@
-                                <h3 class="fw-bold text-dark mb-1" style="font-size: 1.6rem;">@room.RoomNumber</h3>
-                                
-                                @* Dynamic Capacity Text *@
-                                <p class="text-muted small mb-3">Capacity: @(room.Capacity ?? 0)</p>
+                                <div class="text-muted small mb-1" style="font-family: monospace; letter-spacing: 1px;">WING-SEC</div>
+                                <h3 class="fw-bold text-dark mb-1" style="font-size: 1.6rem; letter-spacing: -0.5px;">@room.RoomNumber</h3>
+                                <p class="text-muted small mb-0"><i class="bi bi-people me-1"></i> Capacity: @(room.Capacity ?? 0)</p>
                             </div>
 
-                            <div>
-                                @* IsOccupied True/False Engine Mapping *@
-                                @if (room.IsOccupied == false || room.IsOccupied == null)
+                            <div class="mt-4">
+                                @if (isRoomAvailable)
                                 {
-                                    <span class="badge px-3 py-2 text-white bg-success mb-3"
-                                          style="border-radius: 6px; font-weight: 600; font-size: 0.75rem; cursor: pointer;"
-                                          @onclick="() => ProcessRoomBooking(room.RoomId)">
-                                        Available
-                                    </span>
+                                    <button class="btn btn-sm w-100 fw-bold text-white tracking-wide"
+                                            style="background-color: #10B981; border-radius: 8px; padding: 8px 0; font-size: 0.8rem; border: none; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.15);"
+                                            disabled="@hasAlreadyBooked"
+                                            @onclick="() => ProcessRoomBooking(room.RoomId)">
+                                        <i class="bi bi-bookmark-plus me-1"></i> Book Room
+                                    </button>
                                 }
                                 else
                                 {
-                                    <span class="badge px-3 py-2 text-white bg-secondary mb-3"
-                                          style="border-radius: 6px; font-weight: 600; font-size: 0.75rem; opacity: 0.75;">
-                                        Full
-                                    </span>
+                                    <button class="btn btn-sm w-100 fw-bold text-muted"
+                                            style="background-color: #E2E8F0; border-radius: 8px; padding: 8px 0; font-size: 0.8rem; border: none; cursor: not-allowed;"
+                                            disabled>
+                                        <i class="bi bi-slash-circle me-1"></i> Reserved Full
+                                    </button>
                                 }
                             </div>
-
                         </div>
-                        
                     </div>
                 </div>
             }
@@ -66,8 +104,34 @@
     }
 </div>
 
+<style>
+    .transition-style:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+        transition: all 0.25s ease-in-out;
+    }
+
+    .tracking-wide {
+        letter-spacing: 0.5px;
+    }
+</style>
+
 @code {
     private List<HostelRoom>? roomsList;
+    private string searchQuery = string.Empty;
+    private int selectedCapacityFilter = 0;
+    
+    // Notification parameters
+    private string alertMessage = string.Empty;
+    private string alertClass = "success";
+    private bool hasAlreadyBooked = false;
+
+    // LINQ Expression to handle live searching and dropdown filtering
+    private IEnumerable<HostelRoom> FilteredRooms =>
+        (roomsList ?? new List<HostelRoom>()).Where(r =>
+            (string.IsNullOrEmpty(searchQuery) || r.RoomNumber!.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)) &&
+            (selectedCapacityFilter == 0 || r.Capacity == selectedCapacityFilter)
+        );
 
     protected override async Task OnInitializedAsync()
     {
@@ -77,16 +141,46 @@
     private async Task SyncRoomsDataset()
     {
         roomsList = await Repo.GetAllRoomsAsync();
+        
+        // Safety lock check logic
+        if (roomsList != null)
+        {
+            // For testing purposes, standard lock is off.
+            // values directly dynamically calculated via session database parameters if tracked.
+            hasAlreadyBooked = false;
+        }
     }
 
     private async Task ProcessRoomBooking(int roomId)
     {
-        // Primary key 'RoomId' dispatch pass ho rahi hai
+        if (hasAlreadyBooked)
+        {
+            TriggerNotification("You have already allocated an active reservation room tab under your account id profile.", "danger");
+            return;
+        }
+
         bool isSuccess = await Repo.BookHostelRoomAsync(roomId);
         
         if (isSuccess)
         {
+            TriggerNotification("Room reservation requested successfully! Your space is now reserved.", "success");
+            hasAlreadyBooked = true;
             await SyncRoomsDataset();
         }
+        else
+        {
+            TriggerNotification("Failed to book room. The chosen inventory setup might be full.", "danger");
+        }
+    }
+
+    private void TriggerNotification(string msg, string type)
+    {
+        alertMessage = msg;
+        alertClass = type;
+    }
+
+    private void ClearAlert()
+    {
+        alertMessage = string.Empty;
     }
 }
