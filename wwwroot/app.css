@@ -323,44 +323,78 @@ html, body {
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important;
 }
 
-/* --- SUPER GLOW MOUSE HOVER STATE --- */
-.sidebar-wrapper .custom-nav-tile:hover {
-    transform: translateY(-2.5px) !important;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.07) 100%) !important;
-    border-top-color: rgba(255, 255, 255, 0.5) !important;
-    box-shadow: inset 0 1px 4px rgba(255, 255, 255, 0.5), 0 12px 24px rgba(0, 0, 0, 0.55) !important;
+ /* --- FIX: REMOVE LINE BORDER ACROSS STUDENT SERVICE PORTAL --- */
+.sidebar-wrapper + div h1,
+.sidebar-wrapper + main h1,
+[class*="CommandHub"] h1,
+[class*="ServicePortal"] h1,
+.Student-Service-Portal-Header,
+h1:has(+ p) {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin-bottom: 8px !important;
 }
 
-    .sidebar-wrapper .custom-nav-tile:hover .tile-text-lbl {
-        color: #FFFFFF !important;
-        text-shadow: 0 0 8px rgba(255, 255, 255, 0.6) !important;
-    }
-
-    .sidebar-wrapper .custom-nav-tile:hover .tile-icon-frame {
-        color: #38BDF8 !important;
-        background-color: rgba(56, 189, 248, 0.22) !important;
-        border-color: rgba(56, 189, 248, 0.4) !important;
-        box-shadow: 0 0 10px rgba(56, 189, 248, 0.3) !important;
-    }
-
-/* --- ACTIVE INSTANCE SELECTED GLOW CORE --- */
-.sidebar-wrapper .custom-nav-tile.active {
-    background: linear-gradient(135deg, rgba(14, 165, 233, 0.4) 0%, rgba(14, 165, 233, 0.15) 100%) !important;
-    border-top-color: rgba(56, 189, 248, 0.7) !important;
-    border-left-color: rgba(56, 189, 248, 0.5) !important;
-    border-right-color: rgba(56, 189, 248, 0.3) !important;
-    box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.4), 0 0 25px rgba(56, 189, 248, 0.45), 0 6px 16px rgba(0, 0, 0, 0.4) !important;
+/* --- NEW PREMIUM NEON-GLOW 3D BUTTON ENGINE --- */
+.sidebar-wrapper .custom-nav-tile,
+.nav-item-link,
+.sidebar-wrapper a.nav-link {
+    display: flex !important;
+    align-items: center !important;
+    padding: 12px 16px !important;
+    margin-bottom: 10px !important;
+    border-radius: 12px !important;
+    text-decoration: none !important;
+    position: relative !important;
+    overflow: hidden !important;
+    cursor: pointer !important;
+    /* Sleek Dark Cyber Card Matte Base */
+    background: rgba(15, 23, 42, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    backdrop-filter: blur(12px) !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
 }
 
-    .sidebar-wrapper .custom-nav-tile.active .tile-text-lbl {
-        color: #38BDF8 !important;
-        font-weight: 700 !important;
-        text-shadow: 0 0 10px rgba(56, 189, 248, 0.5) !important;
+    /* Subtle Hover Accent Motion */
+    .sidebar-wrapper .custom-nav-tile:hover,
+    .nav-item-link:hover,
+    .sidebar-wrapper a.nav-link:hover {
+        transform: translateY(-2px) !important;
+        background: rgba(30, 41, 59, 0.8) !important;
+        border-color: rgba(56, 189, 248, 0.3) !important;
+        box-shadow: 0 6px 20px rgba(14, 165, 233, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1) !important;
     }
 
-    .sidebar-wrapper .custom-nav-tile.active .tile-icon-frame {
-        background-color: #38BDF8 !important;
-        color: #0A192F !important;
-        border-color: #38BDF8 !important;
-        box-shadow: 0 0 12px rgba(56, 189, 248, 0.6) !important;
+    /* --- THE REMIXED ACTIVE BUTTON STATE (HIGH-TECH GLOW) --- */
+    .sidebar-wrapper .custom-nav-tile.active,
+    .nav-item-link.active,
+    .sidebar-wrapper a.nav-link.active {
+        /* Deep Rich Cyan Premium Core Background */
+        background: linear-gradient(135deg, rgba(14, 165, 233, 0.25) 0%, rgba(14, 165, 233, 0.05) 100%) !important;
+        /* Dual 3D Cyber Border Injection */
+        border-top: 1.5px solid rgba(56, 189, 248, 0.6) !important;
+        border-left: 1.5px solid rgba(56, 189, 248, 0.4) !important;
+        border-right: 1px solid rgba(14, 165, 233, 0.2) !important;
+        border-bottom: 1px solid rgba(14, 165, 233, 0.1) !important;
+        /* Outward Neon Blueprint Radial Shadow */
+        box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.25), 0 0 20px rgba(56, 189, 248, 0.35), 0 4px 10px rgba(0, 0, 0, 0.3) !important;
     }
+
+/* Icon Frame Adjustments for New Style */
+.sidebar-wrapper .tile-icon-frame,
+.icon-box-wrapper {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.sidebar-wrapper .custom-nav-tile.active .tile-icon-frame,
+.nav-item-link.active .icon-box-wrapper,
+.sidebar-wrapper a.nav-link.active div {
+    background-color: #38BDF8 !important;
+    color: #0A192F !important;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.5) !important;
+}
