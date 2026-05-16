@@ -11,15 +11,53 @@
             <i class="bi bi-building text-warning fs-1"></i> Hostel Accommodation
         </h2>
         
-        @if (!string.IsNullOrEmpty(alertMessage))
-        {
-            <div class="alert alert-@alertClass alert-dismissible fade show m-0 py-2 px-3 align-middle shadow-sm" role="alert" style="border-radius: 8px; font-size: 0.9rem;">
-                <i class="bi @(alertClass == "success" ? "bi-check-circle-fill" : "bi-exclamation-triangle-fill") me-2"></i>
-                @alertMessage
-                <button type="button" class="btn-close py-2.5" @onclick="ClearAlert" aria-label="Close"></button>
-            </div>
-        }
+        <div class="d-flex align-items-center gap-3">
+            @* Admin Add Room Trigger Button *@
+            <button class="btn btn-primary shadow-sm fw-bold d-flex align-items-center gap-2"
+                    style="background-color: #1E293B; border: none; border-radius: 8px; padding: 10px 16px; font-size: 0.9rem;"
+                    @onclick="() => showAddForm = !showAddForm">
+                <i class="bi @(showAddForm ? "bi-x-circle" : "bi-plus-circle")"></i>
+                @(showAddForm ? "Close Form" : "Add New Room")
+            </button>
+
+            @if (!string.IsNullOrEmpty(alertMessage))
+            {
+                <div class="alert alert-@alertClass alert-dismissible fade show m-0 py-2 px-3 align-middle shadow-sm" role="alert" style="border-radius: 8px; font-size: 0.9rem;">
+                    <i class="bi @(alertClass == "success" ? "bi-check-circle-fill" : "bi-exclamation-triangle-fill") me-2"></i>
+                    @alertMessage
+                    <button type="button" class="btn-close py-2.5" @onclick="ClearAlert" aria-label="Close"></button>
+                </div>
+            }
+        </div>
     </div>
+
+    @* --- ADMIN: REGISTER NEW ROOM FORM MODULE --- *@
+    @if (showAddForm)
+    {
+        <div class="card card-body mb-4 shadow-sm border-0 p-4 animate fade-in" style="border-radius: 16px; border-left: 5px solid #F59E0B !important; background-color: #FFFFFF;">
+            <h5 class="fw-bold mb-3 text-dark d-flex align-items-center gap-2">
+                <i class="bi bi-plus-square-fill text-warning"></i> Register New Hostel Room Config
+            </h5>
+            <div class="row g-3">
+                <div class="col-md-5">
+                    <label class="form-label small fw-bold text-muted">Room Identification/Number</label>
+                    <input type="text" class="form-control bg-light" placeholder="e.g., Room 304-B" @bind="newRoom.RoomNumber" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold text-muted">Bed Capacity</label>
+                    <select class="form-select bg-light" @bind="newRoom.Capacity">
+                        <option value="2">2 Person Bed Setup</option>
+                        <option value="4">4 Person Bed Setup</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button class="btn btn-success w-100 fw-bold py-2" style="border-radius: 8px;" @onclick="SaveNewRoom">
+                        <i class="bi bi-cloud-arrow-up-fill me-1"></i> Save Room
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
 
     @* --- CONTROLS / FILTER BAR --- *@
     <div class="card card-body border-0 shadow-sm mb-4 p-3" style="border-radius: 12px; background-color: #FFFFFF;">
@@ -121,12 +159,15 @@
     private string searchQuery = string.Empty;
     private int selectedCapacityFilter = 0;
     
+    // Admin features control state
+    private bool showAddForm = false;
+    private HostelRoom newRoom = new HostelRoom { Capacity = 2, IsOccupied = false };
+
     // Notification parameters
     private string alertMessage = string.Empty;
     private string alertClass = "success";
     private bool hasAlreadyBooked = false;
 
-    // LINQ Expression to handle live searching and dropdown filtering
     private IEnumerable<HostelRoom> FilteredRooms =>
         (roomsList ?? new List<HostelRoom>()).Where(r =>
             (string.IsNullOrEmpty(searchQuery) || r.RoomNumber!.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)) &&
@@ -141,13 +182,37 @@
     private async Task SyncRoomsDataset()
     {
         roomsList = await Repo.GetAllRoomsAsync();
-        
-        // Safety lock check logic
         if (roomsList != null)
         {
-            // For testing purposes, standard lock is off.
-            // values directly dynamically calculated via session database parameters if tracked.
             hasAlreadyBooked = false;
+        }
+    }
+
+    private async Task SaveNewRoom()
+    {
+        if (string.IsNullOrWhiteSpace(newRoom.RoomNumber))
+        {
+            TriggerNotification("Please provide a valid Room Number description.", "danger");
+            return;
+        }
+
+        try
+        {
+            // Execute DB save through established Repo layout
+            await Repo.AddRoomAsync(newRoom);
+            
+            TriggerNotification($"Room '{newRoom.RoomNumber}' successfully created in hostel infrastructure!", "success");
+            
+            // Reset state variables
+            newRoom = new HostelRoom { Capacity = 2, IsOccupied = false };
+            showAddForm = false;
+            
+            // Real-time grid refresh
+            await SyncRoomsDataset();
+        }
+        catch (Exception ex)
+        {
+            TriggerNotification($"Database save error: {ex.Message}", "danger");
         }
     }
 
