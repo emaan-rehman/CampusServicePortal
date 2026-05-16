@@ -1,19 +1,18 @@
 ﻿@using CampusServicePortal.Data
 
-<div class="w-100 d-flex flex-column h-100">
-    <div class="d-flex align-items-center px-4" style="height: 70px; background-color: #020C1B; border-bottom: 1px solid rgba(255,255,255,0.05);">
+<div class="w-100 d-flex flex-column h-100" style="background-color: var(--navy-dark);">
+    <div class="brand-header">
         <i class="bi bi-mortarboard-fill text-info fs-3 me-2"></i>
-        <span class="text-white fw-bold fs-5 tracking-wider">Smart Campus</span>
+        <span class="text-white fw-bold fs-5 tracking-wider" style="letter-spacing: 0.5px;">Smart Campus</span>
     </div>
 
-    <div class="flex-grow-1 overflow-auto px-3 py-4">
-        <ul class="nav nav-pills flex-column mb-auto gap-1">
-            <li class="nav-item">
-                <NavLink class="nav-link text-white d-flex align-items-center gap-3 px-3 py-2.5 active" href="" Match="NavLinkMatch.All" style="border-radius: 8px; font-weight: 500; background: rgba(2, 132, 199, 0.2); color: #64FFDA !important;">
-                    <i class="bi bi-columns-gap fs-5" style="color: #64FFDA;"></i>
-                    <span>Dashboard Panel</span>
-                </NavLink>
-            </li>
+    <div class="nav-scroller">
+        <nav class="d-flex flex-column gap-1">
+            
+            <NavLink class="nav-item-link" href="" Match="NavLinkMatch.All">
+                <i class="bi bi-columns-gap"></i>
+                <span>Dashboard Panel</span>
+            </NavLink>
 
             @if (UserSession.CurrentUser != null)
             {
@@ -22,52 +21,57 @@
 
                 @if (role == "Student" || user.RoleId == 2)
                 {
-                    <li class="nav-item text-info fw-bold text-uppercase font-monospace px-3 mt-4 mb-2" style="font-size: 0.65rem; letter-spacing: 1.5px; opacity: 0.7;">
-                        Academic Core
-                    </li>
-                    <li class="nav-item">
-                        <NavLink class="nav-link text-white-50 d-flex align-items-center gap-2 px-3 py-2" href="courses"><i class="bi bi-book"></i> My Courses</NavLink>
-                    </li>
-                    <li class="nav-item">
-                        <NavLink class="nav-link text-white-50 d-flex align-items-center gap-2 px-3 py-2" href="transport"><i class="bi bi-bus-front"></i> Transport Route</NavLink>
-                    </li>
-                    <li class="nav-item">
-                        <NavLink class="nav-link text-white-50 d-flex align-items-center gap-2 px-3 py-2" href="Library"><i class="bi bi-journal-bookmark"></i> Digital Library</NavLink>
-                    </li>
-                    <li class="nav-item">
-                        <NavLink class="nav-link text-white-50 d-flex align-items-center gap-2 px-3 py-2" href="fees"><i class="bi bi-credit-card"></i> Tuition Fees</NavLink>
-                    </li>
-                    <li class="nav-item">
-                        <NavLink class="nav-link text-white-50 d-flex align-items-center gap-2 px-3 py-2" href="Complaints"><i class="bi bi-chat-left-dots"></i> Helpdesk Tickets</NavLink>
-                    </li>
+                    <div class="section-divider-title">Academic Core</div>
+                    
+                    <NavLink class="nav-item-link" href="courses">
+                        <i class="bi bi-book"></i><span>My Courses</span>
+                    </NavLink>
+                    
+                    <NavLink class="nav-item-link" href="transport">
+                        <i class="bi bi-bus-front"></i><span>Transport Route</span>
+                    </NavLink>
+                    
+                    <NavLink class="nav-item-link" href="Library">
+                        <i class="bi bi-journal-bookmark"></i><span>Digital Library</span>
+                    </NavLink>
+                    
+                    <NavLink class="nav-item-link" href="fees">
+                        <i class="bi bi-credit-card"></i><span>Tuition Fees</span>
+                    </NavLink>
+                    
+                    <NavLink class="nav-item-link" href="Complaints">
+                        <i class="bi bi-chat-left-dots"></i><span>Helpdesk Tickets</span>
+                    </NavLink>
                 }
 
                 @if (role == "Admin" || user.RoleId == 1)
                 {
-                    <li class="nav-item text-warning fw-bold text-uppercase font-monospace px-3 mt-4 mb-2" style="font-size: 0.65rem; letter-spacing: 1.5px; opacity: 0.7;">
-                        Administration
-                    </li>
-                    <li class="nav-item">
-                        <NavLink class="nav-link text-white-50 d-flex align-items-center gap-2 px-3 py-2" href="RoleManagement"><i class="bi bi-shield-lock"></i> Access Control</NavLink>
-                    </li>
-                    <li class="nav-item">
-                        <NavLink class="nav-link text-white-50 d-flex align-items-center gap-2 px-3 py-2" href="faculty"><i class="bi bi-person-badge"></i> Faculty Registry</NavLink>
-                    </li>
+                    <div class="section-divider-title" style="color: #F59E0B;">Administration</div>
+                    
+                    <NavLink class="nav-item-link" href="RoleManagement">
+                        <i class="bi bi-shield-lock"></i><span>Access Control</span>
+                    </NavLink>
+                    
+                    <NavLink class="nav-item-link" href="faculty">
+                        <i class="bi bi-person-badge"></i><span>Faculty Registry</span>
+                    </NavLink>
                 }
             }
-        </ul>
+        </nav>
     </div>
 
     @if (UserSession.CurrentUser != null)
     {
-        <div class="p-3 m-3" style="background-color: #112240; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
-            <div class="d-flex align-items-center">
-                <div class="bg-info text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold me-2" style="width: 38px; height: 38px; min-width: 38px;">
-                    @UserSession.CurrentUser.FullName.Substring(0, 1).ToUpper()
-                </div>
-                <div class="overflow-hidden">
-                    <div class="text-white text-truncate fw-bold small">@UserSession.CurrentUser.FullName</div>
-                    <small class="text-muted d-block font-monospace" style="font-size: 0.7rem;">ID: #@UserSession.CurrentUser.UserId</small>
+        <div class="p-3 mt-auto">
+            <div class="user-footer-card">
+                <div class="d-flex align-items-center">
+                    <div class="bg-info text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold me-2 shadow-sm" style="width: 38px; height: 38px; min-width: 38px; font-size: 0.95rem;">
+                        @UserSession.CurrentUser.FullName.Substring(0, 1).ToUpper()
+                    </div>
+                    <div class="overflow-hidden">
+                        <div class="text-white text-truncate fw-bold" style="font-size: 0.85rem;">@UserSession.CurrentUser.FullName</div>
+                        <small class="text-muted d-block font-monospace" style="font-size: 0.7rem; opacity: 0.7;">ID: #@UserSession.CurrentUser.UserId</small>
+                    </div>
                 </div>
             </div>
         </div>
