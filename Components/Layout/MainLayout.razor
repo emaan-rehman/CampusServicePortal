@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @using CampusServicePortal.Data
+@inject NavigationManager Navigation
 @inject UserSession Session
 
 <div class="portal-master-layout" style="display: flex; flex-direction: row; width: 100vw; height: 100vh; overflow: hidden; background-color: #F4F7FE; margin: 0; padding: 0; box-sizing: border-box;">
@@ -19,16 +20,16 @@
                         <i class="bi bi-shield-check-fill"></i> Connected Securely
                     </span>
                     
-                    <a href="logout" class="btn d-flex align-items-center gap-2 px-3 py-2 rounded-3 fw-medium shadow-sm" style="font-size: 0.85rem; border: 1px solid #FEE2E2; background-color: #FFF5F5; color: #EF4444; text-decoration: none;">
+                    <button @onclick="HandleLogoutAction" class="btn d-flex align-items-center gap-2 px-3 py-2 rounded-3 fw-medium shadow-sm" style="font-size: 0.85rem; border: 1px solid #FEE2E2; background-color: #FFF5F5; color: #EF4444; cursor: pointer;">
                         <i class="bi bi-box-arrow-right"></i> Sign Out
-                    </a>
+                    </button>
                 </div>
             }
             else
             {
-                <a href="login" class="btn d-flex align-items-center gap-2 px-4 py-2 rounded-3 fw-medium shadow-sm border-0" style="font-size: 0.85rem; background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%); color: #FFF; text-decoration: none;">
+                <button @onclick="NavigateToLogin" class="btn d-flex align-items-center gap-2 px-4 py-2 rounded-3 fw-medium shadow-sm border-0" style="font-size: 0.85rem; background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%); color: #FFF; cursor: pointer;">
                     <i class="bi bi-box-arrow-in-right"></i> System Portal Login
-                </a>
+                </button>
             }
         </header>
 
@@ -37,3 +38,19 @@
         </main>
     </div>
 </div>
+
+@code {
+    private void HandleLogoutAction()
+    {
+        // 1. Session state memory parameters clear execution
+        UserSession.CurrentUser = null;
+        
+        // 2. Force refresh and redirect user securely to public base landing view dashboard
+        Navigation.NavigateTo("", forceLoad: true);
+    }
+
+    private void NavigateToLogin()
+    {
+        Navigation.NavigateTo("login");
+    }
+}

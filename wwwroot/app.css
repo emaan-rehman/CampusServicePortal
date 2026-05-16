@@ -215,3 +215,41 @@ html, body {
         .sidebar-wrapper a.nav-link:hover span {
             color: #FFFFFF !important;
         }
+/* Hard Clean for Anchor Tags Inside Navigation Layout */
+.sidebar-wrapper .custom-nav-tile {
+    display: flex !important;
+    align-items: center !important;
+    text-decoration: none !important;
+    background-color: transparent !important;
+}
+
+    /* Hover Dynamics */
+    .sidebar-wrapper .custom-nav-tile:hover {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        text-decoration: none !important;
+    }
+
+        .sidebar-wrapper .custom-nav-tile:hover .tile-text-lbl {
+            color: #FFFFFF !important;
+        }
+
+        .sidebar-wrapper .custom-nav-tile:hover .tile-icon-frame {
+            color: #38BDF8 !important;
+            background-color: rgba(14, 165, 233, 0.15) !important;
+        }
+
+    /* Active Highlight Profiles Injection */
+    .sidebar-wrapper .custom-nav-tile.active {
+        background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0.04) 100%) !important;
+        border: 1px solid rgba(14, 165, 233, 0.2) !important;
+    }
+
+        .sidebar-wrapper .custom-nav-tile.active .tile-text-lbl {
+            color: #38BDF8 !important;
+            font-weight: 600 !important;
+        }
+
+        .sidebar-wrapper .custom-nav-tile.active .tile-icon-frame {
+            background-color: #38BDF8 !important;
+            color: #0A192F !important;
+        }
