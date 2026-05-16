@@ -182,6 +182,7 @@ html, body {
     background: rgba(255, 255, 255, 0.08);
     border-radius: 10px;
 }
+
 /* Ultimate Global Cleanup Override for Navbar Anchors */
 .sidebar-wrapper a.nav-link {
     display: flex !important;
@@ -215,6 +216,7 @@ html, body {
         .sidebar-wrapper a.nav-link:hover span {
             color: #FFFFFF !important;
         }
+
 /* Hard Clean for Anchor Tags Inside Navigation Layout */
 .sidebar-wrapper .custom-nav-tile {
     display: flex !important;
@@ -253,3 +255,112 @@ html, body {
             background-color: #38BDF8 !important;
             color: #0A192F !important;
         }
+
+/* --- THE ULTRABRIGHT SHINY GLASSMORPHIC 3D ENGINE --- */
+.sidebar-wrapper .custom-nav-tile {
+    display: flex !important;
+    align-items: center !important;
+    padding: 14px 18px !important;
+    margin-bottom: 12px !important;
+    border-radius: 14px !important;
+    text-decoration: none !important;
+    position: relative !important;
+    overflow: hidden !important;
+    /* Strong Glass Gradient Background (Dullness Terminator) */
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.04) 100%) !important;
+    /* 3D Specular Borders */
+    border-top: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+    border-left: 1.5px solid rgba(255, 255, 255, 0.25) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    /* Double Depth Shadow Matrix (Drop Shadow + Inner Glow) */
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.4), 0 8px 16px rgba(0, 0, 0, 0.45) !important;
+    backdrop-filter: blur(14px) !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+    /* 3D Glossy Light Flare Overlay Across Upper Half */
+    .sidebar-wrapper .custom-nav-tile::before {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 48% !important;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
+        pointer-events: none !important;
+        z-index: 2 !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+
+/* Premium Icon Frame Container */
+.sidebar-wrapper .tile-icon-frame {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    border-radius: 9px !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #E2E8F0 !important;
+    margin-right: 14px !important;
+    font-size: 1.25rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+    transition: all 0.2s ease !important;
+    z-index: 3 !important;
+}
+
+/* Glowing Label Text Settings */
+.sidebar-wrapper .tile-text-lbl {
+    color: #F8FAFC !important;
+    font-weight: 600 !important;
+    font-size: 0.975rem !important;
+    letter-spacing: 0.4px !important;
+    transition: all 0.25s ease !important;
+    z-index: 3 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* --- SUPER GLOW MOUSE HOVER STATE --- */
+.sidebar-wrapper .custom-nav-tile:hover {
+    transform: translateY(-2.5px) !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.07) 100%) !important;
+    border-top-color: rgba(255, 255, 255, 0.5) !important;
+    box-shadow: inset 0 1px 4px rgba(255, 255, 255, 0.5), 0 12px 24px rgba(0, 0, 0, 0.55) !important;
+}
+
+    .sidebar-wrapper .custom-nav-tile:hover .tile-text-lbl {
+        color: #FFFFFF !important;
+        text-shadow: 0 0 8px rgba(255, 255, 255, 0.6) !important;
+    }
+
+    .sidebar-wrapper .custom-nav-tile:hover .tile-icon-frame {
+        color: #38BDF8 !important;
+        background-color: rgba(56, 189, 248, 0.22) !important;
+        border-color: rgba(56, 189, 248, 0.4) !important;
+        box-shadow: 0 0 10px rgba(56, 189, 248, 0.3) !important;
+    }
+
+/* --- ACTIVE INSTANCE SELECTED GLOW CORE --- */
+.sidebar-wrapper .custom-nav-tile.active {
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.4) 0%, rgba(14, 165, 233, 0.15) 100%) !important;
+    border-top-color: rgba(56, 189, 248, 0.7) !important;
+    border-left-color: rgba(56, 189, 248, 0.5) !important;
+    border-right-color: rgba(56, 189, 248, 0.3) !important;
+    box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.4), 0 0 25px rgba(56, 189, 248, 0.45), 0 6px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+    .sidebar-wrapper .custom-nav-tile.active .tile-text-lbl {
+        color: #38BDF8 !important;
+        font-weight: 700 !important;
+        text-shadow: 0 0 10px rgba(56, 189, 248, 0.5) !important;
+    }
+
+    .sidebar-wrapper .custom-nav-tile.active .tile-icon-frame {
+        background-color: #38BDF8 !important;
+        color: #0A192F !important;
+        border-color: #38BDF8 !important;
+        box-shadow: 0 0 12px rgba(56, 189, 248, 0.6) !important;
+    }
