@@ -2,15 +2,15 @@
 @using CampusServicePortal.Data
 @inject UserSession Session
 
-<div class="portal-master-container" style="display: flex; flex-direction: row; width: 100vw; height: 100vh; overflow: hidden; background-color: #F4F7FE; margin:0; padding:0;">
+<div class="portal-master-layout" style="display: flex; flex-direction: row; width: 100vw; height: 100vh; overflow: hidden; background-color: #F4F7FE; margin: 0; padding: 0; box-sizing: border-box;">
     
-    <aside class="portal-sidebar-area" style="width: 280px; min-width: 280px; max-width: 280px; height: 100vh; background-color: #0A192F; display: flex; flex-direction: column; flex-shrink: 0; border-right: 1px solid rgba(255, 255, 255, 0.06); z-index: 1000;">
+    <aside style="width: 280px; min-width: 280px; max-width: 280px; height: 100vh; background-color: #0A192F; display: flex; flex-direction: column; flex-shrink: 0; border-right: 1px solid rgba(255, 255, 255, 0.06); z-index: 1000; box-sizing: border-box; margin: 0; padding: 0;">
         <NavMenu />
     </aside>
 
-    <div class="portal-content-area" style="flex-grow: 1; height: 100vh; display: flex; flex-direction: column; overflow: hidden;">
+    <div style="flex-grow: 1; height: 100vh; display: flex; flex-direction: column; overflow: hidden; box-sizing: border-box; margin: 0; padding: 0;">
         
-        <header class="d-flex align-items-center justify-content-end px-4 border-bottom bg-white shadow-sm" style="height: 70px; min-height: 70px; border-color: #E2E8F0 !important; flex-shrink: 0;">
+        <header class="d-flex align-items-center justify-content-end px-4 border-bottom bg-white shadow-sm" style="height: 70px; min-height: 70px; border-color: #E2E8F0 !important; flex-shrink: 0; box-sizing: border-box; width: 100%;">
             @if (UserSession.CurrentUser != null)
             {
                 <div class="d-flex align-items-center gap-3">
@@ -19,20 +19,20 @@
                         <i class="bi bi-shield-check-fill"></i> Connected Securely
                     </span>
                     
-                    <a href="logout" class="btn btn-outline-danger d-flex align-items-center gap-2 px-3 py-2 rounded-3 fw-medium shadow-sm transition-all" style="font-size: 0.85rem; border-color: #FEE2E2; background-color: #FFF5F5; color: #EF4444;" onmouseover="this.style.backgroundColor='#EF4444'; this.style.color='#FFF'; this.style.borderColor='#EF4444';" onmouseout="this.style.backgroundColor='#FFF5F5'; this.style.color='#EF4444'; this.style.borderColor='#FEE2E2';">
-                        <i class="bi bi-box-arrow-right fs-6"></i> Sign Out
+                    <a href="logout" class="btn d-flex align-items-center gap-2 px-3 py-2 rounded-3 fw-medium shadow-sm" style="font-size: 0.85rem; border: 1px solid #FEE2E2; background-color: #FFF5F5; color: #EF4444; text-decoration: none;">
+                        <i class="bi bi-box-arrow-right"></i> Sign Out
                     </a>
                 </div>
             }
             else
             {
-                <a href="login" class="btn btn-primary d-flex align-items-center gap-2 px-4 py-2 rounded-3 fw-medium shadow-sm border-0 transition-all" style="font-size: 0.85rem; background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%); color: #FFF;" onmouseover="this.style.opacity='0.95'; this.style.transform='translateY(-1px)';" onmouseout="this.style.opacity='1'; this.style.transform='none';">
-                    <i class="bi bi-box-arrow-in-right fs-5"></i> System Portal Login
+                <a href="login" class="btn d-flex align-items-center gap-2 px-4 py-2 rounded-3 fw-medium shadow-sm border-0" style="font-size: 0.85rem; background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%); color: #FFF; text-decoration: none;">
+                    <i class="bi bi-box-arrow-in-right"></i> System Portal Login
                 </a>
             }
         </header>
 
-        <main class="workspace-outer overflow-auto flex-grow-1" style="padding: 2.25rem; overflow-y: auto; width: 100%;">
+        <main style="flex-grow: 1; padding: 2.25rem; overflow-y: auto; width: 100%; box-sizing: border-box; background-color: #F4F7FE;">
             @Body
         </main>
     </div>
