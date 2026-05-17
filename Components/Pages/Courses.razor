@@ -163,7 +163,6 @@
 
     private async Task SaveCourse()
     {
-        // Double safety layer role validation
         if (!IsAdmin)
         {
             TriggerNotification("Unauthorized contextual thread execution blocked.", "danger");
@@ -178,12 +177,10 @@
 
         try
         {
-            // Apne repository model structure ke mutabiq Add code initialize karein
-            // Agar repository me naya method add nahi hai, toh use niche note me dekhlein
+           
             await Repo.AddCourseAsync(newCourse);
             TriggerNotification($"Course '{newCourse.CourseName}' successfully verified and injected into catalogs!", "success");
 
-            // Forms values state resets
             newCourse = new Course { Credits = 3 };
             showForm = false;
 
