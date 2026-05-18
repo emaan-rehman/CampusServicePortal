@@ -15,7 +15,7 @@ namespace CampusServicePortal.Data
     public class User
     {
         [Key]
-        public int UserId { get; set; } // Matches the 'UserId' column in your DB
+        public int UserId { get; set; } 
         [Required]
         public string FullName { get; set; } = string.Empty;
         [Required, EmailAddress]
@@ -32,8 +32,7 @@ namespace CampusServicePortal.Data
 
     public class Student : User
     {
-        public string RollNumber { get; set; } = string.Empty; // Matches DB column
-
+        public string RollNumber { get; set; } = string.Empty; 
         public override string GetUserRole() => "Student";
     }
 
@@ -48,35 +47,29 @@ namespace CampusServicePortal.Data
         public string Description { get; set; } = string.Empty;
         public string Status { get; set; } = "Pending";
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-        // FIXED: Using 'UserId' because your DB doesn't recognize 'StudentId' in this table
         public int UserId { get; set; }
 
         [ForeignKey("UserId")]
         public virtual User? Student { get; set; }
     }
 
-    [Table("Books")] // Forces EF to plural name, resolving image_177f01 error
+    [Table("Books")] 
     public class Book
     {
-        [Key] // Essential for Entity Framework to track updates
+        [Key] 
         public int Id { get; set; }
 
         [Required]
         public string Title { get; set; } = string.Empty;
 
-        public string? Author { get; set; } // Matches nvarchar(100)
+        public string? Author { get; set; } 
 
-        public bool IsAvailable { get; set; } = true; // Matches bit
+        public bool IsAvailable { get; set; } = true; 
     }
-
-    // --- Supporting Classes Kept for Consistency ---
     public class TransportBooking
     {
-        [Key] // This resolves the InvalidOperationException
+        [Key]
         public int BookingId { get; set; }
-
-        // Add these to fix the CS0117/CS1061 missing definition errors
         public string RouteName { get; set; } = string.Empty;
         public DateTime BookingDate { get; set; } = DateTime.Now;
         public int UserId { get; set; }
@@ -87,21 +80,19 @@ namespace CampusServicePortal.Data
         [Key]
         public int Id { get; set; }
         public string RouteName { get; set; } = string.Empty;
-
-        // Add this to match your SQL 'BusNumber' column
         public string BusNumber { get; set; } = string.Empty;
         public string Status { get; set; } = "Active";
     }
 
     public class CampusEvent
     {
-        [Key] // Prevents the "requires a primary key" exception
+        [Key] 
         public int Id { get; set; }
 
         [Required]
         public string Title { get; set; } = string.Empty;
 
-        public string? Location { get; set; } // Matches nvarchar(100) in SQL
+        public string? Location { get; set; } 
 
         public DateTime Date { get; set; } = DateTime.Now;
     }
@@ -134,10 +125,10 @@ namespace CampusServicePortal.Data
     public class ExamSchedule
     {
         public int Id { get; set; }
-        public string SubjectCode { get; set; } = string.Empty; // Must match image_ebdafb
+        public string SubjectCode { get; set; } = string.Empty; 
         public string SubjectName { get; set; } = string.Empty;
         public DateTime? ExamDate { get; set; }
-        public string? Room { get; set; } // Must match image_ebdafb
+        public string? Room { get; set; } 
     }
     public class Faculty
     {
@@ -158,7 +149,7 @@ namespace CampusServicePortal.Data
 
     public class HostelRoom
     {
-        [Key] // This explicitly defines the Primary Key
+        [Key] 
         public int RoomId { get; set; }
 
         public string? RoomNumber { get; set; }
