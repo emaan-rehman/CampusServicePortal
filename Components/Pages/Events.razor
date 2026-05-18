@@ -41,7 +41,6 @@
         </div>
     }
 
-    @* --- CRITICAL ROLE CHECK: Form Module is strictly ONLY rendered for Admin --- *@
     @if (showForm && IsAdmin)
     {
         <div class="card card-body mb-4 shadow-sm border-0 p-4" style="border-radius: 16px; border-left: 5px solid #0D6EFD !important; background-color: #FFFFFF;">
@@ -70,7 +69,6 @@
         </div>
     }
 
-    @* --- DATA RENDERING MATRIX GRID --- *@
     @if (events == null)
     {
         <div class="text-center mt-5">
@@ -155,7 +153,6 @@
 
     private async Task SaveEvent()
     {
-        // Double safety role-lock block implementation
         if (!IsAdmin)
         {
             TriggerNotification("Unauthorized operation validation failed.", "danger");
@@ -172,8 +169,7 @@
         {
             await Repo.AddEventAsync(newEvent);
             TriggerNotification($"Event '{newEvent.Title}' successfully updated into database infrastructure!", "success");
-            
-            // State variable resets
+       
             newEvent = new CampusEvent { Date = DateTime.Today };
             showForm = false;
             
