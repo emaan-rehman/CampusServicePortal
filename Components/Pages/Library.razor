@@ -71,7 +71,7 @@
         </div>
     }
 
-    @* --- GLOBAL CATALOG SEARCH BAR --- *@
+    @* --- SEARCH BAR --- *@
     <div class="input-group mb-3 shadow-sm" style="border-radius: 8px; overflow: hidden;">
         <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
         <input type="text" class="form-control border-start-0 bg-white"
@@ -79,7 +79,6 @@
                @bind="searchTerm" @bind:event="oninput" />
     </div>
 
-    @* --- INVENTORY DATA LISTINGS MATRIX --- *@
     @if (FilteredBooks == null)
     {
         <div class="text-center mt-5">
@@ -140,7 +139,6 @@
     private string statusMessage = "";
     private string alertClass = "info";
 
-    // Admin module extensions
     private bool showForm = false;
     private Book newBook = new Book { IsAvailable = true };
 
@@ -177,11 +175,8 @@
 
         try
         {
-            // Apne repository system ke mutabiq Add code fallback logic check karein
             await Repo.AddBookAsync(newBook);
-            TriggerNotification($"Successfully cataloged '{newBook.Title}' into system inventory!", "success");
-
-            // Form states flash cleanup
+        
             newBook = new Book { IsAvailable = true };
             showForm = false;
 
