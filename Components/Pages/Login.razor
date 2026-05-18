@@ -44,7 +44,6 @@
         if (user != null)
         {
             UserSession.CurrentUser = user;
-            // FORCE LOAD is the key. It restarts the app state so the Sidebar refreshes.
             Nav.NavigateTo("/", forceLoad: true);
         }
         else
