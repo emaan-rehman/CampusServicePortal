@@ -15,7 +15,6 @@ namespace CampusServicePortal.Repositories
         Task<bool> ReserveBookAsync(int bookId);
         Task<List<CampusEvent>> GetEventsAsync();
 
-        // Strictly matched declaration signature for Admin Events
         Task AddEventAsync(CampusEvent campusEvent);
 
         Task<List<MenuItem>> GetCafeteriaMenuAsync();
@@ -55,7 +54,6 @@ namespace CampusServicePortal.Repositories
 
         public async Task CreateComplaintAsync(Complaint complaint)
         {
-            // Uses a fresh, private connection for the save operation
             using var db = await _dbFactory.CreateDbContextAsync();
             db.Complaints.Add(complaint);
             await db.SaveChangesAsync();
@@ -78,7 +76,6 @@ namespace CampusServicePortal.Repositories
 
         public async Task CreateBookingAsync(TransportBooking booking)
         {
-            // Use the factory to ensure a fresh, private connection for this save
             using var db = await _dbFactory.CreateDbContextAsync();
             db.TransportBookings.Add(booking);
             await db.SaveChangesAsync();
@@ -97,7 +94,7 @@ namespace CampusServicePortal.Repositories
 
             if (book != null && book.IsAvailable)
             {
-                book.IsAvailable = false; // Mark as checked out
+                book.IsAvailable = false; 
                 await db.SaveChangesAsync();
                 return true;
             }
@@ -107,11 +104,8 @@ namespace CampusServicePortal.Repositories
         public async Task<List<CampusEvent>> GetEventsAsync()
         {
             using var db = await _dbFactory.CreateDbContextAsync();
-            // AsNoTracking() improves performance for read-only lists
             return await db.Events.AsNoTracking().OrderBy(e => e.Date).ToListAsync();
         }
-
-        // Fresh factory isolated configuration for AddEvent operation
         public async Task AddEventAsync(CampusEvent campusEvent)
         {
             using var db = await _dbFactory.CreateDbContextAsync();
@@ -140,8 +134,8 @@ namespace CampusServicePortal.Repositories
         {
             using var db = await _dbFactory.CreateDbContextAsync();
             return await db.Users
-                .Include(u => u.Role) // CRITICAL: This fills the 'Role' property
-                .AsNoTracking()      // Helps prevent the 'Materialization' error
+                .Include(u => u.Role) 
+                .AsNoTracking()     
                 .FirstOrDefaultAsync(u => u.Email == email && u.PasswordHash == password);
         }
 
