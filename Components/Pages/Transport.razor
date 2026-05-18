@@ -134,7 +134,7 @@
         if (isProcessing || string.IsNullOrEmpty(selectedRouteName)) return;
 
         isProcessing = true;
-        statusMessage = ""; // Reset previous message
+        statusMessage = ""; 
 
         try
         {
@@ -142,25 +142,23 @@
             {
                 RouteName = selectedRouteName,
                 BookingDate = DateTime.Now,
-                // CRITICAL: Ensure a User with ID 1 exists in your Users table
                 UserId = 1
             };
 
             await Repo.CreateBookingAsync(newBooking);
             
             statusMessage = $"Successfully booked seat for {selectedRouteName}!";
-            selectedRouteName = ""; // Clear selection
+            selectedRouteName = ""; 
         }
         catch (Exception ex)
         {
-            // Specifically catching the InnerException to see SQL errors like Foreign Key violations
             statusMessage = "Error: " + (ex.InnerException?.Message ?? ex.Message);
-            Console.WriteLine(ex.ToString()); // Log for debugging
+            Console.WriteLine(ex.ToString()); 
         }
         finally
         {
             isProcessing = false;
-            StateHasChanged(); // Force UI update
+            StateHasChanged();
         }
     }
 }
