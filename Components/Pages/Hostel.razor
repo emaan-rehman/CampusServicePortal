@@ -62,7 +62,7 @@
         </div>
     }
 
-    @* --- CONTROLS / FILTER BAR --- *@
+    @* --- FILTER BAR --- *@
     <div class="card card-body border-0 shadow-sm mb-4 p-3" style="border-radius: 12px; background-color: #FFFFFF;">
         <div class="row align-items-center g-3">
             <div class="col-md-4">
@@ -161,12 +161,10 @@
     private List<HostelRoom>? roomsList;
     private string searchQuery = string.Empty;
     private int selectedCapacityFilter = 0;
-    
-    // Admin features control state
+
     private bool showAddForm = false;
     private HostelRoom newRoom = new HostelRoom { Capacity = 2, IsOccupied = false };
 
-    // Notification parameters
     private string alertMessage = string.Empty;
     private string alertClass = "success";
     private bool hasAlreadyBooked = false;
@@ -193,7 +191,6 @@
 
     private async Task SaveNewRoom()
     {
-        // Double safety block check to protect backend database pipelines
         if (UserSession.CurrentUser?.Role?.RoleName != "Admin" && UserSession.CurrentUser?.RoleId != 1)
         {
             TriggerNotification("Unauthorized access dynamic validation token failed.", "danger");
