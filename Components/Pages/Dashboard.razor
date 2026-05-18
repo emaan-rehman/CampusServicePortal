@@ -115,19 +115,19 @@
     {
         try
         {
-            // Ensure the Repo is actually returning a list, even if empty
+            
             var data = await Repo.GetComplaintsAsync();
             complaints = data ?? new List<Complaint>();
         }
         catch (Exception ex)
         {
-            // Log this to your Debug console to see the real error
+          
             System.Diagnostics.Debug.WriteLine($"Dashboard Error: {ex.Message}");
         }
         finally
         {
             isLoading = false;
-            StateHasChanged(); // Force the UI to re-render
+            StateHasChanged(); 
         }
     }
 }
