@@ -45,7 +45,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // Use the current logged-in user's ID
         if (UserSession.CurrentUser != null)
         {
             feeList = await Repo.GetStudentFeesAsync(UserSession.CurrentUser.UserId);
