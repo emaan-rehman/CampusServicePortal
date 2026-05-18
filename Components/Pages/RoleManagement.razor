@@ -60,12 +60,11 @@
                                         </span>
                                     </td>
                                     <td>
-                                        @* Change e.Value to use RoleId *@
+                                     
                                         <select class="form-select" @onchange="@(async (e) => await ChangeRole(user.UserId, e))">
                                             <option value="">-- Assign Role --</option>
                                             @foreach (var role in roles)
                                             {
-                                                @* Matches the 'RoleId' property we just added *@
                                                 <option value="@role.RoleId">@role.RoleName</option>
                                             }
                                         </select>
@@ -119,7 +118,7 @@
             await Repo.UpdateUserRoleAsync(userId, newRoleId);
             
             statusMessage = "User role updated successfully!";
-            await RefreshData(); // Refresh UI
+            await RefreshData();
         }
         catch (Exception ex)
         {
