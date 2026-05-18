@@ -4,7 +4,6 @@ namespace CampusServicePortal.Data
 {
     public class UserSession
     {
-        // Static means it persists across the entire app instance
         public static User? CurrentUser { get; set; }
         public bool IsLoggedIn => CurrentUser != null;
 
