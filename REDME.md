@@ -156,50 +156,7 @@ CampusServicePortal
 
 ## Screenshots
 
-### Home Page
-
-![Home](screenshots/home.png)
-
-### Login Portal
-
-![Login](screenshots/login.png)
-
-### Registration Portal
-
-![Register](screenshots/register.png)
-
-### Student Dashboard
-
-![Student Dashboard](screenshots/student-dashboard.png)
-
-### Admin Dashboard
-
-![Admin Dashboard](screenshots/admin-dashboard.png)
-
-### Faculty Management
-
-![Faculty](screenshots/faculty.png)
-
-### Course Management
-
-![Courses](screenshots/courses.png)
-
-### Library Management
-
-![Library](screenshots/library.png)
-
-### Events Management
-
-![Events](screenshots/events.png)
-
-### Complaint Portal
-
-![Complaints](screenshots/complaints.png)
-
-### Database Tables
-
-![Database](screenshots/database.png)
-
+Screenshots and demonstrations can be provided upon request. The project contains multiple modules including authentication, course management, complaint handling, library services, transport management, hostel management, fee management, and event management.
 ---
 
 ## Installation
